@@ -9,6 +9,7 @@
       "NowComesGtk/1.0.0": {
         "dependencies": {
           "GtkSharp": "3.24.24.95",
+          "PokeApi": "1.0.0",
           "PokeApiNet": "3.0.10"
         },
         "runtime": {
@@ -194,6 +195,14 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
+      },
+      "PokeApi/1.0.0": {
+        "dependencies": {
+          "PokeApiNet": "3.0.10"
+        },
+        "runtime": {
+          "PokeApi.dll": {}
+        }
       }
     }
   },
@@ -335,6 +344,11 @@
       "sha512": "sha512-Vg8eB5Tawm1IFqj4TVK1czJX89rhFxJo9ELqc/Eiq0eXy13RK00eubyU6TJE6y+GQXjyV5gSfiewDUZjQgSE0w==",
       "path": "system.text.encodings.web/6.0.0",
       "hashPath": "system.text.encodings.web.6.0.0.nupkg.sha512"
+    },
+    "PokeApi/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

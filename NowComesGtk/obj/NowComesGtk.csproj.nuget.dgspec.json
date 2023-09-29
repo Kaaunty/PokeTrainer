@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj": {}
+    "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeApi\\PokeApi.csproj": {
+    "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainerAPI\\PokeApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeApi\\PokeApi.csproj",
+        "projectUniqueName": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainerAPI\\PokeApi.csproj",
         "projectName": "PokeApi",
-        "projectPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeApi\\PokeApi.csproj",
+        "projectPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainerAPI\\PokeApi.csproj",
         "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeApi\\obj\\",
+        "outputPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainerAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,6 +43,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "PokeApiNet": {
+              "target": "Package",
+              "version": "[3.0.10, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -55,21 +65,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj": {
+    "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj",
+        "projectUniqueName": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj",
         "projectName": "NowComesGtk",
-        "projectPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj",
+        "projectPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj",
         "packagesPath": "C:\\Users\\Dell\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeTrainer\\NowComesGtk\\obj\\",
+        "outputPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainer\\NowComesGtk\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\Dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -83,8 +97,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeApi\\PokeApi.csproj": {
-                "projectPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeApi\\PokeApi.csproj"
+              "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainerAPI\\PokeApi.csproj": {
+                "projectPath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainerAPI\\PokeApi.csproj"
               }
             }
           }
@@ -124,7 +138,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }

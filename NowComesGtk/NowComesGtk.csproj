@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\PokeApi\PokeApi.csproj" />
+    <ProjectReference Include="..\..\PokeTrainerAPI\PokeApi.csproj" />
   </ItemGroup>
 
 </Project>

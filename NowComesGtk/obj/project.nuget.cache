@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "aolHsOpqHlqo3qWW2o/RhCfrTSTmi22z30xQ+GaiNTsuvJtvw0nQi47yQ+fvDrKcOSyjiRGuFHH9kHl2LpFMqQ==",
+  "dgSpecHash": "6Cojp/iiF1Iaz3ZlwyquwUt9EnxGKEmhN+uIclmmeew4MezVgSIP6m1o7tM0ypFlQxMgci5yleO90d3571vBHg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer20003\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj",
+  "projectFilePath": "C:\\Users\\Dell\\source\\repos\\PokeTrainer2\\PokeTrainer\\NowComesGtk\\NowComesGtk.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dell\\.nuget\\packages\\atksharp\\3.24.24.95\\atksharp.3.24.24.95.nupkg.sha512",
     "C:\\Users\\Dell\\.nuget\\packages\\cairosharp\\3.24.24.95\\cairosharp.3.24.24.95.nupkg.sha512",
