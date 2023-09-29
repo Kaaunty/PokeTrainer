@@ -1,4 +1,5 @@
 ﻿using Gtk;
+using PokeApi.BackEnd;
 using Window = Gtk.Window;
 
 public class GtkSharpApp : Window
@@ -192,7 +193,7 @@ public class GtkSharpApp : Window
         //fix.Put(btnPokemon7, 50, 145);
         //btnPokemon7.Clicked += WaterPokemonHomepage;
 
-        #endregion
+        #endregion Buttons
 
         ListStore typeList = new ListStore(typeof(string));
         typeList.AppendValues("Filtrar por tipo");
@@ -228,7 +229,6 @@ public class GtkSharpApp : Window
                     btnPokemon1.Clicked += WaterPokemonHomepage;
                 }
             }
-            
         };
 
         win.Add(fix);
@@ -256,10 +256,10 @@ public class GtkSharpApp : Window
         win.Resizable = false;
         win.SetIconFromFile("Images/AppIcon - Pokémon.png");
     }
-    
+
     #region Pokémons
 
-    private void SquirtleScreen (object sender, EventArgs e)
+    private void SquirtleScreen(object sender, EventArgs e)
     {
         Window win = new Window("\"PokéTrainer© // Pokémons tipo - Água // Squirtle - #0007");
         Fixed fix = new Fixed();
@@ -268,14 +268,14 @@ public class GtkSharpApp : Window
         win.SetPosition(WindowPosition.Center);
         win.Resizable = false;
 
-        win.Add(fix) ;
-        win.ShowAll ();
-
+        win.Add(fix);
+        win.ShowAll();
     }
 
-    #endregion
+    #endregion Pokémons
 
-    #endregion
+    #endregion Water screens
+
     public static void Main()
     {
         Application.Init();
