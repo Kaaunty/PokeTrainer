@@ -371,10 +371,14 @@ public class GtkSharpApp
                 var typeSelected = (string)typeList.GetValue(searchByType, 0);
                 if (typeSelected == "Todos")
                 {
+                    pokeball1.Clicked -= TaurosScreen;
+                    pokeball1.Clicked -= PoliwratScreen;
                     ButtonUpdate("Images/pokemon_water/pure_pokemon/0007_squirtle.png", pokeball1, SquirtleScreen);
                 }
                 else if (typeSelected == "Puro tipo Água")
                 {
+                    pokeball1.Clicked -= TaurosScreen;
+                    pokeball1.Clicked -= PoliwratScreen;
                     ButtonUpdate("Images/pokemon_water/pure_pokemon/0007_squirtle.png", pokeball1, SquirtleScreen);
                 }
                 else if (typeSelected == "Meio - Primário")
