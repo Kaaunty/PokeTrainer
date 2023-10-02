@@ -1,12 +1,11 @@
-﻿using Application = Gtk.Application;
+﻿using Gtk;
+using Application = Gtk.Application;
 using Window = Gtk.Window;
-using GLib;
-using Gtk;
-
 
 public class GtkSharpApp
 {
     #region Pokeball buttons
+
     public Button pokeball1;
     public Button pokeball2;
     public Button pokeball3;
@@ -56,7 +55,8 @@ public class GtkSharpApp
     public Button pokeball47;
     public Button pokeball48;
     public Button pokeball49;
-    #endregion
+
+    #endregion Pokeball buttons
 
     public GtkSharpApp()
     {
@@ -76,7 +76,6 @@ public class GtkSharpApp
         Gtk.Menu pokemonsMenu = new Gtk.Menu();
         Gtk.MenuItem pokemonsMI = new Gtk.MenuItem("Pokémons");
 
-
         Gtk.MenuItem waterMenuItem = MenuItemGenerator("Água", "Images/pokemon_water/WaterIcon.png", WaterPokemonHomepage);
         pokemonsMenu.Append(waterMenuItem);
 
@@ -94,7 +93,7 @@ public class GtkSharpApp
         //waterMI.Child = waterEventBox;
         //waterMI.Activated += WaterPokemonHomepage;
 
-        #endregion Menubar Settings 
+        #endregion Menubar Settings
 
         // Pokémons button:
         Button btnPokemonsWater = ButtonGenerator("Images/pokemon_water/WaterIcon.png", 150, 175);
@@ -111,6 +110,7 @@ public class GtkSharpApp
     }
 
     #region Water screens
+
     private void WaterPokemonHomepage(object? sender, EventArgs e)
     {
         Window win = new Window("PokéTrainer© // Pokémons tipo - Água");
@@ -154,6 +154,7 @@ public class GtkSharpApp
         win.Add(fix);
         win.ShowAll();
     }
+
     private void WaterPokemonScreen(object? sender, EventArgs e)
     {
         Window waterPokemonScreen = WindowGenerator(500, 600, "PokéTrainer© // Pokémons tipo - Água // Pokémons");
@@ -169,7 +170,6 @@ public class GtkSharpApp
         ComboBox cbTypePokemon = new ComboBox();
         fix.Put(cbTypePokemon, 180, 60);
 
-        
         Button btnBack = new Button("<<");
         btnBack.SetSizeRequest(10, 10);
         fix.Put(btnBack, 25, 74);
@@ -180,6 +180,7 @@ public class GtkSharpApp
         #region Buttons
 
         #region First row of button
+
         // Pokeball 1
         pokeball1 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball1, 50, 145);
@@ -201,9 +202,11 @@ public class GtkSharpApp
         // Pokeball 7
         pokeball7 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball7, 396, 145);
-        #endregion
+
+        #endregion First row of button
 
         #region Second button row
+
         // Pokeball 8
         pokeball8 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball8, 50, 203);
@@ -225,9 +228,11 @@ public class GtkSharpApp
         // Pokeball 14
         pokeball14 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball14, 396, 203);
-        #endregion
+
+        #endregion Second button row
 
         #region Third button row
+
         // Pokeball 15
         pokeball15 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball15, 50, 261);
@@ -249,9 +254,11 @@ public class GtkSharpApp
         // Pokeball 21
         pokeball21 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball21, 396, 261);
-        #endregion
+
+        #endregion Third button row
 
         #region Fourth button row
+
         // Pokeball 22
         pokeball22 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball22, 50, 319);
@@ -273,9 +280,11 @@ public class GtkSharpApp
         // Pokeball 28
         pokeball28 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball28, 396, 319);
-        #endregion
+
+        #endregion Fourth button row
 
         #region Fifth button row
+
         // Pokeball 29
         pokeball29 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball29, 50, 376);
@@ -297,9 +306,11 @@ public class GtkSharpApp
         // Pokeball 35
         pokeball35 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball35, 396, 376);
-        #endregion
+
+        #endregion Fifth button row
 
         #region Sixth button row
+
         // Pokeball 36
         pokeball36 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball36, 50, 434);
@@ -321,9 +332,11 @@ public class GtkSharpApp
         // Pokeball 42
         pokeball42 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball42, 396, 434);
-        #endregion
+
+        #endregion Sixth button row
 
         #region Seventh button row
+
         // Pokeball 43
         pokeball43 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball43, 50, 493);
@@ -345,7 +358,8 @@ public class GtkSharpApp
         // Pokeball 49
         pokeball49 = ButtonGenerator("Images/pokeball.png", 40, 40);
         fix.Put(pokeball49, 396, 493);
-        #endregion
+
+        #endregion Seventh button row
 
         #endregion Buttons
 
@@ -361,7 +375,6 @@ public class GtkSharpApp
         CellRendererText cell = new CellRendererText();
         cbTypePokemon.PackStart(cell, false);
         cbTypePokemon.AddAttribute(cell, "text", 0);
-
 
         cbTypePokemon.Changed += (sender, e) =>
         {
@@ -394,7 +407,6 @@ public class GtkSharpApp
                     ButtonUpdate("Images/pokemon_water/secundary_pokemon/0128_tauros.png", pokeball1, TaurosScreen);
                 }
             }
-
         };
 
         waterPokemonScreen.Add(fix);
@@ -430,11 +442,13 @@ public class GtkSharpApp
         Window squirtleScreen = WindowGenerator(600, 500, "PokéTrainer© // Pokémons tipo - Água // Squirtle - #0007");
         squirtleScreen.ShowAll();
     }
+
     private void PoliwratScreen(object? sender, EventArgs e)
     {
         Window poliwratScreen = WindowGenerator(600, 500, "PokéTrainer© // Pokémons tipo - Água // Poliwrat - #0062");
         poliwratScreen.ShowAll();
     }
+
     private void TaurosScreen(object? sender, EventArgs e)
     {
         Window taurosScreen = WindowGenerator(600, 500, "PokéTrainer© // Pokémons tipo - Água // Tauros - #0128");
@@ -455,6 +469,7 @@ public class GtkSharpApp
         win.ShowAll();
         return win;
     }
+
     public Button ButtonGenerator(string imagePath, int width, int height)
     {
         Button btnPokeball = new Button();
@@ -464,6 +479,7 @@ public class GtkSharpApp
         btnPokeball.Image = imgPokeball;
         return btnPokeball;
     }
+
     private Gtk.MenuItem MenuItemGenerator(string label, string imagePath, EventHandler activatedHandler)
     {
         Gtk.MenuItem menuItem = new Gtk.MenuItem();
@@ -486,6 +502,7 @@ public class GtkSharpApp
 
         return menuItem;
     }
+
     public void ButtonUpdate(string imagePath, Button button, EventHandler activatedHandler)
     {
         Image buttonImage = new Image(imagePath);
@@ -493,6 +510,7 @@ public class GtkSharpApp
 
         button.Clicked += activatedHandler;
     }
+
     public static void Main()
     {
         Application.Init();
