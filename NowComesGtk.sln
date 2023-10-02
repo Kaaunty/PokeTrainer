@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NowComesGtk", "NowComesGtk\NowComesGtk.csproj", "{668E8B35-5703-4693-91E6-D71A2C5A2C0E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokeApi", "..\PokeTrainerAPI\PokeApi.csproj", "{C9690350-04EB-4B17-A401-9D56484C1F75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{668E8B35-5703-4693-91E6-D71A2C5A2C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{668E8B35-5703-4693-91E6-D71A2C5A2C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{668E8B35-5703-4693-91E6-D71A2C5A2C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{668E8B35-5703-4693-91E6-D71A2C5A2C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9690350-04EB-4B17-A401-9D56484C1F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9690350-04EB-4B17-A401-9D56484C1F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9690350-04EB-4B17-A401-9D56484C1F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9690350-04EB-4B17-A401-9D56484C1F75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64DCE847-A983-440A-BF4B-A599D34E11C2}
+	EndGlobalSection
+EndGlobal
