@@ -1,5 +1,5 @@
-﻿using Gtk;
-using NowComesGtk.Reusable_components;
+﻿using NowComesGtk.Reusable_components;
+using Gtk;
 
 namespace NowComesGtk.Screens.Water_Pokemon.Pokemon_Screens_Water
 {
@@ -12,6 +12,15 @@ namespace NowComesGtk.Screens.Water_Pokemon.Pokemon_Screens_Water
             fix.Put(pokemonWaterBackground, 0, 0);
             Image pokemonPic = new Image(); 
             fix.Put(pokemonPic, 75, 100);
+
+            Label lblDexNumber = new Label();
+            lblDexNumber.Text = "#0007";
+            fix.Put(lblDexNumber, 25, 35);
+
+
+
+
+
 
 
             Button btnMoves = new ButtonGenerator("Images/pokemon_water/Sem nome (75 × 50 px).png", 75, 50);
