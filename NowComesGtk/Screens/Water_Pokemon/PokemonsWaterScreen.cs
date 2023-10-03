@@ -1,8 +1,6 @@
 ﻿using NowComesGtk.Screens.Water_Pokemon.Pokemon_Screens_Water;
 using NowComesGtk.Reusable_components;
 using Gtk;
-using System.Reflection.Emit;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace NowComesGtk.Screens.Water_Pokemon
 {
@@ -64,10 +62,9 @@ namespace NowComesGtk.Screens.Water_Pokemon
         {
             Fixed fix = new Fixed();
             EventBox eventBox = new EventBox();
-            Gtk.Image backgroundScreen = new Gtk.Image("Images/pokemon_water/pokemon_water_homescreen.png");
+            Image backgroundScreen = new Image("Images/pokemon_water/pokemon_water_homescreen.png");
             fix.Put(backgroundScreen, 0, 0);
 
-            HBox hboxSearches = new HBox(false, 0);
             Entry txtSearchPokemon = new Entry();
             string defaultText = "Buscar Pokémon";
             txtSearchPokemon.SetSizeRequest(125, 20);
@@ -104,231 +101,194 @@ namespace NowComesGtk.Screens.Water_Pokemon
 
             #region Buttons
 
-            HBox hboxPokemonButtons = new HBox(false, 0);
+            VBox vboxPokemonButtonsFirstColumn = new VBox(false, 0);
+            fix.Put(vboxPokemonButtonsFirstColumn, 50, 145);
+            VBox vboxPokemonButtonsSecondColumn = new VBox(false, 0);
+            fix.Put(vboxPokemonButtonsSecondColumn, 108, 145);
+            VBox vboxPokemonButtonsThirdColumn = new VBox(false, 0);
+            fix.Put(vboxPokemonButtonsThirdColumn, 165, 145);
+            VBox vboxPokemonButtonsFourthColumn = new VBox(false, 0);
+            fix.Put(vboxPokemonButtonsFourthColumn, 223, 145);
+            VBox vboxPokemonButtonsFifthColumn = new VBox(false, 0);
+            fix.Put(vboxPokemonButtonsFifthColumn, 280, 145);
+            VBox vboxPokemonButtonsSixthColumn = new VBox(false, 0);
+            fix.Put(vboxPokemonButtonsSixthColumn, 338, 145);
+            VBox vboxPokemonButtonsSeventhColumn = new VBox(false, 0);
+            fix.Put(vboxPokemonButtonsSeventhColumn, 396, 145);
 
             #region First row of button
             // Pokeball 1
             pokeball1 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball1, 50, 145);
+            vboxPokemonButtonsFirstColumn.PackStart(pokeball1, false, false, 4);
             // Pokeball 2
             pokeball2 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball2, 108, 145);
+            vboxPokemonButtonsSecondColumn.PackStart(pokeball2, false, false, 4);
             // Pokeball 3
             pokeball3 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball3, 165, 145);
+            vboxPokemonButtonsThirdColumn.PackStart(pokeball3, false, false, 4);
             // Pokeball 4
             pokeball4 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball4, 223, 145);
+            vboxPokemonButtonsFourthColumn.PackStart(pokeball4, false, false, 4);
             // Pokeball 5
             pokeball5 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball5, 280, 145);
+            vboxPokemonButtonsFifthColumn.PackStart(pokeball5, false, false, 4);
             // Pokeball 6
             pokeball6 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball6, 338, 145);
+            vboxPokemonButtonsSixthColumn.PackStart(pokeball6, false, false, 4);
             // Pokeball 7
             pokeball7 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball7, 396, 145);
-
-            hboxPokemonButtons.PackStart(pokeball1, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball2, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball3, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball4, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball5, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball6, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball7, false, false, 3);
+            vboxPokemonButtonsSeventhColumn.PackStart(pokeball7, false, false, 4);
 
             #endregion
 
             #region Second button row
             // Pokeball 8
             pokeball8 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball8, 50, 203);
+            vboxPokemonButtonsFirstColumn.PackStart(pokeball8, false, false, 4);
             // Pokeball 9
             pokeball9 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball9, 108, 203);
+            vboxPokemonButtonsSecondColumn.PackStart(pokeball9, false, false, 4);
             // Pokeball 10
             pokeball10 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball10, 165, 203);
+            vboxPokemonButtonsThirdColumn.PackStart(pokeball10, false, false, 4);
             // Pokeball 11
             pokeball11 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball11, 223, 203);
+            vboxPokemonButtonsFourthColumn.PackStart(pokeball11, false, false, 4);
             // Pokeball 12
             pokeball12 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball12, 280, 203);
+            vboxPokemonButtonsFifthColumn.PackStart(pokeball12, false, false, 4);
             // Pokeball 13
             pokeball13 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball13, 338, 203);
+            vboxPokemonButtonsSixthColumn.PackStart(pokeball13, false, false, 4);
             // Pokeball 14
             pokeball14 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball14, 396, 203);
+            vboxPokemonButtonsSeventhColumn.PackStart(pokeball14, false, false, 4);
 
-            hboxPokemonButtons.PackStart(pokeball8, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball9, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball10, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball11, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball12, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball13, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball14, false, false, 3);
             #endregion
 
             #region Third button row
             // Pokeball 15
             pokeball15 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball15, 50, 261);
+            vboxPokemonButtonsFirstColumn.PackStart(pokeball15, false, false, 4);
             // Pokeball 16
             pokeball16 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball16, 108, 261);
+            vboxPokemonButtonsSecondColumn.PackStart(pokeball16, false, false, 4);
             // Pokeball 17
             pokeball17 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball17, 165, 261);
+            vboxPokemonButtonsThirdColumn.PackStart(pokeball17, false, false, 4);
             // Pokeball 18
             pokeball18 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball18, 223, 261);
+            vboxPokemonButtonsFourthColumn.PackStart(pokeball18, false, false, 4);
             // Pokeball 19
             pokeball19 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball19, 280, 261);
+            vboxPokemonButtonsFifthColumn.PackStart(pokeball19, false, false, 4);
             // Pokeball 20
             pokeball20 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball20, 338, 261);
+            vboxPokemonButtonsSixthColumn.PackStart(pokeball20, false, false, 4);
             // Pokeball 21
             pokeball21 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball21, 396, 261);
+            vboxPokemonButtonsSeventhColumn.PackStart(pokeball21, false, false, 4);
 
-            hboxPokemonButtons.PackStart(pokeball15, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball16, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball17, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball18, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball19, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball20, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball21, false, false, 3);
             #endregion
 
             #region Fourth button row
             // Pokeball 22
             pokeball22 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball22, 50, 319);
+            vboxPokemonButtonsFirstColumn.PackStart(pokeball22, false, false, 4);
             // Pokeball 23
             pokeball23 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball23, 108, 319);
+            vboxPokemonButtonsSecondColumn.PackStart(pokeball23, false, false, 4);
             // Pokeball 24
             pokeball24 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball24, 165, 319);
+            vboxPokemonButtonsThirdColumn.PackStart(pokeball24, false, false, 4);
             // Pokeball 25
             pokeball25 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball25, 223, 319);
+            vboxPokemonButtonsFourthColumn.PackStart(pokeball25, false, false, 4);
             // Pokeball 26
             pokeball26 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball26, 280, 319);
+            vboxPokemonButtonsFifthColumn.PackStart(pokeball26, false, false, 4);
             // Pokeball 27
             pokeball27 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball27, 338, 319);
+            vboxPokemonButtonsSixthColumn.PackStart(pokeball27, false, false, 4);
             // Pokeball 28
             pokeball28 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball28, 396, 319);
+            vboxPokemonButtonsSeventhColumn.PackStart(pokeball28, false, false, 4);
 
-            hboxPokemonButtons.PackStart(pokeball22, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball23, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball24, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball25, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball26, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball27, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball28, false, false, 3);
             #endregion
 
             #region Fifth button row
             // Pokeball 29
             pokeball29 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball29, 50, 376);
+            vboxPokemonButtonsFirstColumn.PackStart(pokeball29, false, false, 4);
             // Pokeball 30
             pokeball30 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball30, 108, 376);
+            vboxPokemonButtonsSecondColumn.PackStart(pokeball30, false, false, 4);
             // Pokeball 31
             pokeball31 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball31, 165, 376);
+            vboxPokemonButtonsThirdColumn.PackStart(pokeball31, false, false, 4);
             // Pokeball 32
             pokeball32 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball32, 223, 376);
+            vboxPokemonButtonsFourthColumn.PackStart(pokeball32, false, false, 4);
             // Pokeball 33
             pokeball33 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball33, 280, 376);
+            vboxPokemonButtonsFifthColumn.PackStart(pokeball33, false, false, 4);
             // Pokeball 34
             pokeball34 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball34, 338, 376);
+            vboxPokemonButtonsSixthColumn.PackStart(pokeball34, false, false, 4);
             // Pokeball 35
             pokeball35 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball35, 396, 376);
+            vboxPokemonButtonsSeventhColumn.PackStart(pokeball35, false, false, 4);
 
-            hboxPokemonButtons.PackStart(pokeball29, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball30, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball31, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball32, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball33, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball34, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball35, false, false, 3);
             #endregion
 
             #region Sixth button row
             // Pokeball 36
             pokeball36 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball36, 50, 434);
+            vboxPokemonButtonsFirstColumn.PackStart(pokeball36, false, false, 4);
             // Pokeball 37
             pokeball37 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball37, 108, 434);
+            vboxPokemonButtonsSecondColumn.PackStart(pokeball37, false, false, 4);
             // Pokeball 38
             pokeball38 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball38, 165, 434);
+            vboxPokemonButtonsThirdColumn.PackStart(pokeball38, false, false, 4);
             // Pokeball 39
             pokeball39 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball39, 223, 434);
+            vboxPokemonButtonsFourthColumn.PackStart(pokeball39, false, false, 4);
             // Pokeball 40
             pokeball40 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball40, 280, 434);
+            vboxPokemonButtonsFifthColumn.PackStart(pokeball40, false, false, 4);
             // Pokeball 41
             pokeball41 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball41, 338, 434);
+            vboxPokemonButtonsSixthColumn.PackStart(pokeball41, false, false, 4);
             // Pokeball 42
             pokeball42 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball42, 396, 434);
+            vboxPokemonButtonsSeventhColumn.PackStart(pokeball42, false, false, 4);
 
-            hboxPokemonButtons.PackStart(pokeball36, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball37, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball38, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball39, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball40, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball41, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball42, false, false, 3);
             #endregion
 
             #region Seventh button row
             // Pokeball 43
             pokeball43 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball43, 50, 493);
+            vboxPokemonButtonsFirstColumn.PackStart(pokeball43, false, false, 4);
             // Pokeball 44
             pokeball44 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball44, 108, 493);
+            vboxPokemonButtonsSecondColumn.PackStart(pokeball44, false, false, 4);
             // Pokeball 45
             pokeball45 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball45, 165, 493);
+            vboxPokemonButtonsThirdColumn.PackStart(pokeball45, false, false, 4);
             // Pokeball 46
             pokeball46 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball46, 223, 493);
+            vboxPokemonButtonsFourthColumn.PackStart(pokeball46, false, false, 4);
             // Pokeball 47
             pokeball47 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball47, 280, 493);
+            vboxPokemonButtonsFifthColumn.PackStart(pokeball47, false, false, 4);
             // Pokeball 48
             pokeball48 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball48, 338, 493);
+            vboxPokemonButtonsSixthColumn.PackStart(pokeball48, false, false, 4);
             // Pokeball 49
             pokeball49 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            fix.Put(pokeball49, 396, 493);
+            vboxPokemonButtonsSeventhColumn.PackStart(pokeball49, false, false, 4);
 
-            hboxPokemonButtons.PackStart(pokeball43, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball44, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball45, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball46, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball47, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball48, false, false, 3);
-            hboxPokemonButtons.PackStart(pokeball49, false, false, 3);
             #endregion
 
             #endregion Buttons
@@ -377,19 +337,21 @@ namespace NowComesGtk.Screens.Water_Pokemon
                 }
             };
 
+            eventBox.Add(vboxPokemonButtonsFifthColumn);
+            eventBox.Add(vboxPokemonButtonsSecondColumn);
+            eventBox.Add(vboxPokemonButtonsThirdColumn);
+            eventBox.Add(vboxPokemonButtonsFourthColumn);
+            eventBox.Add(vboxPokemonButtonsFifthColumn);
+            eventBox.Add(vboxPokemonButtonsSixthColumn);
+            eventBox.Add(vboxPokemonButtonsSeventhColumn);
 
-
-            hboxSearches.PackStart(txtSearchPokemon, false, false, 2);
-            hboxSearches.PackStart(cbTypePokemon, false, false, 2);
-            eventBox.Add(hboxSearches);
-            eventBox.Add(hboxPokemonButtons);
             fix.Add(eventBox);
             Add(fix);
             ShowAll();
         }
         public void ButtonUpdate(string imagePath, Button button, EventHandler activatedHandler)
         {
-            Gtk.Image buttonImage = new Gtk.Image(imagePath);
+            Image buttonImage = new Image(imagePath);
             button.Image = buttonImage;
             button.Clicked += activatedHandler;
         }
