@@ -345,6 +345,7 @@ namespace NowComesGtk.Screens.Water_Pokemon
             eventBox.Add(vboxPokemonButtonsFifthColumn);
             eventBox.Add(vboxPokemonButtonsSixthColumn);
             eventBox.Add(vboxPokemonButtonsSeventhColumn);
+            //
             fix.Add(eventBox);
             Add(fix);
             ShowAll();
