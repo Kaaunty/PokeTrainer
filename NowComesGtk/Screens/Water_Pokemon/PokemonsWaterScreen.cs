@@ -1,6 +1,8 @@
 ﻿using NowComesGtk.Screens.Water_Pokemon.Pokemon_Screens_Water;
 using NowComesGtk.Reusable_components;
 using Gtk;
+using System.Reflection.Emit;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NowComesGtk.Screens.Water_Pokemon
 {
@@ -61,9 +63,11 @@ namespace NowComesGtk.Screens.Water_Pokemon
         public PokemonsWaterScreen() : base("PokéTrainer© // Pokémons tipo - Água // Pokémons", 500, 600)
         {
             Fixed fix = new Fixed();
-            Image backgroundScreen = new Image("Images/pokemon_water/pokemon_water_homescreen.png");
+            EventBox eventBox = new EventBox();
+            Gtk.Image backgroundScreen = new Gtk.Image("Images/pokemon_water/pokemon_water_homescreen.png");
             fix.Put(backgroundScreen, 0, 0);
 
+            HBox hboxSearches = new HBox(false, 0);
             Entry txtSearchPokemon = new Entry();
             string defaultText = "Buscar Pokémon";
             txtSearchPokemon.SetSizeRequest(125, 20);
@@ -95,10 +99,12 @@ namespace NowComesGtk.Screens.Water_Pokemon
             btnBack.SetSizeRequest(10, 10);
             fix.Put(btnBack, 25, 74);
             Button btnNext = new Button(">>");
-            btnBack.SetSizeRequest(10, 10);
+            btnNext.SetSizeRequest(10, 10);
             fix.Put(btnNext, 425, 74);
 
             #region Buttons
+
+            HBox hboxPokemonButtons = new HBox(false, 0);
 
             #region First row of button
             // Pokeball 1
@@ -122,6 +128,15 @@ namespace NowComesGtk.Screens.Water_Pokemon
             // Pokeball 7
             pokeball7 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             fix.Put(pokeball7, 396, 145);
+
+            hboxPokemonButtons.PackStart(pokeball1, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball2, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball3, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball4, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball5, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball6, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball7, false, false, 3);
+
             #endregion
 
             #region Second button row
@@ -146,6 +161,14 @@ namespace NowComesGtk.Screens.Water_Pokemon
             // Pokeball 14
             pokeball14 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             fix.Put(pokeball14, 396, 203);
+
+            hboxPokemonButtons.PackStart(pokeball8, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball9, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball10, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball11, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball12, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball13, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball14, false, false, 3);
             #endregion
 
             #region Third button row
@@ -170,6 +193,14 @@ namespace NowComesGtk.Screens.Water_Pokemon
             // Pokeball 21
             pokeball21 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             fix.Put(pokeball21, 396, 261);
+
+            hboxPokemonButtons.PackStart(pokeball15, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball16, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball17, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball18, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball19, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball20, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball21, false, false, 3);
             #endregion
 
             #region Fourth button row
@@ -194,6 +225,14 @@ namespace NowComesGtk.Screens.Water_Pokemon
             // Pokeball 28
             pokeball28 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             fix.Put(pokeball28, 396, 319);
+
+            hboxPokemonButtons.PackStart(pokeball22, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball23, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball24, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball25, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball26, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball27, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball28, false, false, 3);
             #endregion
 
             #region Fifth button row
@@ -218,6 +257,14 @@ namespace NowComesGtk.Screens.Water_Pokemon
             // Pokeball 35
             pokeball35 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             fix.Put(pokeball35, 396, 376);
+
+            hboxPokemonButtons.PackStart(pokeball29, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball30, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball31, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball32, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball33, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball34, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball35, false, false, 3);
             #endregion
 
             #region Sixth button row
@@ -242,6 +289,14 @@ namespace NowComesGtk.Screens.Water_Pokemon
             // Pokeball 42
             pokeball42 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             fix.Put(pokeball42, 396, 434);
+
+            hboxPokemonButtons.PackStart(pokeball36, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball37, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball38, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball39, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball40, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball41, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball42, false, false, 3);
             #endregion
 
             #region Seventh button row
@@ -266,6 +321,14 @@ namespace NowComesGtk.Screens.Water_Pokemon
             // Pokeball 49
             pokeball49 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             fix.Put(pokeball49, 396, 493);
+
+            hboxPokemonButtons.PackStart(pokeball43, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball44, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball45, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball46, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball47, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball48, false, false, 3);
+            hboxPokemonButtons.PackStart(pokeball49, false, false, 3);
             #endregion
 
             #endregion Buttons
@@ -314,12 +377,19 @@ namespace NowComesGtk.Screens.Water_Pokemon
                 }
             };
 
+
+
+            hboxSearches.PackStart(txtSearchPokemon, false, false, 2);
+            hboxSearches.PackStart(cbTypePokemon, false, false, 2);
+            eventBox.Add(hboxSearches);
+            eventBox.Add(hboxPokemonButtons);
+            fix.Add(eventBox);
             Add(fix);
             ShowAll();
         }
         public void ButtonUpdate(string imagePath, Button button, EventHandler activatedHandler)
         {
-            Image buttonImage = new Image(imagePath);
+            Gtk.Image buttonImage = new Gtk.Image(imagePath);
             button.Image = buttonImage;
             button.Clicked += activatedHandler;
         }

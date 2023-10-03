@@ -14,7 +14,6 @@ namespace NowComesGtk.Screens
             Resizable = false;
             SetPosition(WindowPosition.Center);
             SetDefaultSize(width, height);
-
         }
     }
 }

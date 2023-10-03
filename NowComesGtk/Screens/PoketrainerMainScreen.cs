@@ -1,4 +1,5 @@
-﻿using NowComesGtk.Screens.Water_Pokemon;
+﻿using NowComesGtk.Screens.Water_Pokemon.Pokemon_Screens_Water;
+using NowComesGtk.Screens.Water_Pokemon;
 using NowComesGtk.Reusable_components;
 using Gtk;
 
@@ -32,6 +33,11 @@ namespace NowComesGtk.Screens
             fix.Put(btnPokemonsWater, 250, 50);
             btnPokemonsWater.Clicked += Pokemons_Water_Click;
 
+            //Botão teste do Kauã ------> Esse vai direto para a tela do pokémon Squirtle!
+            Button btnSquirtle = new ButtonGenerator("Images/pokemon_water/pure_pokemon/0007_squirtle.png", 40, 40);
+            fix.Put(btnSquirtle, 250, 250);
+            btnSquirtle.Clicked += Squirtle_Click;
+
             mb.Append(pokemonsMI);
             pokemonsMI.Submenu = pokemonsMenu;
             pokemonsMenu.Append(waterMenuItem);
@@ -49,6 +55,11 @@ namespace NowComesGtk.Screens
         {
             PokemonsWaterScreen pokemonsWater = new PokemonsWaterScreen();
             pokemonsWater.Show();
+        }
+        private void Squirtle_Click(object? sender, EventArgs e)
+        {
+            SquirtleScreen squirtleCreen = new SquirtleScreen();
+            squirtleCreen.Show();
         }
     }
 }
