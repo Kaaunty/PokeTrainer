@@ -12,6 +12,7 @@ namespace NowComesGtk.Screens
 
         string a = "";
         string b = "";
+
         #region Pokeball buttons
         public Button pokeball1;
         public Button pokeball2;
