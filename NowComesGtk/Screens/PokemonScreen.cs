@@ -7,6 +7,8 @@ namespace NowComesGtk.Screens
 {
     public class PokemonScreen : BaseWindow
     {
+
+
         public string pokemonDex = "#0123";
         public string pokemonName = "Pokemon";
         public string pokemonType = "Leandrinha";
@@ -32,17 +34,13 @@ namespace NowComesGtk.Screens
             Fixed fix = new Fixed();
 
             string title = $"PokéTrainer© // Pokémons tipo - Água // Pokémons - Pokemon [#0000]";
-            SetIconFromFile("Images/poketrainer_icon.png");
-
             Title = title;
-            Resizable = false;
-            SetPosition(WindowPosition.Center);
 
             Image Background = new Image("Images/pokemon_water/pokemonWater_backgroung.png");
             fix.Put(Background, 0, 0);
             Image pokemonPic = new Image("Images/pokemon_water/Sem nome (175 × 200 px).png");
             fix.Put(pokemonPic, 75, 100);
-            
+
             // Dex number, name and type
             Label lblPokemonDexNumber = new Label();
             lblPokemonDexNumber.Markup = $"<span font_desc='MS Gothic Regular 24'>{pokemonDex}</span>";
@@ -74,7 +72,7 @@ namespace NowComesGtk.Screens
             fix.Put(lblPokemonMale, 385, 225);
             Label lblPokemnFemale = new Label();
             lblPokemnFemale.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonFemale}</span>";
-            fix.Put(lblPokemnFemale, 500 , 225);
+            fix.Put(lblPokemnFemale, 500, 225);
             Label lblPokemonCatchRate = new Label();
             lblPokemonCatchRate.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonCatchRate}</span>";
             fix.Put(lblPokemonCatchRate, 665, 210);
@@ -100,12 +98,20 @@ namespace NowComesGtk.Screens
             fix.Put(lblPokemonSpeed, 723, 327);
 
 
-
+            // Moves button
             Button btnMoves = new ButtonGenerator("Images/pokemon_water/Sem nome (75 × 50 px).png", 75, 50);
             fix.Put(btnMoves, 584, 410);
+            btnMoves.Clicked += PokemonMoves;
 
             Add(fix);
             ShowAll();
+        }
+        private void PokemonMoves(object? sender, EventArgs e)
+        {
+            List<string> moves = new List<string>();
+
+            MovementScreen movementScreen = new();
+            movementScreen.ShowAll();
         }
     }
 }
