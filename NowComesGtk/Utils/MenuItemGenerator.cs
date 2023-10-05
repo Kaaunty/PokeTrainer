@@ -4,10 +4,11 @@ namespace NowComesGtk.Reusable_components
 {
     public class MenuItemGenerator : MenuItem
     {
+        [Obsolete]
         public MenuItemGenerator(string label, string imagePath, EventHandler activatedHandler)
         {
             EventBox eventBox = new EventBox();
-            HBox hbox = new HBox(false, 0);
+            HBox hbox = new(false, 0);
             Label labelWidget = new Label();
             Image image = new Image();
 

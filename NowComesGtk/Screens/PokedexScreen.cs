@@ -1,11 +1,17 @@
-﻿using NowComesGtk.Screens.Water_Pokemon.Pokemon_Screens_Water;
-using NowComesGtk.Reusable_components;
+﻿using NowComesGtk.Reusable_components;
+using PokeApiNet;
 using Gtk;
+using NowComesGtk.Utils;
 
-namespace NowComesGtk.Screens.Water_Pokemon
+namespace NowComesGtk.Screens
 {
-    public class PokemonsWaterScreen : BaseWindow
+    public class PokedexScreen : BaseWindow
+
     {
+        Pokemon pokemon = new Pokemon();
+
+        string a = "";
+        string b = "";
         #region Pokeball buttons
         public Button pokeball1;
         public Button pokeball2;
@@ -58,7 +64,7 @@ namespace NowComesGtk.Screens.Water_Pokemon
         public Button pokeball49;
         #endregion
 
-        public PokemonsWaterScreen() : base("PokéTrainer© // Pokémons tipo - Água // Pokémons", 500, 600)
+        public PokedexScreen() : base("PokéTrainer© // Pokémons tipo - Água // Pokémons", 500, 600)
         {
             Fixed fix = new Fixed();
             EventBox eventBox = new EventBox();
@@ -101,19 +107,19 @@ namespace NowComesGtk.Screens.Water_Pokemon
 
             #region Buttons
 
-            VBox vboxPokemonButtonsFirstColumn = new VBox(false, 0);
+            VBox vboxPokemonButtonsFirstColumn = new(false, 0);
             fix.Put(vboxPokemonButtonsFirstColumn, 50, 145);
-            VBox vboxPokemonButtonsSecondColumn = new VBox(false, 0);
+            VBox vboxPokemonButtonsSecondColumn = new(false, 0);
             fix.Put(vboxPokemonButtonsSecondColumn, 108, 145);
-            VBox vboxPokemonButtonsThirdColumn = new VBox(false, 0);
+            VBox vboxPokemonButtonsThirdColumn = new(false, 0);
             fix.Put(vboxPokemonButtonsThirdColumn, 165, 145);
-            VBox vboxPokemonButtonsFourthColumn = new VBox(false, 0);
+            VBox vboxPokemonButtonsFourthColumn = new(false, 0);
             fix.Put(vboxPokemonButtonsFourthColumn, 223, 145);
-            VBox vboxPokemonButtonsFifthColumn = new VBox(false, 0);
+            VBox vboxPokemonButtonsFifthColumn = new(false, 0);
             fix.Put(vboxPokemonButtonsFifthColumn, 280, 145);
-            VBox vboxPokemonButtonsSixthColumn = new VBox(false, 0);
+            VBox vboxPokemonButtonsSixthColumn = new(false, 0);
             fix.Put(vboxPokemonButtonsSixthColumn, 338, 145);
-            VBox vboxPokemonButtonsSeventhColumn = new VBox(false, 0);
+            VBox vboxPokemonButtonsSeventhColumn = new(false, 0);
             fix.Put(vboxPokemonButtonsSeventhColumn, 396, 145);
 
             #region First row of button
@@ -314,25 +320,19 @@ namespace NowComesGtk.Screens.Water_Pokemon
                     var typeSelected = (string)typeList.GetValue(searchByType, 0);
                     if (typeSelected == "Todos")
                     {
-                        ButtonUpdate("Images/pokemon_water/pure_pokemon/0007_squirtle.png", pokeball1, Squirtle_Click);
+
                     }
                     else if (typeSelected == "Puro tipo Água")
                     {
-                        pokeball1.Clicked -= Tauros_Click;
-                        pokeball1.Clicked -= Poliwrat_Click;
-                        ButtonUpdate("Images/pokemon_water/pure_pokemon/0007_squirtle.png", pokeball1, Squirtle_Click);
+                        pokeball1.Clicked += Onclicked;
                     }
                     else if (typeSelected == "Meio - Primário")
                     {
-                        pokeball1.Clicked -= Squirtle_Click;
-                        pokeball1.Clicked -= Poliwrat_Click;
-                        ButtonUpdate("Images/pokemon_water/primary_pokemon/0062_poliwrat.png", pokeball1, Poliwrat_Click);
+
                     }
                     else
                     {
-                        pokeball1.Clicked -= Squirtle_Click;
-                        pokeball1.Clicked -= Tauros_Click;
-                        ButtonUpdate("Images/pokemon_water/secundary_pokemon/0128_tauros.png", pokeball1, Tauros_Click);
+
                     }
                 }
             };
@@ -349,29 +349,17 @@ namespace NowComesGtk.Screens.Water_Pokemon
             Add(fix);
             ShowAll();
         }
+        private void Onclicked(object? sender, EventArgs e)
+        {
+
+            PokemonScreen macaco = new();
+            macaco.Show();
+        }
         public void ButtonUpdate(string imagePath, Button button, EventHandler activatedHandler)
         {
-            Image buttonImage = new Image(imagePath);
+            Image buttonImage = new(imagePath);
             button.Image = buttonImage;
             button.Clicked += activatedHandler;
-        }
-        private void Squirtle_Click(object? sender, EventArgs e)
-        {
-            Close();
-            SquirtleScreen squirtleCreen = new SquirtleScreen();
-            squirtleCreen.Show();
-        }
-        private void Tauros_Click(object? sender, EventArgs e)
-        {
-            Close();
-            TaurosScreen taurosScreen = new TaurosScreen();
-            taurosScreen.Show();
-        }
-        private void Poliwrat_Click(object? sender, EventArgs e)
-        {
-            Close();
-            PoliwratScreen poliwratScreen = new PoliwratScreen();
-            poliwratScreen.Show();
         }
     }
 }
