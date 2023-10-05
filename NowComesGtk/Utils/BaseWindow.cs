@@ -1,6 +1,6 @@
 ﻿using Gtk;
 
-namespace NowComesGtk.Screens
+namespace NowComesGtk.Utils
 {
     public class BaseWindow : Window
     {

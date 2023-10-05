@@ -1,12 +1,14 @@
-﻿using NowComesGtk.Screens.Water_Pokemon.Pokemon_Screens_Water;
-using NowComesGtk.Screens.Water_Pokemon;
-using NowComesGtk.Reusable_components;
+﻿using NowComesGtk.Reusable_components;
+using NowComesGtk.Utils;
+using PokeApiNet;
 using Gtk;
 
 namespace NowComesGtk.Screens
 {
     public class PoketrainerMainScreen : BaseWindow
     {
+        Pokemon pokemon;
+
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
             Fixed fix = new Fixed();
@@ -16,7 +18,7 @@ namespace NowComesGtk.Screens
 
             #region Menubar Settings
 
-            VBox vbMb = new VBox(false, 0);
+            VBox vbMb = new(false, 0);
             MenuBar mb = new MenuBar();
             vbMb.PackStart(mb, false, false, 0);
 
@@ -29,14 +31,14 @@ namespace NowComesGtk.Screens
             #endregion Menubar Settings 
 
             //Botão teste do Kauã ------> Esse vai direto para a tela de pokémons tipo água!
-            Button btnPokemonsWater = new ButtonGenerator("Images/pokemon_water/btn_pokemon_water.png", 150, 175);
-            fix.Put(btnPokemonsWater, 250, 50);
-            btnPokemonsWater.Clicked += Pokemons_Water_Click;
+            Button btnPokedex = new ButtonGenerator("", 150, 175);
+            fix.Put(btnPokedex, 250, 50);
+            btnPokedex.Clicked += btnPokedexTest;
 
             //Botão teste do Kauã ------> Esse vai direto para a tela do pokémon Squirtle!
-            Button btnSquirtle = new ButtonGenerator("Images/pokemon_water/pure_pokemon/0007_squirtle.png", 40, 40);
-            fix.Put(btnSquirtle, 250, 250);
-            btnSquirtle.Clicked += Squirtle_Click;
+            Button btnPokemonScreen = new ButtonGenerator("", 40, 40);
+            fix.Put(btnPokemonScreen, 250, 250);
+            btnPokemonScreen.Clicked += btnPokemonScreenTest;
 
             mb.Append(pokemonsMI);
             pokemonsMI.Submenu = pokemonsMenu;
@@ -46,20 +48,25 @@ namespace NowComesGtk.Screens
             Add(fix);
             ShowAll();
         }
-        private void WaterMenuItem_Actived (object? sender, EventArgs e)
+        private void WaterMenuItem_Actived(object? sender, EventArgs e)
         {
-            PokemonWaterMainScreen pokemonWater = new PokemonWaterMainScreen();
+            TypeMainScreen pokemonWater = new TypeMainScreen();
             pokemonWater.Show();
         }
-        private void Pokemons_Water_Click(object? sender, EventArgs e)
+
+        [Obsolete]
+        private void btnPokedexTest(object? sender, EventArgs e)
         {
-            PokemonsWaterScreen pokemonsWater = new PokemonsWaterScreen();
+            PokedexScreen pokemonsWater = new();
             pokemonsWater.Show();
         }
-        private void Squirtle_Click(object? sender, EventArgs e)
+
+        [Obsolete]
+        private void btnPokemonScreenTest(object? sender, EventArgs e)
         {
-            SquirtleScreen squirtleCreen = new SquirtleScreen();
-            squirtleCreen.Show();
+            PokemonScreen pokemonScreen = new();
+            pokemonScreen.Show();
         }
+
     }
 }

@@ -1,11 +1,12 @@
 ﻿using NowComesGtk.Reusable_components;
 using Gtk;
+using NowComesGtk.Utils;
 
-namespace NowComesGtk.Screens.Water_Pokemon
+namespace NowComesGtk.Screens
 {
-    public class PokemonWaterMainScreen : BaseWindow
+    public class TypeMainScreen : BaseWindow
     {
-        public PokemonWaterMainScreen() : base("PokéTrainer© // Pokémons tipo - Água", 800, 500)
+        public TypeMainScreen() : base("PokéTrainer© // Pokémons tipo - Água", 800, 500)
         {
             Fixed fix = new Fixed();
             Image pokemonWaterBackground = new Image("Images/pokemon_water/background_pokemonWater_homescreen.png");
@@ -21,7 +22,7 @@ namespace NowComesGtk.Screens.Water_Pokemon
         }
         private void Pokemons_Water_Click(object? sender, EventArgs e)
         {
-            PokemonsWaterScreen pokemonsWater = new PokemonsWaterScreen();
+            PokedexScreen pokemonsWater = new PokedexScreen();
             pokemonsWater.Show();
         }
     }
