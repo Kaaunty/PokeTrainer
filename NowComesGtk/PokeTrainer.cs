@@ -1,12 +1,14 @@
-﻿using NowComesGtk.Screens;
-using Gtk;
+﻿using Gtk;
 
-public class PokeTrainer
+namespace NowComesGtk
 {
-    //public static void Main()
-    //{
-    //    Application.Init();
-    //    new PoketrainerMainScreen();
-    //    Application.Run();
-    //}
+    public class PokeTrainer
+    {
+        public static void Main(string[] args)
+        {
+            Application.Init();
+            new PokemonLoader();
+            Application.Run();
+        }
+    }
 }
