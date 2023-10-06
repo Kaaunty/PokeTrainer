@@ -8,11 +8,8 @@ namespace NowComesGtk.Screens
 {
     public class PoketrainerMainScreen : BaseWindow
     {
-        private readonly ApiRequest _apiRequest = new();
-
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
-            LoadPokemonList();
             Fixed fix = new Fixed();
             Image poketrainerBackground = new Image("Images/background_homescreen.png");
             fix.Put(poketrainerBackground, 0, 0);
@@ -47,11 +44,6 @@ namespace NowComesGtk.Screens
             fix.Add(vbMb);
             Add(fix);
             ShowAll();
-        }
-
-        private async void LoadPokemonList()
-        {
-            await _apiRequest.GetPokemonsListAll();
         }
 
         private void WaterMenuItem_Actived(object? sender, EventArgs e)

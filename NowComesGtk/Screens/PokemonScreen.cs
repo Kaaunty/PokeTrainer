@@ -12,7 +12,7 @@ namespace NowComesGtk.Screens
 #nullable disable
         private ApiRequest _apiRequest = new();
         private Pokemon pokemon;
-        public string pokemonDex = "#0123";
+        public int pokemonDex;
         public string pokemonName;
         public string pokemonType;
         private Pixbuf pixbuf = new Pixbuf("Images/PokemonAnimated.gif");
@@ -25,12 +25,12 @@ namespace NowComesGtk.Screens
         public string pokemonFemale = "75%";
         public string pokemonCatchRate = "100%";
 
-        public string pokemonHP;
-        public string pokemonATK;
-        public string pokemonDEF;
-        public string pokemonSpATK;
-        public string pokemonSpDEF;
-        public string pokemonSpeed;
+        public int pokemonHP;
+        public int pokemonATK;
+        public int pokemonDEF;
+        public int pokemonSpATK;
+        public int pokemonSpDEF;
+        public int pokemonSpeed;
 
         public PokemonScreen(Pokemon pokemon) : base("", 800, 500)
         {
@@ -42,21 +42,28 @@ namespace NowComesGtk.Screens
             string title = $"PokéTrainer© // Pokémons tipo - Água // Pokémons - Pokemon [#0000]";
             Title = title;
 
+            VBox vbox = new VBox();
+            vbox.SetSizeRequest(150, 150);
             Image Background = new Image("Images/pokemon_water/pokemonWater_backgroung.png");
             fix.Put(Background, 0, 0);
 
-            pokemonPic.Pixbuf = pixbuf.ScaleSimple(120, 120, InterpType.Bilinear);
+            vbox.BorderWidth = 10;
             pokemonPic.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+            pokemonPic.Pixbuf = pixbuf.ScaleSimple(150, 150, InterpType.Bilinear);
+            pokemonPic.SetSizeRequest(150, 150);
 
-            fix.Put(pokemonPic, 90, 120);
+            vbox.Add(pokemonPic);
+            fix.Put(vbox, 125, 170);
 
             // Dex number, name and type
             Label lblPokemonDexNumber = new Label();
             lblPokemonDexNumber.Markup = $"<span font_desc='MS Gothic Regular 24'>#{pokemonDex}</span>";
             fix.Put(lblPokemonDexNumber, 40, 45);
+
             Label lblPokemonName = new Label();
             lblPokemonName.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonName}</span>";
             fix.Put(lblPokemonName, 40, 357);
+
             Label lblPokemonType = new Label();
             lblPokemonType.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonType}</span>";
             fix.Put(lblPokemonType, 100, 437);
@@ -88,23 +95,29 @@ namespace NowComesGtk.Screens
 
             // Statistics
             Label lblPokemonHP = new Label();
-            lblPokemonHP.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonHP}</span>";
-            fix.Put(lblPokemonHP, 384, 327);
+            string pokemonHPFormatted = pokemonHP.ToString("D3");
+            lblPokemonHP.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonHPFormatted}</span>";
+            fix.Put(lblPokemonHP, 375, 327);
             Label lblPokemonATK = new Label();
-            lblPokemonATK.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonATK}</span>";
-            fix.Put(lblPokemonATK, 451, 327);
+            string pokemonATKFormatted = pokemonATK.ToString("D3");
+            lblPokemonATK.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonATKFormatted}</span>";
+            fix.Put(lblPokemonATK, 442, 327);
             Label lblPokemonDEF = new Label();
-            lblPokemonDEF.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonDEF}</span>";
-            fix.Put(lblPokemonDEF, 520, 327);
+            string pokemonDEFFormatted = pokemonDEF.ToString("D3");
+            lblPokemonDEF.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonDEFFormatted}</span>";
+            fix.Put(lblPokemonDEF, 511, 327);
             Label lblPokemonSpATK = new Label();
-            lblPokemonSpATK.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpATK}</span>";
-            fix.Put(lblPokemonSpATK, 587, 327);
+            string pokemonSpATKFormatted = pokemonSpATK.ToString("D3");
+            lblPokemonSpATK.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpATKFormatted}</span>";
+            fix.Put(lblPokemonSpATK, 578, 327);
             Label lblPokemonSpDEF = new Label();
-            lblPokemonSpDEF.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpDEF}</span>";
-            fix.Put(lblPokemonSpDEF, 655, 327);
+            string pokemonSpDEFFormatted = pokemonSpDEF.ToString("D3");
+            lblPokemonSpDEF.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpDEFFormatted}</span>";
+            fix.Put(lblPokemonSpDEF, 646, 327);
             Label lblPokemonSpeed = new Label();
-            lblPokemonSpeed.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpeed}</span>";
-            fix.Put(lblPokemonSpeed, 723, 327);
+            string pokemonSpeedFormatted = pokemonSpeed.ToString("D3");
+            lblPokemonSpeed.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpeedFormatted}</span>";
+            fix.Put(lblPokemonSpeed, 714, 327);
 
             // Moves button
             Button btnMoves = new ButtonGenerator("Images/pokemon_water/Sem nome (75 × 50 px).png", 75, 50);
@@ -125,7 +138,7 @@ namespace NowComesGtk.Screens
 
         private async void PopulateFields()
         {
-            pokemonDex = pokemon.Id.ToString();
+            pokemonDex = pokemon.Id;
             pokemonName = pokemon.Name;
 
             if (pokemon.Abilities.Count < 2)
@@ -158,17 +171,18 @@ namespace NowComesGtk.Screens
                 pokemonType = item.Type.Name;
             }
 
-            pokemonHP = pokemon.Stats[0].BaseStat.ToString();
-            pokemonATK = pokemon.Stats[1].BaseStat.ToString();
-            pokemonDEF = pokemon.Stats[2].BaseStat.ToString();
-            pokemonSpATK = pokemon.Stats[3].BaseStat.ToString();
-            pokemonSpDEF = pokemon.Stats[4].BaseStat.ToString();
-            pokemonSpeed = pokemon.Stats[5].BaseStat.ToString();
+            pokemonHP = pokemon.Stats[0].BaseStat;
+            pokemonATK = pokemon.Stats[1].BaseStat;
+            pokemonDEF = pokemon.Stats[2].BaseStat;
+            pokemonSpATK = pokemon.Stats[3].BaseStat;
+            pokemonSpDEF = pokemon.Stats[4].BaseStat;
+            pokemonSpeed = pokemon.Stats[5].BaseStat;
 
             await _apiRequest.GetPokemonAnimatedSprite(pokemonName);
 
             pokemonPic.Pixbuf = pixbuf.ScaleSimple(150, 150, InterpType.Bilinear);
             pokemonPic.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+            pokemonPic.SetSizeRequest(150, 150);
         }
     }
 }
