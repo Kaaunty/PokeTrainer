@@ -2,35 +2,41 @@
 using NowComesGtk.Utils;
 using PokeApiNet;
 using Gtk;
+using PokeApi.BackEnd.Service;
+using Gdk;
 
 namespace NowComesGtk.Screens
 {
     public class PokemonScreen : BaseWindow
     {
-
-
+#nullable disable
+        private ApiRequest _apiRequest = new();
+        private Pokemon pokemon;
         public string pokemonDex = "#0123";
-        public string pokemonName = "Pokemon";
-        public string pokemonType = "Leandrinha";
-
-        public string pokemonAbilityOne = "Super-Gostosa";
-        public string pokemonAbilityTwo = "Tomar-No-U-Viu";
-        public string pokemonAbilityThree = "Sedutore";
-        public string pokemonAbilityFour = "Uper-Lifre";
-
+        public string pokemonName;
+        public string pokemonType;
+        private Pixbuf pixbuf = new Pixbuf("Images/PokemonAnimated.gif");
+        public string pokemonAbilityOne;
+        public string pokemonAbilityTwo;
+        public string pokemonAbilityThree;
+        public string pokemonAbilityFour;
+        private Image pokemonPic = new Image("Images/PokemonAnimated.gif");
         public string pokemonMale = "25%";
         public string pokemonFemale = "75%";
         public string pokemonCatchRate = "100%";
 
-        public string pokemonHP = "0";
-        public string pokemonATK = "1";
-        public string pokemonDEF = "0";
-        public string pokemonSpATK = "1";
-        public string pokemonSpDEF = "0";
-        public string pokemonSpeed = "0";
+        public string pokemonHP;
+        public string pokemonATK;
+        public string pokemonDEF;
+        public string pokemonSpATK;
+        public string pokemonSpDEF;
+        public string pokemonSpeed;
 
-        public PokemonScreen() : base("", 800, 500)
+        public PokemonScreen(Pokemon pokemon) : base("", 800, 500)
         {
+            this.pokemon = pokemon;
+
+            PopulateFields();
             Fixed fix = new Fixed();
 
             string title = $"PokéTrainer© // Pokémons tipo - Água // Pokémons - Pokemon [#0000]";
@@ -38,12 +44,15 @@ namespace NowComesGtk.Screens
 
             Image Background = new Image("Images/pokemon_water/pokemonWater_backgroung.png");
             fix.Put(Background, 0, 0);
-            Image pokemonPic = new Image("Images/pokemon_water/Sem nome (175 × 200 px).png");
-            fix.Put(pokemonPic, 75, 100);
+
+            pokemonPic.Pixbuf = pixbuf.ScaleSimple(120, 120, InterpType.Bilinear);
+            pokemonPic.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+
+            fix.Put(pokemonPic, 90, 120);
 
             // Dex number, name and type
             Label lblPokemonDexNumber = new Label();
-            lblPokemonDexNumber.Markup = $"<span font_desc='MS Gothic Regular 24'>{pokemonDex}</span>";
+            lblPokemonDexNumber.Markup = $"<span font_desc='MS Gothic Regular 24'>#{pokemonDex}</span>";
             fix.Put(lblPokemonDexNumber, 40, 45);
             Label lblPokemonName = new Label();
             lblPokemonName.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonName}</span>";
@@ -97,7 +106,6 @@ namespace NowComesGtk.Screens
             lblPokemonSpeed.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpeed}</span>";
             fix.Put(lblPokemonSpeed, 723, 327);
 
-
             // Moves button
             Button btnMoves = new ButtonGenerator("Images/pokemon_water/Sem nome (75 × 50 px).png", 75, 50);
             fix.Put(btnMoves, 584, 410);
@@ -106,12 +114,61 @@ namespace NowComesGtk.Screens
             Add(fix);
             ShowAll();
         }
-        private void PokemonMoves(object? sender, EventArgs e)
+
+        private void PokemonMoves(object sender, EventArgs e)
         {
             List<string> moves = new List<string>();
 
             MovementScreen movementScreen = new();
             movementScreen.ShowAll();
+        }
+
+        private async void PopulateFields()
+        {
+            pokemonDex = pokemon.Id.ToString();
+            pokemonName = pokemon.Name;
+
+            if (pokemon.Abilities.Count < 2)
+            {
+                pokemonAbilityOne = pokemon.Abilities[0].Ability.Name;
+            }
+
+            if (pokemon.Abilities.Count >= 2)
+            {
+                pokemonAbilityOne = pokemon.Abilities[0].Ability.Name;
+                pokemonAbilityTwo = pokemon.Abilities[1].Ability.Name;
+            }
+
+            if (pokemon.Abilities.Count >= 3)
+            {
+                pokemonAbilityOne = pokemon.Abilities[0].Ability.Name;
+                pokemonAbilityTwo = pokemon.Abilities[1].Ability.Name;
+                pokemonAbilityThree = pokemon.Abilities[2].Ability.Name;
+            }
+            if (pokemon.Abilities.Count >= 4)
+            {
+                pokemonAbilityOne = pokemon.Abilities[0].Ability.Name;
+                pokemonAbilityTwo = pokemon.Abilities[1].Ability.Name;
+                pokemonAbilityThree = pokemon.Abilities[2].Ability.Name;
+                pokemonAbilityFour = pokemon.Abilities[3].Ability.Name;
+            }
+
+            foreach (var item in pokemon.Types)
+            {
+                pokemonType = item.Type.Name;
+            }
+
+            pokemonHP = pokemon.Stats[0].BaseStat.ToString();
+            pokemonATK = pokemon.Stats[1].BaseStat.ToString();
+            pokemonDEF = pokemon.Stats[2].BaseStat.ToString();
+            pokemonSpATK = pokemon.Stats[3].BaseStat.ToString();
+            pokemonSpDEF = pokemon.Stats[4].BaseStat.ToString();
+            pokemonSpeed = pokemon.Stats[5].BaseStat.ToString();
+
+            await _apiRequest.GetPokemonAnimatedSprite(pokemonName);
+
+            pokemonPic.Pixbuf = pixbuf.ScaleSimple(150, 150, InterpType.Bilinear);
+            pokemonPic.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
         }
     }
 }

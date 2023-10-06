@@ -2,15 +2,17 @@
 using NowComesGtk.Utils;
 using PokeApiNet;
 using Gtk;
+using PokeApi.BackEnd.Service;
 
 namespace NowComesGtk.Screens
 {
     public class PoketrainerMainScreen : BaseWindow
     {
-        Pokemon pokemon;
+        private readonly ApiRequest _apiRequest = new();
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
+            LoadPokemonList();
             Fixed fix = new Fixed();
             Image poketrainerBackground = new Image("Images/background_homescreen.png");
             fix.Put(poketrainerBackground, 0, 0);
@@ -28,7 +30,7 @@ namespace NowComesGtk.Screens
             MenuItem waterMenuItem = new MenuItemGenerator("Água", "Images/pokemon_water/WaterIcon.png", WaterMenuItem_Actived);
             pokemonsMenu.Append(waterMenuItem);
 
-            #endregion Menubar Settings 
+            #endregion Menubar Settings
 
             //Botão teste do Kauã ------> Esse vai direto para a tela de pokémons tipo água!
             Button btnPokedex = new ButtonGenerator("", 150, 175);
@@ -38,8 +40,6 @@ namespace NowComesGtk.Screens
             //Botão teste do Kauã ------> Esse vai direto para a tela do pokémon Squirtle!
             Button btnPokemonScreen = new ButtonGenerator("", 40, 40);
             fix.Put(btnPokemonScreen, 250, 250);
-            btnPokemonScreen.Clicked += btnPokemonScreenTest;
-
             mb.Append(pokemonsMI);
             pokemonsMI.Submenu = pokemonsMenu;
             pokemonsMenu.Append(waterMenuItem);
@@ -48,25 +48,22 @@ namespace NowComesGtk.Screens
             Add(fix);
             ShowAll();
         }
+
+        private async void LoadPokemonList()
+        {
+            await _apiRequest.GetPokemonsListAll();
+        }
+
         private void WaterMenuItem_Actived(object? sender, EventArgs e)
         {
             TypeMainScreen pokemonWater = new TypeMainScreen();
             pokemonWater.Show();
         }
 
-        [Obsolete]
         private void btnPokedexTest(object? sender, EventArgs e)
         {
             PokedexScreen pokemonsWater = new();
             pokemonsWater.Show();
         }
-
-        [Obsolete]
-        private void btnPokemonScreenTest(object? sender, EventArgs e)
-        {
-            PokemonScreen pokemonScreen = new();
-            pokemonScreen.Show();
-        }
-
     }
 }

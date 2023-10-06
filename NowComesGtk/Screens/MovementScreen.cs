@@ -12,17 +12,20 @@ namespace NowComesGtk.Screens
             Move = move;
         }
     }
+
     public class MovementScreen : BaseWindow
     {
-        ListStore moveList;
-        enum Column
+#nullable disable
+        private ListStore moveList;
+
+        private enum Column
         {
             Move
         }
 
-        List<string> moves;
+        private List<string> moves;
 
-        int i = 0;
+        private int i = 0;
 
         //while (i<moves.Count)
         //    {
@@ -48,6 +51,7 @@ namespace NowComesGtk.Screens
             vBox.Add(txtSearchMove);
 
             #region FocusIn and FocusOut Event (txtSearchMove)
+
             txtSearchMove.FocusInEvent += (sender, e) =>
             {
                 txtSearchMove.Text = string.Empty;
@@ -62,7 +66,8 @@ namespace NowComesGtk.Screens
                 cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
                 txtSearchMove.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
             };
-            #endregion
+
+            #endregion FocusIn and FocusOut Event (txtSearchMove)
 
             ScrolledWindow sw = new ScrolledWindow();
             sw.ShadowType = ShadowType.EtchedIn;
@@ -80,7 +85,8 @@ namespace NowComesGtk.Screens
             Add(fix);
             ShowAll();
         }
-        void AddColumns(TreeView treeView)
+
+        private void AddColumns(TreeView treeView)
         {
             CellRendererText rendererText = new CellRendererText();
             TreeViewColumn column = new TreeViewColumn("Movimento", rendererText,
@@ -88,7 +94,8 @@ namespace NowComesGtk.Screens
             column.SortColumnId = (int)Column.Move;
             treeView.AppendColumn(column);
         }
-        ListStore CreateModel()
+
+        private ListStore CreateModel()
         {
             ListStore moves = new ListStore(typeof(string),
                 typeof(string), typeof(int));
