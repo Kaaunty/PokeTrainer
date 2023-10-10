@@ -7,7 +7,7 @@ namespace NowComesGtk
         public static void Main(string[] args)
         {
             Application.Init();
-            new PokemonLoader();
+            new PokemonLoad();
             Application.Run();
         }
     }

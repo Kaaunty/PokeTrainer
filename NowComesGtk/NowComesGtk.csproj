@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Translate.v2" Version="1.62.0.875" />
     <PackageReference Include="GtkSharp" Version="3.24.24.95" />
     <PackageReference Include="PokeApiNet" Version="3.0.10" />
   </ItemGroup>

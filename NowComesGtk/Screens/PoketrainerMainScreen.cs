@@ -8,6 +8,8 @@ namespace NowComesGtk.Screens
 {
     public class PoketrainerMainScreen : BaseWindow
     {
+        private ApiRequest _apiRequest = new();
+
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
             Fixed fix = new Fixed();
@@ -31,11 +33,15 @@ namespace NowComesGtk.Screens
 
             //Botão teste do Kauã ------> Esse vai direto para a tela de pokémons tipo água!
             Button btnPokedex = new ButtonGenerator("", 150, 175);
+            btnPokedex.Image = new Image("Images/pokemon_water/WaterIcon.png");
             fix.Put(btnPokedex, 250, 50);
+
             btnPokedex.Clicked += btnPokedexTest;
 
             //Botão teste do Kauã ------> Esse vai direto para a tela do pokémon Squirtle!
             Button btnPokemonScreen = new ButtonGenerator("", 40, 40);
+            btnPokemonScreen.Clicked += btnPokemonTest;
+            btnPokemonScreen.Image = new Image("Images/0r,ayquaza-mega.gif");
             fix.Put(btnPokemonScreen, 250, 250);
             mb.Append(pokemonsMI);
             pokemonsMI.Submenu = pokemonsMenu;
@@ -44,6 +50,14 @@ namespace NowComesGtk.Screens
             fix.Add(vbMb);
             Add(fix);
             ShowAll();
+        }
+
+        private async void btnPokemonTest(object? sender, EventArgs e)
+        {
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("rayquaza");
+
+            PokemonScreen pokemonScreen = new(pokemon);
+            pokemonScreen.Show();
         }
 
         private void WaterMenuItem_Actived(object? sender, EventArgs e)
