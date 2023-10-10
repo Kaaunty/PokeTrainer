@@ -2,15 +2,17 @@
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
 using Gtk;
+using PokeApiNet;
 
-public class PokemonLoader : BaseWindow
+public class PokemonLoad : BaseWindow
 {
+#nullable disable
     private ApiRequest _apiRequest = new ApiRequest();
     private ProgressBar progressBar;
     private bool isLoaded = false;
     private Label loadingLabel;
 
-    public PokemonLoader() : base("", 400, 100)
+    public PokemonLoad() : base("", 400, 100)
     {
         var vbox = new VBox();
 
@@ -40,7 +42,7 @@ public class PokemonLoader : BaseWindow
     {
         try
         {
-            await _apiRequest.GetPokemonsListAll();
+            //await _apiRequest.GetPokemonsListAll();
             progressBar.Fraction = 1;
             isLoaded = true;
 
