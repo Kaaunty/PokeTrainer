@@ -1,6 +1,5 @@
 ﻿using Gdk;
 using Gtk;
-using NowComesGtk;
 using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
@@ -20,6 +19,7 @@ namespace NowComesGtk.Screens
         public string pokemonType;
         private string pokemonTypeSecondary;
         private bool isLoaded = false;
+        private EvolutionChain evolutionChain;
         private PokemonSpecies pokeSpecies;
         private PixbufAnimation pokemonAnimation;
         private List<Ability> pokeAbility = new List<Ability>();
@@ -47,71 +47,55 @@ namespace NowComesGtk.Screens
             {
                 Task.Delay(100).Wait();
             }
-
             Fixed fix = new Fixed();
 
-            string title = $"PokéTrainer© // Pokémons tipo - Água // Pokémons - Pokemon [#0000]";
-            Title = title;
+            string PokemonNameUpper = textInfo.ToTitleCase(pokemonName);
+            string pokemonDexFormatted = pokemonDex.ToString("D3");
+            string PokemonFirstTypeFormatted = textInfo.ToTitleCase(_apiRequest.Translate(pokemon.Types[0].Type.Name));
 
+            string title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormatted} // Pokémon - {PokemonNameUpper} [#{pokemonDexFormatted}]";
+            Title = title;
             Image Background = new Image("Images/pokemon_water/pokemonWater_backgroung.png");
 
-            fix.Put(Background, 0, 0);
+            Image animationImage = new Image();
+            animationImage.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
 
-            var animationAlignment = new Alignment(0.5f, 0.5f, 0, 0);
+            #region vbox
 
-            pokemonAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+            VBox vbox = new VBox(false, 0);
 
-            var animationImage = new Image();
+            vbox.Add(Background);
+            Label teste = new Label("teste");
+            vbox.PackStart(teste, false, false, 0);
+            Add(vbox);
 
-            animationImage.PixbufAnimation = pokemonAnimation;
+            #endregion vbox
 
-            animationAlignment.Add(animationImage);
-
-            fix.Put(animationAlignment, 150, 200);
-
-            // Dex number, name and type
             Label lblPokemonDexNumber = new Label();
-            string pokemonDexFormatted = pokemonDex.ToString("D3");
             lblPokemonDexNumber.Markup = $"<span font_desc='MS Gothic Regular 24'>#{pokemonDexFormatted}</span>";
 
-            fix.Put(lblPokemonDexNumber, 40, 45);
+            //fix.Put(lblPokemonDexNumber, 40, 45);
 
             Label lblPokemonName = new Label();
 
-            string PokemonNameUpper = textInfo.ToTitleCase(pokemonName);
             lblPokemonName.Markup = $"<span font_desc='MS Gothic Regular 15'>{PokemonNameUpper}</span>";
-            fix.Put(lblPokemonName, 40, 357);
+
+            //fix.Put(lblPokemonName, 40, 357);
 
             Image PokemonTypeOne = new Image($"Images/pokemon_types/{pokemonType}.png");
-            fix.Put(PokemonTypeOne, 93, 427);
+            //fix.Put(PokemonTypeOne, 93, 427);
 
             if (pokemon.Types.Count > 1)
             {
                 Image imagePokemonTypeSecondary = new Image($"Images/pokemon_types/{pokemonTypeSecondary}.png");
-                fix.Put(imagePokemonTypeSecondary, 179, 427);
+                //fix.Put(imagePokemonTypeSecondary, 179, 427);
             }
 
-            //Label lblPokemonType = new Label();
-
-            //string pokemonTypeUpper = textInfo.ToTitleCase(pokemonType);
-            //lblPokemonType.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonTypeUpper}</span>";
-            //fix.Put(lblPokemonType, 100, 437);
-
-            //Label lblPokemonTypeSecondary = new Label();
-            //if (!String.IsNullOrEmpty(pokemonTypeSecondary))
-            //{
-            //    string pokemonTypeSecondaryUpper = textInfo.ToTitleCase(pokemonTypeSecondary);
-            //    lblPokemonType.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonTypeUpper}/</span>";
-            //    lblPokemonTypeSecondary.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonTypeSecondaryUpper}</span>";
-            //    fix.Put(lblPokemonTypeSecondary, 165, 437);
-            //}
-
-            // Ability
             Label lblPokemonAbilityOne = new Label();
 
             string pokemonAbilityOneUpper = textInfo.ToTitleCase(pokemonAbilityOne);
             lblPokemonAbilityOne.Markup = $"<span font_desc='MS Gothic Regular 15'>[ {pokemonAbilityOneUpper} ]</span>";
-            fix.Put(lblPokemonAbilityOne, 375, 63);
+            //fix.Put(lblPokemonAbilityOne, 375, 63);
             string PokemonAbilityOneToolTipTranslated = _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
 
             lblPokemonAbilityOne.TooltipMarkup = $"<span font_desc='MS Gothic Regular 15'>{PokemonAbilityOneToolTipTranslated}</span>";
@@ -122,7 +106,7 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityTwo.Markup = $"<span font_desc='MS Gothic Regular 15'>[ {pokemonAbilityTwoUpper} ]</span>";
                 string PokemonAbilityTwoToolTipTranslted = _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect);
                 lblPokemonAbilityTwo.TooltipMarkup = $"<span font_desc='MS Gothic Regular 15'>{PokemonAbilityTwoToolTipTranslted}</span>";
-                fix.Put(lblPokemonAbilityTwo, 375, 90);
+                //fix.Put(lblPokemonAbilityTwo, 375, 90);
             }
 
             Label lblPokemonAbilityThree = new Label();
@@ -132,7 +116,7 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityThree.Markup = $"<span font_desc='MS Gothic Regular 15'>[ {pokemonAbilityThreeUpper} ]</span>";
                 string PokemonAbilityThreeToolTipTranslated = _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect);
                 lblPokemonAbilityThree.TooltipMarkup = $"<span font_desc='MS Gothic Regular 15'>{PokemonAbilityThreeToolTipTranslated}</span>";
-                fix.Put(lblPokemonAbilityThree, 585, 63);
+                //fix.Put(lblPokemonAbilityThree, 585, 63);
             }
 
             Label lblPokemonAbilityFour = new Label();
@@ -142,60 +126,64 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityFour.Markup = $"<span font_desc='MS Gothic Regular 15'>[ {pokemonAbilityFourUpper} ]</span>";
                 string PokemonAbilityFourToolTipTranslated = _apiRequest.Translate(pokeAbility[3].EffectEntries[1].Effect);
                 lblPokemonAbilityFour.TooltipMarkup = $"<span font_desc='MS Gothic Regular 15'>{PokemonAbilityFourToolTipTranslated}</span>";
-                fix.Put(lblPokemonAbilityFour, 585, 90);
+                //fix.Put(lblPokemonAbilityFour, 585, 90);
             }
 
             // Gender ratio and Catch rate
             Label lblPokemonMale = new Label();
             lblPokemonMale.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonMale}</span>";
-            fix.Put(lblPokemonMale, 385, 225);
+            //fix.Put(lblPokemonMale, 385, 225);
             Label lblPokemnFemale = new Label();
             lblPokemnFemale.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonFemale}</span>";
-            fix.Put(lblPokemnFemale, 500, 225);
+            //fix.Put(lblPokemnFemale, 500, 225);
             Label lblPokemonCatchRate = new Label();
             lblPokemonCatchRate.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonCatchRate}</span>";
-            fix.Put(lblPokemonCatchRate, 665, 210);
+            //fix.Put(lblPokemonCatchRate, 665, 210);
 
             // Statistics
             Label lblPokemonHP = new Label();
             string pokemonHPFormatted = pokemonHP.ToString("D3");
             lblPokemonHP.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonHPFormatted}</span>";
-            fix.Put(lblPokemonHP, 375, 327);
+            //fix.Put(lblPokemonHP, 375, 327);
             Label lblPokemonATK = new Label();
             string pokemonATKFormatted = pokemonATK.ToString("D3");
             lblPokemonATK.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonATKFormatted}</span>";
-            fix.Put(lblPokemonATK, 442, 327);
+            //fix.Put(lblPokemonATK, 442, 327);
             Label lblPokemonDEF = new Label();
             string pokemonDEFFormatted = pokemonDEF.ToString("D3");
             lblPokemonDEF.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonDEFFormatted}</span>";
-            fix.Put(lblPokemonDEF, 511, 327);
+            // fix.Put(lblPokemonDEF, 511, 327);
             Label lblPokemonSpATK = new Label();
             string pokemonSpATKFormatted = pokemonSpATK.ToString("D3");
             lblPokemonSpATK.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpATKFormatted}</span>";
-            fix.Put(lblPokemonSpATK, 578, 327);
+            //fix.Put(lblPokemonSpATK, 578, 327);
             Label lblPokemonSpDEF = new Label();
             string pokemonSpDEFFormatted = pokemonSpDEF.ToString("D3");
             lblPokemonSpDEF.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpDEFFormatted}</span>";
-            fix.Put(lblPokemonSpDEF, 646, 327);
+            //fix.Put(lblPokemonSpDEF, 646, 327);
             Label lblPokemonSpeed = new Label();
             string pokemonSpeedFormatted = pokemonSpeed.ToString("D3");
             lblPokemonSpeed.Markup = $"<span font_desc='MS Gothic Regular 15'>{pokemonSpeedFormatted}</span>";
-            fix.Put(lblPokemonSpeed, 714, 327);
+            //fix.Put(lblPokemonSpeed, 714, 327);
 
             // Moves button
-            Button NextEvolution = new ButtonGenerator("Images/NextButton.png", 40, 40);
-            fix.Put(NextEvolution, 180, 290);
-            NextEvolution.Clicked += GetNextEvolution;
 
-            Button PreviousEvolution = new ButtonGenerator("Images/BackButton.png", 40, 40);
-            fix.Put(PreviousEvolution, 100, 290);
-            PreviousEvolution.Clicked += GetPreviousEvolution;
+            if (evolutionChain.Chain.EvolvesTo.Count != 0 && evolutionChain.Chain.EvolvesTo[0].EvolvesTo.Count != 0)
+            {
+                Button NextEvolution = new ButtonGenerator("Images/NextButton.png", 40, 40);
+                //fix.Put(NextEvolution, 180, 290);
+                NextEvolution.Clicked += GetNextEvolution;
+
+                Button PreviousEvolution = new ButtonGenerator("Images/BackButton.png", 40, 40);
+                //fix.Put(PreviousEvolution, 100, 290);
+                PreviousEvolution.Clicked += GetPreviousEvolution;
+            }
 
             Button btnMoves = new ButtonGenerator("Images/pokemon_water/Sem nome (75 × 50 px).png", 75, 50);
-            fix.Put(btnMoves, 584, 410);
+            //fix.Put(btnMoves, 584, 410);
             btnMoves.Clicked += PokemonMoves;
 
-            Add(fix);
+            //Add(fix);
             ShowAll();
         }
 
@@ -204,7 +192,6 @@ namespace NowComesGtk.Screens
             try
             {
                 string nextEvolution = pokeSpecies.EvolutionChain.Url;
-                EvolutionChain evolutionChain = await _apiRequest.GetEvolutionChain(nextEvolution);
                 if (evolutionChain.Chain.EvolvesTo.Count >= 1 && evolutionChain.Chain.EvolvesTo[0].Species.Name != pokemonName)
                 {
                     if (evolutionChain.Chain.EvolvesTo[0].EvolvesTo.Count == 1 && evolutionChain.Chain.Species.Name == pokemonName)
@@ -319,6 +306,7 @@ namespace NowComesGtk.Screens
 
                 await Task.Run(() => GetPokemonSpecies(pokemonName)).ConfigureAwait(false);
                 await Task.Run(() => UpdatePokemonSprite()).ConfigureAwait(false);
+                await Task.Run(() => GetPokemonEvolutionChain(pokeSpecies.EvolutionChain.Url)).ConfigureAwait(false);
 
                 foreach (var abilities in pokemon.Abilities)
                 {
@@ -380,6 +368,18 @@ namespace NowComesGtk.Screens
             if (pokeAbility != null)
             {
                 pokeAbility.Add(ability);
+            }
+        }
+
+        private async Task GetPokemonEvolutionChain(string url)
+        {
+            try
+            {
+                evolutionChain = await _apiRequest.GetEvolutionChain(url);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao carregar os dados do Pokémon: {ex.Message}");
             }
         }
 
