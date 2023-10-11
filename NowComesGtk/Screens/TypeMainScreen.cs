@@ -20,10 +20,9 @@ namespace NowComesGtk.Screens
             Add(fix);
             ShowAll();
         }
+
         private void Pokemons_Water_Click(object? sender, EventArgs e)
         {
-            PokedexScreen pokemonsWater = new PokedexScreen();
-            pokemonsWater.Show();
         }
     }
 }

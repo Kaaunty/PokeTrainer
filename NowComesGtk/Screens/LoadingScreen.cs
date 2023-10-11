@@ -1,8 +1,7 @@
-﻿using PokeApi.BackEnd.Service;
+﻿using Gtk;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
-using Gtk;
-using PokeApiNet;
+using PokeApi.BackEnd.Service;
 
 public class PokemonLoad : BaseWindow
 {

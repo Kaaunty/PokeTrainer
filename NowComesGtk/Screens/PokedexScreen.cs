@@ -1,8 +1,9 @@
-﻿using NowComesGtk.Reusable_components;
-using PokeApiNet;
-using Gtk;
+﻿using Gtk;
+using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
+using PokeApiNet;
+using System.Globalization;
 
 namespace NowComesGtk.Screens
 {
@@ -13,7 +14,8 @@ namespace NowComesGtk.Screens
         private Fixed fix = new Fixed();
         private Methods _methods = new();
         private ApiRequest _apiRequest = new();
-        private string type = "water";
+        private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
+        private string type;
         private int choice = 0;
         private int currentPage = 0;
 
@@ -71,15 +73,18 @@ namespace NowComesGtk.Screens
 
         #endregion Pokeball buttons
 
-        public PokedexScreen() : base("PokéTrainer© // Pokémons tipo - Água // Pokémons", 500, 600)
+        public PokedexScreen(string type) : base($"PokéTrainer© // Pokémons tipo - {type} // Pokémons", 500, 600)
         {
-            EventBox eventBox = new EventBox();
+            this.type = type;
+            string TypeFormatted = textInfo.ToTitleCase(_apiRequest.Translate(type));
+            Title = $"PokéTrainer© // Pokémons tipo - {TypeFormatted} // Pokémons";
+            //EventBox fix = new EventBox();
             Image backgroundScreen = new Image("Images/pokemon_water/pokemon_water_homescreen.png");
-            fix.Put(backgroundScreen, 0, 0);
+            this.fix.Put(backgroundScreen, 0, 0);
 
             string defaultText = "Buscar Pokémon";
             txtSearchPokemon.SetSizeRequest(125, 20);
-            fix.Put(txtSearchPokemon, 165, 25);
+            this.fix.Put(txtSearchPokemon, 165, 25);
             txtSearchPokemon.Text = defaultText;
             txtSearchPokemon.Changed += SearchPokemon;
             CssProvider cssProvider = new CssProvider();
@@ -102,71 +107,56 @@ namespace NowComesGtk.Screens
             };
 
             ComboBox cbTypePokemon = new ComboBox();
-            fix.Put(cbTypePokemon, 180, 60);
+            this.fix.Put(cbTypePokemon, 180, 60);
 
             Button btnBack = new Button("<<");
             btnBack.SetSizeRequest(10, 10);
-            fix.Put(btnBack, 25, 74);
+            this.fix.Put(btnBack, 25, 74);
             btnBack.Clicked += btnBack_Clicked;
             Button btnNext = new Button(">>");
             btnNext.SetSizeRequest(10, 10);
-            fix.Put(btnNext, 425, 74);
+            this.fix.Put(btnNext, 425, 74);
             btnNext.Clicked += btnNext_Clicked;
 
             #region Buttons
-
-            VBox vboxPokemonButtonsFirstColumn = new(false, 0);
-            fix.Put(vboxPokemonButtonsFirstColumn, 50, 145);
-            VBox vboxPokemonButtonsSecondColumn = new(false, 0);
-            fix.Put(vboxPokemonButtonsSecondColumn, 108, 145);
-            VBox vboxPokemonButtonsThirdColumn = new(false, 0);
-            fix.Put(vboxPokemonButtonsThirdColumn, 165, 145);
-            VBox vboxPokemonButtonsFourthColumn = new(false, 0);
-            fix.Put(vboxPokemonButtonsFourthColumn, 223, 145);
-            VBox vboxPokemonButtonsFifthColumn = new(false, 0);
-            fix.Put(vboxPokemonButtonsFifthColumn, 280, 145);
-            VBox vboxPokemonButtonsSixthColumn = new(false, 0);
-            fix.Put(vboxPokemonButtonsSixthColumn, 338, 145);
-            VBox vboxPokemonButtonsSeventhColumn = new(false, 0);
-            fix.Put(vboxPokemonButtonsSeventhColumn, 396, 145);
 
             #region First row of button
 
             // Pokeball 1
             pokeball1 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFirstColumn.PackStart(pokeball1, false, false, 4);
             pokeball1.Name = "pokemon1";
             pokeball1.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball1, 51, 145);
             // Pokeball 2
             pokeball2 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSecondColumn.PackStart(pokeball2, false, false, 4);
             pokeball2.Name = "pokemon2";
             pokeball2.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball2, 108, 145);
             // Pokeball 3
             pokeball3 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsThirdColumn.PackStart(pokeball3, false, false, 4);
             pokeball3.Name = "pokemon3";
             pokeball3.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball3, 166, 145);
             // Pokeball 4
             pokeball4 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFourthColumn.PackStart(pokeball4, false, false, 4);
             pokeball4.Name = "pokemon4";
             pokeball4.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball4, 223, 145);
             // Pokeball 5
             pokeball5 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFifthColumn.PackStart(pokeball5, false, false, 4);
             pokeball5.Name = "pokemon5";
             pokeball5.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball5, 281, 145);
             // Pokeball 6
             pokeball6 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSixthColumn.PackStart(pokeball6, false, false, 4);
             pokeball6.Name = "pokemon6";
             pokeball6.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball6, 339, 145);
             // Pokeball 7
             pokeball7 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSeventhColumn.PackStart(pokeball7, false, false, 4);
             pokeball7.Name = "pokemon7";
             pokeball7.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball7, 397, 145);
 
             #endregion First row of button
 
@@ -174,39 +164,42 @@ namespace NowComesGtk.Screens
 
             // Pokeball 8
             pokeball8 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFirstColumn.PackStart(pokeball8, false, false, 4);
             pokeball8.Name = "pokemon8";
             pokeball8.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball8, 51, 203);
             // Pokeball 9
             pokeball9 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSecondColumn.PackStart(pokeball9, false, false, 4);
             pokeball9.Name = "pokemon9";
             pokeball9.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball9, 108, 203);
             // Pokeball 10
             pokeball10 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsThirdColumn.PackStart(pokeball10, false, false, 4);
+
             pokeball10.Name = "pokemon10";
             pokeball10.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball10, 166, 203);
             // Pokeball 11
             pokeball11 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFourthColumn.PackStart(pokeball11, false, false, 4);
             pokeball11.Name = "pokemon11";
             pokeball11.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball11, 223, 203);
             // Pokeball 12
             pokeball12 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFifthColumn.PackStart(pokeball12, false, false, 4);
+
             pokeball12.Name = "pokemon12";
             pokeball12.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball12, 281, 203);
             // Pokeball 13
             pokeball13 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSixthColumn.PackStart(pokeball13, false, false, 4);
+
             pokeball13.Name = "pokemon13";
             pokeball13.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball13, 339, 203);
             // Pokeball 14
             pokeball14 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSeventhColumn.PackStart(pokeball14, false, false, 4);
             pokeball14.Name = "pokemon14";
             pokeball14.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball14, 397, 203);
 
             #endregion Second button row
 
@@ -214,39 +207,41 @@ namespace NowComesGtk.Screens
 
             // Pokeball 15
             pokeball15 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFirstColumn.PackStart(pokeball15, false, false, 4);
             pokeball15.Name = "pokemon15";
             pokeball15.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball15, 51, 261);
+
             // Pokeball 16
             pokeball16 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSecondColumn.PackStart(pokeball16, false, false, 4);
             pokeball16.Name = "pokemon16";
             pokeball16.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball16, 108, 261);
             // Pokeball 17
             pokeball17 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsThirdColumn.PackStart(pokeball17, false, false, 4);
             pokeball17.Name = "pokemon17";
             pokeball17.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball17, 166, 261);
             // Pokeball 18
             pokeball18 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFourthColumn.PackStart(pokeball18, false, false, 4);
             pokeball18.Name = "pokemon18";
             pokeball18.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball18, 223, 261);
             // Pokeball 19
             pokeball19 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFifthColumn.PackStart(pokeball19, false, false, 4);
             pokeball19.Name = "pokemon19";
             pokeball19.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball19, 281, 261);
             // Pokeball 20
+
             pokeball20 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSixthColumn.PackStart(pokeball20, false, false, 4);
             pokeball20.Name = "pokemon20";
             pokeball20.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball20, 339, 261);
             // Pokeball 21
             pokeball21 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSeventhColumn.PackStart(pokeball21, false, false, 4);
             pokeball21.Name = "pokemon21";
             pokeball21.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball21, 397, 261);
 
             #endregion Third button row
 
@@ -254,40 +249,40 @@ namespace NowComesGtk.Screens
 
             // Pokeball 22
             pokeball22 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFirstColumn.PackStart(pokeball22, false, false, 4);
             pokeball22.Name = "pokemon22";
             pokeball22.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball22, 51, 319);
 
             // Pokeball 23
             pokeball23 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSecondColumn.PackStart(pokeball23, false, false, 4);
             pokeball23.Name = "pokemon23";
             pokeball23.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball23, 108, 319);
             // Pokeball 24
             pokeball24 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsThirdColumn.PackStart(pokeball24, false, false, 4);
             pokeball24.Name = "pokemon24";
             pokeball24.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball24, 166, 319);
             // Pokeball 25
             pokeball25 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFourthColumn.PackStart(pokeball25, false, false, 4);
             pokeball25.Name = "pokemon25";
             pokeball25.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball25, 223, 319);
             // Pokeball 26
             pokeball26 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFifthColumn.PackStart(pokeball26, false, false, 4);
             pokeball26.Name = "pokemon26";
             pokeball26.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball26, 281, 319);
             // Pokeball 27
             pokeball27 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSixthColumn.PackStart(pokeball27, false, false, 4);
             pokeball27.Name = "pokemon27";
             pokeball27.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball27, 339, 319);
             // Pokeball 28
             pokeball28 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSeventhColumn.PackStart(pokeball28, false, false, 4);
             pokeball28.Name = "pokemon28";
             pokeball28.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball28, 397, 319);
 
             #endregion Fourth button row
 
@@ -295,40 +290,40 @@ namespace NowComesGtk.Screens
 
             // Pokeball 29
             pokeball29 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFirstColumn.PackStart(pokeball29, false, false, 4);
             pokeball29.Name = "pokemon29";
             pokeball29.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball29, 51, 377);
 
             // Pokeball 30
             pokeball30 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSecondColumn.PackStart(pokeball30, false, false, 4);
             pokeball30.Name = "pokemon30";
             pokeball30.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball30, 108, 377);
             // Pokeball 31
             pokeball31 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsThirdColumn.PackStart(pokeball31, false, false, 4);
             pokeball31.Name = "pokemon31";
             pokeball31.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball31, 166, 377);
             // Pokeball 32
             pokeball32 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFourthColumn.PackStart(pokeball32, false, false, 4);
             pokeball32.Name = "pokemon32";
             pokeball32.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball32, 223, 377);
             // Pokeball 33
             pokeball33 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFifthColumn.PackStart(pokeball33, false, false, 4);
             pokeball33.Name = "pokemon33";
             pokeball33.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball33, 281, 377);
             // Pokeball 34
             pokeball34 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSixthColumn.PackStart(pokeball34, false, false, 4);
             pokeball34.Name = "pokemon34";
             pokeball34.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball34, 339, 377);
             // Pokeball 35
             pokeball35 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSeventhColumn.PackStart(pokeball35, false, false, 4);
             pokeball35.Name = "pokemon35";
             pokeball35.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball35, 397, 377);
 
             #endregion Fifth button row
 
@@ -336,40 +331,40 @@ namespace NowComesGtk.Screens
 
             // Pokeball 36
             pokeball36 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFirstColumn.PackStart(pokeball36, false, false, 4);
             pokeball36.Name = "pokemon36";
             pokeball36.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball36, 51, 435);
 
             // Pokeball 37
             pokeball37 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSecondColumn.PackStart(pokeball37, false, false, 4);
             pokeball37.Name = "pokemon37";
             pokeball37.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball37, 108, 435);
             // Pokeball 38
             pokeball38 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsThirdColumn.PackStart(pokeball38, false, false, 4);
             pokeball38.Name = "pokemon38";
             pokeball38.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball38, 166, 435);
             // Pokeball 39
             pokeball39 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFourthColumn.PackStart(pokeball39, false, false, 4);
             pokeball39.Name = "pokemon39";
             pokeball39.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball39, 223, 435);
             // Pokeball 40
             pokeball40 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFifthColumn.PackStart(pokeball40, false, false, 4);
             pokeball40.Name = "pokemon40";
             pokeball40.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball40, 281, 435);
             // Pokeball 41
             pokeball41 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSixthColumn.PackStart(pokeball41, false, false, 4);
             pokeball41.Name = "pokemon41";
             pokeball41.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball41, 339, 435);
             // Pokeball 42
             pokeball42 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSeventhColumn.PackStart(pokeball42, false, false, 4);
             pokeball42.Name = "pokemon42";
             pokeball42.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball42, 397, 435);
 
             #endregion Sixth button row
 
@@ -377,39 +372,39 @@ namespace NowComesGtk.Screens
 
             // Pokeball 43
             pokeball43 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFirstColumn.PackStart(pokeball43, false, false, 4);
             pokeball43.Name = "pokemon43";
             pokeball43.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball43, 51, 493);
             // Pokeball 44
             pokeball44 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSecondColumn.PackStart(pokeball44, false, false, 4);
             pokeball44.Name = "pokemon44";
             pokeball44.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball44, 108, 493);
             // Pokeball 45
             pokeball45 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsThirdColumn.PackStart(pokeball45, false, false, 4);
             pokeball45.Name = "pokemon45";
             pokeball45.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball45, 166, 493);
             // Pokeball 46
             pokeball46 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFourthColumn.PackStart(pokeball46, false, false, 4);
             pokeball46.Name = "pokemon46";
             pokeball46.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball46, 223, 493);
             // Pokeball 47
             pokeball47 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsFifthColumn.PackStart(pokeball47, false, false, 4);
             pokeball47.Name = "pokemon47";
             pokeball47.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball47, 281, 493);
             // Pokeball 48
             pokeball48 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSixthColumn.PackStart(pokeball48, false, false, 4);
             pokeball48.Name = "pokemon48";
             pokeball48.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball48, 339, 493);
             // Pokeball 49
             pokeball49 = new ButtonGenerator("Images/pokeball.png", 40, 40);
-            vboxPokemonButtonsSeventhColumn.PackStart(pokeball49, false, false, 4);
             pokeball49.Name = "pokemon49";
             pokeball49.Clicked += OpenPokemonScreenClicked;
+            fix.Put(pokeball49, 397, 493);
 
             #endregion Seventh button row
 
@@ -417,7 +412,7 @@ namespace NowComesGtk.Screens
 
             ListStore typeList = new ListStore(typeof(string));
             typeList.AppendValues("Todos");
-            typeList.AppendValues("Puro tipo Água");
+            typeList.AppendValues($"Puro tipo {TypeFormatted}");
             typeList.AppendValues("Meio - Primário");
             typeList.AppendValues("Meio - Secundário");
             cbTypePokemon.Model = typeList;
@@ -437,8 +432,9 @@ namespace NowComesGtk.Screens
                     {
                         currentPage = 0;
                         choice = 0;
+                        AllTypeClicked();
                     }
-                    else if (typeSelected == "Puro tipo Água")
+                    else if (typeSelected == $"Puro tipo  {TypeFormatted}")
                     {
                         currentPage = 0;
                         choice = 1;
@@ -460,17 +456,8 @@ namespace NowComesGtk.Screens
                 }
             };
 
-            eventBox.Add(vboxPokemonButtonsFifthColumn);
-            eventBox.Add(vboxPokemonButtonsSecondColumn);
-            eventBox.Add(vboxPokemonButtonsThirdColumn);
-            eventBox.Add(vboxPokemonButtonsFourthColumn);
-            eventBox.Add(vboxPokemonButtonsFifthColumn);
-            eventBox.Add(vboxPokemonButtonsSixthColumn);
-            eventBox.Add(vboxPokemonButtonsSeventhColumn);
-
-            fix.Add(eventBox);
-            _methods.UpdateButtons(fix, currentPage, type, choice);
-            Add(fix);
+            _methods.UpdateButtons(this.fix, currentPage, type, choice);
+            Add(this.fix);
             ShowAll();
         }
 
