@@ -1,11 +1,12 @@
-﻿using Gtk;
+﻿using PokeApi.BackEnd.Service;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
-using PokeApi.BackEnd.Service;
+using Gtk;
 
 public class PokemonLoad : BaseWindow
 {
-#nullable disable
+    #nullable disable
+    
     private ApiRequest _apiRequest = new ApiRequest();
     private ProgressBar progressBar;
     private bool isLoaded = false;
@@ -27,7 +28,6 @@ public class PokemonLoad : BaseWindow
         LoadPokemonList();
         Task.Run(() => UpdateProgressBar());
     }
-
     private void UpdateProgressBar()
     {
         while (!isLoaded)
@@ -36,12 +36,11 @@ public class PokemonLoad : BaseWindow
             Task.Delay(100).Wait();
         }
     }
-
     private async void LoadPokemonList()
     {
         try
         {
-            //await _apiRequest.GetPokemonsListAll();
+            await _apiRequest.GetPokemonsListAll();
             progressBar.Fraction = 1;
             isLoaded = true;
 

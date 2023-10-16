@@ -1,14 +1,14 @@
-﻿using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
+using NowComesGtk.Utils;
 using PokeApiNet;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
     public class PoketrainerMainScreen : BaseWindow
     {
-#nullable disable
+        #nullable disable
 
         private ApiRequest _apiRequest = new();
 

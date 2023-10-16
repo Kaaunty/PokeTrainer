@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NowComesGtk.Utils
+﻿namespace NowComesGtk.Utils
 {
     public class MessageDialogGenerator : Gtk.MessageDialog
     {

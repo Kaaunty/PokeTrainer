@@ -1,6 +1,6 @@
 ﻿using NowComesGtk.Reusable_components;
-using Gtk;
 using NowComesGtk.Utils;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -20,7 +20,6 @@ namespace NowComesGtk.Screens
             Add(fix);
             ShowAll();
         }
-
         private void Pokemons_Water_Click(object? sender, EventArgs e)
         {
         }

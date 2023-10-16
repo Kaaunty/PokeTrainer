@@ -1,15 +1,16 @@
-﻿using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
-using PokeApiNet;
 using System.Globalization;
+using NowComesGtk.Utils;
+using PokeApiNet;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
     public class PokedexScreen : BaseWindow
     {
 #nullable disable
+
         private Entry txtSearchPokemon = new Entry();
         private Fixed fix = new Fixed();
         private Methods _methods = new();
@@ -21,55 +22,13 @@ namespace NowComesGtk.Screens
 
         #region Pokeball buttons
 
-        public Button pokeball1;
-        public Button pokeball2;
-        public Button pokeball3;
-        public Button pokeball4;
-        public Button pokeball5;
-        public Button pokeball6;
-        public Button pokeball7;
-        public Button pokeball8;
-        public Button pokeball9;
-        public Button pokeball10;
-        public Button pokeball11;
-        public Button pokeball12;
-        public Button pokeball13;
-        public Button pokeball14;
-        public Button pokeball15;
-        public Button pokeball16;
-        public Button pokeball17;
-        public Button pokeball18;
-        public Button pokeball19;
-        public Button pokeball20;
-        public Button pokeball21;
-        public Button pokeball22;
-        public Button pokeball23;
-        public Button pokeball24;
-        public Button pokeball25;
-        public Button pokeball26;
-        public Button pokeball27;
-        public Button pokeball28;
-        public Button pokeball29;
-        public Button pokeball30;
-        public Button pokeball31;
-        public Button pokeball32;
-        public Button pokeball33;
-        public Button pokeball34;
-        public Button pokeball35;
-        public Button pokeball36;
-        public Button pokeball37;
-        public Button pokeball38;
-        public Button pokeball39;
-        public Button pokeball40;
-        public Button pokeball41;
-        public Button pokeball42;
-        public Button pokeball43;
-        public Button pokeball44;
-        public Button pokeball45;
-        public Button pokeball46;
-        public Button pokeball47;
-        public Button pokeball48;
-        public Button pokeball49;
+        public Button pokeball1, pokeball2, pokeball3, pokeball4, pokeball5, pokeball6, pokeball7;
+        public Button pokeball8, pokeball9, pokeball10, pokeball11, pokeball12, pokeball13, pokeball14;
+        public Button pokeball15, pokeball16, pokeball17, pokeball18, pokeball19, pokeball20, pokeball21;
+        public Button pokeball22, pokeball23, pokeball24, pokeball25, pokeball26, pokeball27, pokeball28;
+        public Button pokeball29, pokeball30, pokeball31, pokeball32, pokeball33, pokeball34, pokeball35;
+        public Button pokeball36, pokeball37, pokeball38, pokeball39, pokeball40, pokeball41, pokeball42;
+        public Button pokeball43, pokeball44, pokeball45, pokeball46, pokeball47, pokeball48, pokeball49;
 
         #endregion Pokeball buttons
 
@@ -78,13 +37,14 @@ namespace NowComesGtk.Screens
             this.type = type;
             string TypeFormatted = textInfo.ToTitleCase(_apiRequest.Translate(type));
             Title = $"PokéTrainer© // Pokémons tipo - {TypeFormatted} // Pokémons";
+
             //EventBox fix = new EventBox();
             Image backgroundScreen = new Image("Images/pokemon_water/pokemon_water_homescreen.png");
-            this.fix.Put(backgroundScreen, 0, 0);
+            fix.Put(backgroundScreen, 0, 0);
 
             string defaultText = "Buscar Pokémon";
             txtSearchPokemon.SetSizeRequest(125, 20);
-            this.fix.Put(txtSearchPokemon, 165, 25);
+            fix.Put(txtSearchPokemon, 165, 25);
             txtSearchPokemon.Text = defaultText;
             txtSearchPokemon.Changed += SearchPokemon;
             CssProvider cssProvider = new CssProvider();
@@ -107,15 +67,15 @@ namespace NowComesGtk.Screens
             };
 
             ComboBox cbTypePokemon = new ComboBox();
-            this.fix.Put(cbTypePokemon, 180, 60);
+            fix.Put(cbTypePokemon, 180, 60);
 
             Button btnBack = new Button("<<");
             btnBack.SetSizeRequest(10, 10);
-            this.fix.Put(btnBack, 25, 74);
+            fix.Put(btnBack, 25, 74);
             btnBack.Clicked += btnBack_Clicked;
             Button btnNext = new Button(">>");
             btnNext.SetSizeRequest(10, 10);
-            this.fix.Put(btnNext, 425, 74);
+            fix.Put(btnNext, 425, 74);
             btnNext.Clicked += btnNext_Clicked;
 
             #region Buttons
@@ -413,8 +373,7 @@ namespace NowComesGtk.Screens
             ListStore typeList = new ListStore(typeof(string));
             typeList.AppendValues("Todos");
             typeList.AppendValues($"Puro tipo {TypeFormatted}");
-            typeList.AppendValues("Meio - Primário");
-            typeList.AppendValues("Meio - Secundário");
+            typeList.AppendValues("Meio tipo");
             cbTypePokemon.Model = typeList;
             cbTypePokemon.Active = 0;
 
@@ -440,7 +399,7 @@ namespace NowComesGtk.Screens
                         choice = 1;
                         AllTypeClicked();
                     }
-                    else if (typeSelected == "Meio - Primário")
+                    else if (typeSelected == "Meio tipo")
                     {
                         currentPage = 0;
 
@@ -456,8 +415,8 @@ namespace NowComesGtk.Screens
                 }
             };
 
-            _methods.UpdateButtons(this.fix, currentPage, type, choice);
-            Add(this.fix);
+            _methods.UpdateButtons(fix, currentPage, type, choice);
+            Add(fix);
             ShowAll();
         }
 
