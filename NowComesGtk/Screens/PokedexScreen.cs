@@ -79,7 +79,7 @@ namespace NowComesGtk.Screens
             string TypeFormatted = textInfo.ToTitleCase(_apiRequest.Translate(type));
             Title = $"PokéTrainer© // Pokémons tipo - {TypeFormatted} // Pokémons";
             //EventBox fix = new EventBox();
-            Image backgroundScreen = new Image("Images/pokemon_water/pokemon_water_homescreen.png");
+            Image backgroundScreen = new Image("Images/pokemon_water/pokemon_homescreen.png");
             this.fix.Put(backgroundScreen, 0, 0);
 
             string defaultText = "Buscar Pokémon";

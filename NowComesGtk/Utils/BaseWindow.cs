@@ -11,7 +11,7 @@ namespace NowComesGtk.Utils
             SetPosition(WindowPosition.Center);
             SetDefaultSize(width, height);
             SetIconFromFile("Images/poketrainer_icon.png");
-            PangoContext.FontDescription = Pango.FontDescription.FromString("RetroPix Regular 15");
+            SetIconFromFile("Images/pokeball.png");
         }
     }
 }
