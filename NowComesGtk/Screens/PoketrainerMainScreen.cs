@@ -18,6 +18,12 @@ namespace NowComesGtk.Screens
             Image poketrainerBackground = new Image("Images/background_homescreen.png");
             fix.Put(poketrainerBackground, 0, 0);
             DeleteEvent += delegate { Application.Quit(); };
+            var fontDescription = Pango.FontDescription.FromString("RetroPix Regular 15");
+
+            Label lblTitle = new Label("PokeTrainer");
+            Label lblSubtitle = new Label("Choose a type to see the pokemons");
+            fix.Put(lblTitle, 300, 10);
+            fix.Put(lblSubtitle, 300, 30);
 
             #region Buttons
 
@@ -142,7 +148,7 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTest(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("rayquaza");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("charizard");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
