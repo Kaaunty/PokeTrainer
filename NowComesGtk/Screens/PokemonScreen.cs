@@ -1,10 +1,10 @@
-﻿using Gdk;
-using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
-using PokeApiNet;
 using System.Globalization;
+using NowComesGtk.Utils;
+using PokeApiNet;
+using Gdk;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -13,51 +13,36 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private static ApiRequest _apiRequest = new();
-        private Pokemon pokemon;
-        private Fixed fix = new Fixed();
-        private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private PokemonSpecies pokeSpecies;
-        private List<Ability> pokeAbility = new List<Ability>();
-        private Image PokemonAnimation = new Image();
         private bool isLoaded = false;
-        private CssProvider cssProvider = new CssProvider();
-        private string pokemonNameFormatted;
-        private string pokemonDexFormatted;
-        private string pokemonHPFormatted;
-        private string pokemonATKFormatted;
-        private string pokemonDEFFormatted;
-        private string pokemonSpATKFormatted;
-        private string pokemonSpDEFFormatted;
-        private string pokemonSpeedFormatted;
-        private string pokemonMaleFormatted;
-        private string pokemonFemaleFormatted;
-        private string pokemonCatchRate;
-        private string pokemonAbilityOneUpper;
-        private string pokemonAbilityTwoUpper;
-        private string pokemonAbilityThreeUpper;
-        private string pokemonAbilityFourUpper;
-        private string PokemonFirstTypeFormatted;
-        private string pokemonSecondaryTypeFormatted;
-        private string PokemonFirstTypeFormattedTitle;
-
         private int variationId = 0;
-        private Label lblPokemonName = new Label();
-        private Label lblPokemonDexNumber = new Label();
-        private Label lblPokemonAbilityOne = new Label();
-        private Label lblPokemonAbilityTwo = new Label();
-        private Label lblPokemonAbilityThree = new Label();
-        private Label lblPokemonAbilityFour = new Label();
-        private Label lblPokemonHP = new Label();
-        private Label lblPokemonATK = new Label();
-        private Label lblPokemonDEF = new Label();
-        private Label lblPokemonSpATK = new Label();
-        private Label lblPokemonSpDEF = new Label();
-        private Label lblPokemonSpeed = new Label();
-
-        private Image PokemonTypeOne = new Image();
+        private Pokemon pokemon;
+        private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
+        private List<Ability> pokeAbility = new();
+        private CssProvider cssProvider = new();
+        private Image PokemonAnimation = new();
+        private PokemonSpecies pokeSpecies;
+        private Fixed fix = new Fixed();
+        private Label lblPokemonName = new();
+        private Label lblPokemonDexNumber = new();
+        private Label lblPokemonAbilityOne = new();
+        private Label lblPokemonAbilityTwo = new();
+        private Label lblPokemonAbilityThree = new();
+        private Label lblPokemonAbilityFour = new();
+        private Label lblPokemonHP = new();
+        private Label lblPokemonATK = new();
+        private Label lblPokemonDEF = new();
+        private Label lblPokemonSpATK = new();
+        private Label lblPokemonSpDEF = new();
+        private Label lblPokemonSpeed = new();
+        private Image PokemonTypeOne = new();
+        private string pokemonHPFormatted, pokemonATKFormatted, pokemonDEFFormatted, pokemonSpATKFormatted, pokemonSpDEFFormatted, pokemonSpeedFormatted;
+        private string pokemonNameFormatted, pokemonDexFormatted, pokemonMaleFormatted, pokemonFemaleFormatted, pokemonCatchRate;
+        private string pokemonAbilityOneUpper, pokemonAbilityTwoUpper, pokemonAbilityThreeUpper, pokemonAbilityFourUpper;
+        private string PokemonFirstTypeFormattedTitle, PokemonFirstTypeFormatted, pokemonSecondaryTypeFormatted;
 
         public PokemonScreen(Pokemon Pokemon) : base("", 800, 500)
         {
+
             try
             {
                 pokemon = Pokemon;
@@ -75,15 +60,15 @@ namespace NowComesGtk.Screens
                 PokemonFirstTypeFormattedTitle = _apiRequest.Translate(textInfo.ToTitleCase(PokemonFirstTypeFormatted));
                 Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
 
-                Image Background = new Image("Images/pokemon_water/pokemonWater_backgroung.png");
+                Image Background = new Image("Images/pokemon_homescreen/water.png");
                 fix.Put(Background, 0, 0);
 
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
 
                 GetPokemonGifSize();
 
-                lblPokemonDexNumber.Text = pokemonDexFormatted;
-                fix.Put(lblPokemonDexNumber, 40, 45);
+                //lblPokemonDexNumber.Text = pokemonDexFormatted;
+                //fix.Put(lblPokemonDexNumber, 40, 45);
 
                 lblPokemonName.Text = pokemonNameFormatted;
                 fix.Put(lblPokemonName, 40, 357);

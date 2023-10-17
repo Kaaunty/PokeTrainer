@@ -8,10 +8,12 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
+
+        private ListStore moves = new(typeof(string), typeof(Gdk.Pixbuf));
+        private Entry txtSearchMoves = new();
         private List<Move> Moves = new();
-        private Entry txtSearchMove = new Entry();
-        private ListStore moves = new ListStore(typeof(string), typeof(Gdk.Pixbuf));
         private ListStore moveList;
+        private string defaultText = "Buscar Movimento";
 
         private enum Column
         {
@@ -23,7 +25,7 @@ namespace NowComesGtk.Screens
 
         public MovementScreen(List<Move> move) : base("", 500, 500)
         {
-            this.Moves = move;
+            Moves = move;
 
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
@@ -32,6 +34,7 @@ namespace NowComesGtk.Screens
             Fixed fix = new();
             VBox vBox = new(false, 50);
             vBox.BorderWidth = 25;
+            fix.Put(vBox, 0, 75);
 
             #region FocusIn and FocusOut Event (txtSearchMove)
 
@@ -66,41 +69,38 @@ namespace NowComesGtk.Screens
             sw.ShadowType = ShadowType.EtchedIn;
             sw.SetPolicy(PolicyType.Automatic, PolicyType.Automatic);
             sw.SetSizeRequest(400, 400);
-
             vBox.PackStart(sw, true, true, 0);
+
+
+            CssProvider cssProvider = new();
+            cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
+            txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
+            fix.Put(txtSearchMoves, 150, 25);
+
+            txtSearchMoves.FocusInEvent += (sender, e) =>
+            {
+                txtSearchMoves.Text = string.Empty;
+                CssProvider cssProvider = new CssProvider();
+                cssProvider.LoadFromData("entry { color: rgb(0, 0, 0); }");
+                txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
+            };
+            txtSearchMoves.FocusOutEvent += (sender, e) =>
+            {
+                txtSearchMoves.Text = defaultText;
+                CssProvider cssProvider = new CssProvider();
+                cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
+                txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
+            };
 
             moveList = CreateModel();
             TreeView treeView = new TreeView(moveList);
             treeView.RulesHint = true;
             sw.Add(treeView);
 
+            txtSearchMoves.Changed += SearchMove;
             AddColumns(treeView);
-            fix.Add(vBox);
             Add(fix);
             ShowAll();
-        }
-
-        private void TxtSearchMove_Changed(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtSearchMove.Text))
-            {
-                moveList.Clear();
-                foreach (Move move in Moves)
-                {
-                    if (move.Name.Contains(txtSearchMove.Text))
-                    {
-                        moveList.AppendValues(move.Name, move.Type.Name);
-                    }
-                }
-            }
-            else
-            {
-                moveList.Clear();
-                foreach (Move move in Moves)
-                {
-                    moveList.AppendValues(move.Name, move.Type.Name);
-                }
-            }
         }
 
         private void AddColumns(TreeView treeView)
@@ -110,7 +110,7 @@ namespace NowComesGtk.Screens
                 "text", (int)Column.Move);
             column.SortColumnId = (int)Column.Move;
             treeView.AppendColumn(column);
-            treeView.AppendColumn("Tipo", new Gtk.CellRendererPixbuf(), "pixbuf", 1);
+            treeView.AppendColumn("Tipo", new CellRendererPixbuf(), "pixbuf", 1);
             column.FixedWidth = 200;
 
             //column = new TreeViewColumn("Tipo", rendererText, "text", (int)Column.Type);
@@ -122,10 +122,33 @@ namespace NowComesGtk.Screens
         {
             foreach (Move move in Moves)
             {
-                Gdk.Pixbuf pixbuf = new Gdk.Pixbuf($"Images/pokemon_types/{move.Type.Name}.png");
+                Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Type.Name}.png");
                 moves.AppendValues(move.Name, pixbuf);
             }
             return moves;
+        }
+        private void SearchMove(object sender, EventArgs e)
+        {
+
+            if (!string.IsNullOrEmpty(txtSearchMoves.Text))
+            {
+                string pokeMove = txtSearchMoves.Text;
+                pokeMove = pokeMove.Replace(' ', '-');
+                moveList.Clear();
+                foreach (Move move in Moves)
+                {
+                    if (move.Name.StartsWith(pokeMove))
+                    {
+                        Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Type.Name}.png");
+                        moveList.AppendValues(move.Name, pixbuf);
+                    }
+                }
+            }
+            else
+            {
+                moveList.Clear();
+                CreateModel();
+            }
         }
     }
 }

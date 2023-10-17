@@ -10,7 +10,7 @@ namespace NowComesGtk.Utils
             Resizable = false;
             SetPosition(WindowPosition.Center);
             SetDefaultSize(width, height);
-            SetIconFromFile("Images/poketrainer_icon.png");
+            SetIconFromFile("Images/pokeball.png");
         }
     }
 }
