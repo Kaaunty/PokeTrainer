@@ -22,8 +22,6 @@ obj/
 *.user
 *.userosscache
 *.sln.docstates
-!NowComesGtk/bin/Debug/net7.0/Images/
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
