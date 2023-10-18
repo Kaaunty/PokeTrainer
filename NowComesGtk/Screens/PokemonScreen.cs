@@ -64,9 +64,17 @@ namespace NowComesGtk.Screens
                 StyleContext.AddProviderForScreen(Gdk.Screen.Default, cssProvider, 800);
                 PokemonFirstTypeFormattedTitle = _apiRequest.Translate(textInfo.ToTitleCase(PokemonFirstTypeFormatted));
                 Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
+
+
+                Image Background = new Image($"Images/pokemon_homescreen/{pokemon.Types[0].Type.Name}.png");
+                fix.Put(Background, 0, 0);
+
+                megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
+
                 Image Background = new Image("Images/pokemon_homescreen/PokemonScreen_Testes.png");
                 fix.Put(Background, 0, 0);
                 megaKey.Pixbuf = new Pixbuf("Images/MegaKeyDesactivated.png");
+
                 fix.Put(megaKey, 138, 42);
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
                 GetPokemonGifSize();
@@ -143,23 +151,26 @@ namespace NowComesGtk.Screens
 
                 if (pokeForm.IsMega)
                 {
-                    megaKey.Pixbuf = new Pixbuf("Images/MegaKeyActivated.png");
+                    megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
                     fix.Put(megaKey, 138, 42);
                 }
 
-                Button PreviousEvolution = new ButtonGenerator("Images/BackForm.png", 40, 40);
+                Button PreviousEvolution = new ButtonGenerator("Images/buttons/BackForm.png", 40, 40);
                 fix.Put(PreviousEvolution, 180, 38);
                 PreviousEvolution.Clicked += GetPreviousVariation;
 
-                Button NextEvolution = new ButtonGenerator("Images/NextForm.png", 40, 40);
+                Button NextEvolution = new ButtonGenerator("Images/buttons/NextForm.png", 40, 40);
                 fix.Put(NextEvolution, 230, 38);
                 NextEvolution.Clicked += GetNextVariation;
+
+                Button btnMoves = new ButtonGenerator("Images/buttons/btnMoves.png", 192, 85);
 
                 ShinyButton = new ButtonGenerator("Images/shinyButtonDesactivated.png", 40, 40);
                 fix.Put(ShinyButton, 80, 38);
                 ShinyButton.Clicked += ShinyButtonClicked;
 
                 Button btnMoves = new ButtonGenerator("Images/buttons_type/MovesIcon.png", 255, 80);
+
                 btnMoves.TooltipMarkup = "<span foreground='white' font_desc='MS Gothic Regular 10'>[Clique para ver os movimentos do Pokémon]</span>";
                 fix.Put(btnMoves, 428, 395);
                 btnMoves.Clicked += PokemonMoves;
@@ -564,13 +575,13 @@ namespace NowComesGtk.Screens
             if (pokeForm.IsMega)
             {
                 fix.Remove(megaKey);
-                megaKey.Pixbuf = new Pixbuf("Images/MegaKeyActivated.png");
+                megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
                 fix.Put(megaKey, 138, 42);
             }
             else
             {
                 fix.Remove(megaKey);
-                megaKey.Pixbuf = new Pixbuf("Images/MegaKeyDesactivated.png");
+                megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
                 fix.Put(megaKey, 138, 42);
             }
 

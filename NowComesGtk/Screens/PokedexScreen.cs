@@ -1,23 +1,24 @@
-﻿using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
-using PokeApiNet;
 using System.Globalization;
+using NowComesGtk.Utils;
+using PokeApiNet;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
     public class PokedexScreen : BaseWindow
     {
 #nullable disable
-        private Entry txtSearchPokemon = new Entry();
-        private Fixed fix = new Fixed();
-        private Methods _methods = new();
-        private ApiRequest _apiRequest = new();
+
         private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private string type;
-        private int choice = 0;
+        private ApiRequest _apiRequest = new();
+        private Entry txtSearchPokemon = new();
+        private Methods _methods = new();
         private int currentPage = 0;
+        private Fixed fix = new();
+        private int choice = 0;
+        private string type;
 
         #region Pokeball buttons
 
@@ -74,17 +75,16 @@ namespace NowComesGtk.Screens
         #endregion Pokeball buttons
 
         public PokedexScreen(string type) : base($"PokéTrainer© // Pokémons tipo - {type} // Pokémons", 500, 600)
-        {
+        { 
             this.type = type;
             string TypeFormatted = textInfo.ToTitleCase(_apiRequest.Translate(type));
             Title = $"PokéTrainer© // Pokémons tipo - {TypeFormatted} // Pokémons";
-            //EventBox fix = new EventBox();
-            Image backgroundScreen = new Image("Images/pokemon_water/pokemon_homescreen.png");
-            this.fix.Put(backgroundScreen, 0, 0);
+            Image backgroundScreen = new Image($"Images/pokedex_homescreen/{type}.png");
+            fix.Put(backgroundScreen, 0, 0);
 
             string defaultText = "Buscar Pokémon";
             txtSearchPokemon.SetSizeRequest(125, 20);
-            this.fix.Put(txtSearchPokemon, 165, 25);
+            fix.Put(txtSearchPokemon, 165, 25);
             txtSearchPokemon.Text = defaultText;
             txtSearchPokemon.Changed += SearchPokemon;
             CssProvider cssProvider = new CssProvider();
@@ -413,8 +413,7 @@ namespace NowComesGtk.Screens
             ListStore typeList = new ListStore(typeof(string));
             typeList.AppendValues("Todos");
             typeList.AppendValues($"Puro tipo {TypeFormatted}");
-            typeList.AppendValues("Meio - Primário");
-            typeList.AppendValues("Meio - Secundário");
+            typeList.AppendValues("Meio tipo");
             cbTypePokemon.Model = typeList;
             cbTypePokemon.Active = 0;
 
@@ -440,7 +439,7 @@ namespace NowComesGtk.Screens
                         choice = 1;
                         AllTypeClicked();
                     }
-                    else if (typeSelected == "Meio - Primário")
+                    else if (typeSelected == "Meio tipo")
                     {
                         currentPage = 0;
 

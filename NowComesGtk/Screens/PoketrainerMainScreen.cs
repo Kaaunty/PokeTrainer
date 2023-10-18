@@ -1,8 +1,8 @@
-﻿using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
+using NowComesGtk.Utils;
 using PokeApiNet;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -11,19 +11,12 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private ApiRequest _apiRequest = new();
-
+        private Fixed fix = new Fixed();
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
-            Fixed fix = new Fixed();
-            Image poketrainerBackground = new Image("Images/pokemon_homescreen.png");
+            Image poketrainerBackground = new Image("Images/pokemon_homescreen/homescreen.png");
             fix.Put(poketrainerBackground, 0, 0);
-            DeleteEvent += delegate { Application.Quit(); };
             var fontDescription = Pango.FontDescription.FromString("RetroPix Regular 15");
-
-            Label lblTitle = new Label("PokeTrainer");
-            Label lblSubtitle = new Label("Choose a type to see the pokemons");
-            fix.Put(lblTitle, 300, 10);
-            fix.Put(lblSubtitle, 300, 30);
 
             #region Buttons Pokédex
 
@@ -138,20 +131,21 @@ namespace NowComesGtk.Screens
             #endregion Buttons
 
             Button btnWelcome = new ButtonGenerator("", 70, 40);
-            btnWelcome.Image = new Image("Images/btnWelcome.png");
+            btnWelcome.Image = new Image("Images/buttons/btnWelcome.png");
             //btnDialog.Clicked += btnPokemonTest;
             fix.Put(btnWelcome, 620, 75);
 
             Button btnGitHub = new ButtonGenerator("", 40, 40);
-            btnGitHub.Image = new Image("Images/btnGitHub.png");
+            btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
             //btnDialog.Clicked += btnPokemonTest;
             fix.Put(btnGitHub, 735, 435);
 
             Button BtnTest = new ButtonGenerator("Teste", 100, 50);
-            BtnTest.Image = new Image("Images/btnTeste.png");
+            BtnTest.Image = new Image("Images/buttons/btnTeste.png");
             BtnTest.Clicked += btnPokemonTest;
             fix.Put(BtnTest, 640, 300);
 
+            DeleteEvent += delegate { Application.Quit(); };
             Add(fix);
             ShowAll();
         }

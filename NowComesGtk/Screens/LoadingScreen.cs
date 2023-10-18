@@ -16,6 +16,8 @@ public class PokemonLoad : BaseWindow
         var vbox = new VBox();
 
         loadingLabel = new Label("Carregando...");
+
+        /// LEMBRAR DE COLOCAR UM GIF DE UM POKEMONZIN CORRENDO
         vbox.PackStart(loadingLabel, false, false, 10);
 
         progressBar = new ProgressBar();
@@ -41,7 +43,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            //await _apiRequest.GetPokemonsListAll();
+            await _apiRequest.GetPokemonsListAll();
             progressBar.Fraction = 1;
             isLoaded = true;
 
