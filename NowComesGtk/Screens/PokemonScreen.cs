@@ -14,6 +14,7 @@ namespace NowComesGtk.Screens
 
         private static ApiRequest _apiRequest = new();
         private bool isLoaded = false;
+        private bool isShiny = false;
         private int variationId = 0;
         private Pokemon pokemon;
         private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
@@ -21,9 +22,10 @@ namespace NowComesGtk.Screens
         private CssProvider cssProvider = new();
         private Image PokemonAnimation = new();
         private PokemonSpecies pokeSpecies;
-
+        private Button ShinyButton;
         private Image megaKey = new Image();
         private Image PokemonTypeOne = new Image();
+        private Image imagePokemonTypeSecondary = new();
         private PokemonForm pokeForm;
         private PokeApiNet.Type pokemonTypePrimary;
         private PokeApiNet.Type pokemonTypeSecondary;
@@ -57,36 +59,21 @@ namespace NowComesGtk.Screens
                 {
                     Task.Delay(100).Wait();
                 }
+
                 cssProvider.LoadFromPath("Styles/pokemonScreen.css");
-
                 StyleContext.AddProviderForScreen(Gdk.Screen.Default, cssProvider, 800);
-
                 PokemonFirstTypeFormattedTitle = _apiRequest.Translate(textInfo.ToTitleCase(PokemonFirstTypeFormatted));
                 Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
-
-                Image Background = new Image("Images/pokemon_homescreen/water.png");
+                Image Background = new Image("Images/pokemon_homescreen/PokemonScreen_Testes.png");
                 fix.Put(Background, 0, 0);
-
                 megaKey.Pixbuf = new Pixbuf("Images/MegaKeyDesactivated.png");
                 fix.Put(megaKey, 138, 42);
-
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
-
                 GetPokemonGifSize();
-                lblPokemonDexNumber.Text = pokemonDexFormatted;
-                //lblPokemonDexNumber.Markup = $"<span foreground='black' font_desc='MS Gothic Regular 18'>[{pokemonDexFormatted}]</span>";
-                fix.Put(lblPokemonDexNumber, 40, 45);
-
-                //lblPokemonDexNumber.Text = pokemonDexFormatted;
-                //fix.Put(lblPokemonDexNumber, 40, 45);
-
                 lblPokemonName.Text = pokemonNameFormatted;
                 lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono 15'>[ {textInfo.ToTitleCase(_apiRequest.Translate(pokeSpecies.FlavorTextEntries[0].FlavorText.ToLower()))} ]</span>";
-
                 fix.Put(lblPokemonName, 40, 357);
-
                 PokemonTypeOne = new Image($"Images/pokemon_types/{pokemon.Types[0].Type.Name}.png");
-
                 string damageRelations = GetTypeDamageRelations(pokemonTypePrimary);
                 PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[ {damageRelations} ]</span>";
 
@@ -94,7 +81,7 @@ namespace NowComesGtk.Screens
 
                 if (pokemon.Types.Count > 1)
                 {
-                    Image imagePokemonTypeSecondary = new Image($"Images/pokemon_types/{pokemon.Types[1].Type.Name}.png");
+                    imagePokemonTypeSecondary = new Image($"Images/pokemon_types/{pokemon.Types[1].Type.Name}.png");
                     string damageRelationsSecondary = GetTypeDamageRelations(pokemonTypeSecondary);
                     imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[ {damageRelationsSecondary} ]</span>";
 
@@ -168,6 +155,10 @@ namespace NowComesGtk.Screens
                 fix.Put(NextEvolution, 230, 38);
                 NextEvolution.Clicked += GetNextVariation;
 
+                ShinyButton = new ButtonGenerator("Images/shinyButtonDesactivated.png", 40, 40);
+                fix.Put(ShinyButton, 80, 38);
+                ShinyButton.Clicked += ShinyButtonClicked;
+
                 Button btnMoves = new ButtonGenerator("Images/buttons_type/MovesIcon.png", 255, 80);
                 btnMoves.TooltipMarkup = "<span foreground='white' font_desc='MS Gothic Regular 10'>[Clique para ver os movimentos do Pokémon]</span>";
                 fix.Put(btnMoves, 428, 395);
@@ -182,6 +173,24 @@ namespace NowComesGtk.Screens
             }
         }
 
+        private async void ShinyButtonClicked(object sender, EventArgs e)
+        {
+            if (isShiny)
+            {
+                ShinyButton.Image = new Image("Images/shinyButtonDesactivated.png");
+                isShiny = false;
+                await _apiRequest.GetPokemonAnimatedSprite(pokemon.Name);
+                PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+            }
+            else
+            {
+                ShinyButton.Image = new Image("Images/shinyButtonActivated.png");
+                isShiny = true;
+                await _apiRequest.GetPokemonShinyAnimatedSprite(pokemon.Name);
+                PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
+            }
+        }
+
         private async void PokemonMoves(object sender, EventArgs e)
         {
             List<Move> pokemonMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemon);
@@ -192,82 +201,107 @@ namespace NowComesGtk.Screens
 
         private string GetTypeDamageRelations(PokeApiNet.Type type)
         {
-            string HalfDamageFrom = "";
-            string HalfDamageTo = "";
-            string DoubleDamageFrom = "";
-            string DoubleDamageTo = "";
-            string NoDamageFrom = "";
-            string NoDamageTo = "";
-            if (type.DamageRelations.HalfDamageFrom.Count > 0)
+            try
             {
-                foreach (var halfDamageFrom in type.DamageRelations.HalfDamageFrom)
+                List<string> damageRelationsList = new();
+                string HalfDamageFrom = "";
+                string HalfDamageTo = "";
+                string DoubleDamageFrom = "";
+                string DoubleDamageTo = "";
+                string NoDamageFrom = "";
+                string NoDamageTo = "";
+                if (type.DamageRelations.HalfDamageFrom.Count > 0)
                 {
-                    string translatedName = textInfo.ToTitleCase(_apiRequest.Translate(halfDamageFrom.Name));
-                    HalfDamageFrom += translatedName + ",";
+                    foreach (var halfDamageFrom in type.DamageRelations.HalfDamageFrom)
+                    {
+                        HalfDamageFrom += textInfo.ToTitleCase(halfDamageFrom.Name) + ",";
+                    }
+                    string removeLastComma = HalfDamageFrom.Remove(HalfDamageFrom.Length - 1);
+                    HalfDamageFrom = removeLastComma;
+                    damageRelationsList.Add(HalfDamageFrom);
                 }
-                string removeLastComma = HalfDamageFrom.Remove(HalfDamageFrom.Length - 1);
-                HalfDamageFrom = removeLastComma;
-            }
-            if (type.DamageRelations.HalfDamageTo.Count > 0)
-            {
-                foreach (var halfDamageTo in type.DamageRelations.HalfDamageTo)
+                if (type.DamageRelations.HalfDamageTo.Count > 0)
                 {
-                    string translatedName = textInfo.ToTitleCase(_apiRequest.Translate(halfDamageTo.Name));
-                    HalfDamageTo += translatedName + ",";
+                    foreach (var halfDamageTo in type.DamageRelations.HalfDamageTo)
+                    {
+                        HalfDamageTo += textInfo.ToTitleCase(halfDamageTo.Name) + ",";
+                    }
+                    string removeLastComma = HalfDamageTo.Remove(HalfDamageTo.Length - 1);
+                    HalfDamageTo = removeLastComma;
+                    damageRelationsList.Add(HalfDamageTo);
                 }
-                string removeLastComma = HalfDamageTo.Remove(HalfDamageTo.Length - 1);
-                HalfDamageTo = removeLastComma;
-            }
-            if (type.DamageRelations.DoubleDamageFrom.Count > 0)
-            {
-                foreach (var doubleDamageFrom in type.DamageRelations.DoubleDamageFrom)
+                if (type.DamageRelations.DoubleDamageFrom.Count > 0)
                 {
-                    string translatedName = textInfo.ToTitleCase(_apiRequest.Translate(doubleDamageFrom.Name));
-                    DoubleDamageFrom += translatedName + ",";
+                    foreach (var doubleDamageFrom in type.DamageRelations.DoubleDamageFrom)
+                    {
+                        DoubleDamageFrom += textInfo.ToTitleCase(doubleDamageFrom.Name) + ",";
+                    }
+                    string removeLastComma = DoubleDamageFrom.Remove(DoubleDamageFrom.Length - 1);
+                    DoubleDamageFrom = removeLastComma;
+                    damageRelationsList.Add(DoubleDamageFrom);
                 }
-                string removeLastComma = DoubleDamageFrom.Remove(DoubleDamageFrom.Length - 1);
-                DoubleDamageFrom = removeLastComma;
-            }
-            if (type.DamageRelations.DoubleDamageTo.Count > 0)
-            {
-                foreach (var doubleDamageTo in type.DamageRelations.DoubleDamageTo)
+                if (type.DamageRelations.DoubleDamageTo.Count > 0)
                 {
-                    string translatedName = textInfo.ToTitleCase(_apiRequest.Translate(doubleDamageTo.Name));
-                    DoubleDamageTo += translatedName + ",";
+                    foreach (var doubleDamageTo in type.DamageRelations.DoubleDamageTo)
+                    {
+                        DoubleDamageTo += textInfo.ToTitleCase(doubleDamageTo.Name) + ",";
+                    }
+                    string removeLastComma = DoubleDamageTo.Remove(DoubleDamageTo.Length - 1);
+                    DoubleDamageTo = removeLastComma;
+                    damageRelationsList.Add(DoubleDamageTo);
                 }
-                string removeLastComma = DoubleDamageTo.Remove(DoubleDamageTo.Length - 1);
-                DoubleDamageTo = removeLastComma;
-            }
-            if (type.DamageRelations.NoDamageFrom.Count > 0)
-            {
-                foreach (var noDamageFrom in type.DamageRelations.NoDamageFrom)
+                if (type.DamageRelations.NoDamageFrom.Count > 0)
                 {
-                    string translatedName = textInfo.ToTitleCase(_apiRequest.Translate(noDamageFrom.Name));
-                    NoDamageFrom += translatedName + ",";
+                    foreach (var noDamageFrom in type.DamageRelations.NoDamageFrom)
+                    {
+                        NoDamageFrom += textInfo.ToTitleCase(noDamageFrom.Name) + ",";
+                    }
+                    string removeLastComma = NoDamageFrom.Remove(NoDamageFrom.Length - 1);
+                    NoDamageFrom = removeLastComma;
+                    damageRelationsList.Add(NoDamageFrom);
                 }
-                string removeLastComma = NoDamageFrom.Remove(NoDamageFrom.Length - 1);
-                NoDamageFrom = removeLastComma;
-            }
-            if (string.IsNullOrEmpty(NoDamageFrom))
-            {
-                NoDamageFrom = "Nenhum";
-            }
-            if (type.DamageRelations.NoDamageTo.Count > 0)
-            {
-                foreach (var noDamageFrom in type.DamageRelations.NoDamageTo)
+                if (string.IsNullOrEmpty(NoDamageFrom))
                 {
-                    string translatedName = textInfo.ToTitleCase(_apiRequest.Translate(noDamageFrom.Name));
-                    NoDamageTo += translatedName + ",";
+                    NoDamageFrom = "Nenhum";
+                    damageRelationsList.Add(NoDamageFrom);
                 }
-                string removeLastComma = NoDamageTo.Remove(NoDamageTo.Length - 1);
-                NoDamageTo = removeLastComma;
+                if (type.DamageRelations.NoDamageTo.Count > 0)
+                {
+                    foreach (var noDamageFrom in type.DamageRelations.NoDamageTo)
+                    {
+                        NoDamageTo += textInfo.ToTitleCase(noDamageFrom.Name) + ",";
+                    }
+                    string removeLastComma = NoDamageTo.Remove(NoDamageTo.Length - 1);
+                    NoDamageTo = removeLastComma;
+                    damageRelationsList.Add(NoDamageTo);
+                }
+                if (string.IsNullOrEmpty(NoDamageTo))
+                {
+                    NoDamageTo = "Nenhum";
+                    damageRelationsList.Add(NoDamageTo);
+                }
+
+                List<string> DamageRelationsListTranslated = new List<string>();
+                foreach (var damageRelation in damageRelationsList)
+                {
+                    if (damageRelation != "Nenhum")
+                    {
+                        DamageRelationsListTranslated.Add(textInfo.ToTitleCase(_apiRequest.Translate(damageRelation)));
+                    }
+                    else
+                    {
+                        DamageRelationsListTranslated.Add(damageRelation);
+                    }
+                }
+
+                string damageRelations = $"Dano Sofrido Pouco Efetivo: {DamageRelationsListTranslated[0]}\n Pouco Efetivo Contra: {DamageRelationsListTranslated[1]}\n Dano Sofrido Super Efetivo: {DamageRelationsListTranslated[2]}\n Super Efetivo Contra: {DamageRelationsListTranslated[3]}\n Imune: {DamageRelationsListTranslated[4]}\n Nenhum Dano a: {DamageRelationsListTranslated[5]}";
+                return damageRelations;
             }
-            if (string.IsNullOrEmpty(NoDamageTo))
+            catch (Exception ex)
             {
-                NoDamageTo = "Nenhum";
+                Console.WriteLine($"Erro ao carregar as informaçoes do tipo:{type.Name} Erro: {ex.Message}");
+                throw;
             }
-            string damageRelations = $"Dano Sofrido Pouco Efetivo: {HalfDamageFrom}\n Pouco Efetivo Contra: {HalfDamageTo}\n Dano Sofrido Super Efetivo: {DoubleDamageFrom}\n Super Efetivo Contra: {DoubleDamageTo}\n Imune: {NoDamageFrom}\n Nenhum Dano a: {NoDamageTo}";
-            return damageRelations;
         }
 
         private async Task PopulateFields()
@@ -283,8 +317,14 @@ namespace NowComesGtk.Screens
                 pokemonSpeedFormatted = pokemon.Stats[5].BaseStat.ToString("D3");
 
                 string pokemonSpecie = pokemon.Species.Name;
+                if (pokeSpecies == null)
+                {
+                    if (pokeSpecies == null || pokemonSpecie != pokeSpecies.Name)
+                        await Task.Run(() => GetPokemonSpecies(pokemonSpecie)).ConfigureAwait(false);
+                    else
+                        await Task.Run(() => GetPokemonSpecies(pokemon.Species.Name)).ConfigureAwait(false);
+                }
 
-                await Task.Run(() => GetPokemonSpecies(pokemonSpecie)).ConfigureAwait(false);
                 await Task.Run(() => UpdatePokemonSprite()).ConfigureAwait(false);
 
                 pokeForm = await _apiRequest.GetPokemonForm(pokemon.Name);
@@ -440,8 +480,16 @@ namespace NowComesGtk.Screens
         {
             try
             {
-                await _apiRequest.GetPokemonAnimatedSprite(pokemon.Name);
-                PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+                if (!isShiny)
+                {
+                    await _apiRequest.GetPokemonAnimatedSprite(pokemon.Name);
+                    PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+                }
+                else
+                {
+                    await _apiRequest.GetPokemonShinyAnimatedSprite(pokemon.Name);
+                    PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
+                }
             }
             catch (Exception ex)
             {
@@ -452,8 +500,10 @@ namespace NowComesGtk.Screens
         private void GetPokemonGifSize()
         {
             fix.Remove(PokemonAnimation);
-
-            PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+            if (!isShiny)
+                PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+            else
+                PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
 
             int x = (340 - PokemonAnimation.PixbufAnimation.Width) / 2;
             int y = (380 - PokemonAnimation.PixbufAnimation.Height) / 2;
@@ -468,13 +518,13 @@ namespace NowComesGtk.Screens
             lblPokemonAbilityOne.Text = pokemonAbilityOneUpper;
             PokemonFirstTypeFormattedTitle = _apiRequest.Translate(textInfo.ToTitleCase(PokemonFirstTypeFormatted));
 
-            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='RetroPix 15'>[{_apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect)}]</span>";
+            // lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='RetroPix 15'>[{_apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect)}]</span>";
 
             Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
             if (pokemon.Abilities.Count == 2)
             {
                 lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
-                lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{_apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
+                //lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{_apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
             }
             else if (pokemon.Abilities.Count == 3)
             {
@@ -496,7 +546,20 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{_apiRequest.Translate(pokeAbility[3].EffectEntries[1].Effect)}]</span>";
             }
 
-            PokemonFirstTypeFormatted = pokemon.Types[0].Type.Name;
+            if (PokemonFirstTypeFormatted != pokemon.Types[0].Type.Name)
+            {
+                PokemonFirstTypeFormatted = pokemon.Types[0].Type.Name;
+                PokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{PokemonFirstTypeFormatted}.png");
+                string damageRelations = GetTypeDamageRelations(pokemonTypePrimary);
+                PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[ {damageRelations} ]</span>";
+            }
+            if (pokemon.Types.Count > 1)
+            {
+                pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
+                imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{pokemonSecondaryTypeFormatted}.png");
+                string damageRelationsSecondary = GetTypeDamageRelations(pokemonTypeSecondary);
+                imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[ {damageRelationsSecondary} ]</span>";
+            }
 
             if (pokeForm.IsMega)
             {
