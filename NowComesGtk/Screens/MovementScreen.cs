@@ -1,6 +1,6 @@
 ﻿using NowComesGtk.Utils;
-using Gtk;
 using PokeApiNet;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
