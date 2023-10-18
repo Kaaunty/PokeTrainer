@@ -21,12 +21,7 @@ namespace NowComesGtk.Screens
         private CssProvider cssProvider = new();
         private Image PokemonAnimation = new();
         private PokemonSpecies pokeSpecies;
-        private List<Ability> pokeAbility = new List<Ability>();
-        private Image PokemonAnimation = new Image();
-        private bool isLoaded = false;
-        private CssProvider cssProvider = new CssProvider();
-        
-      
+
         private Image megaKey = new Image();
         private Image PokemonTypeOne = new Image();
         private PokemonForm pokeForm;
@@ -45,7 +40,6 @@ namespace NowComesGtk.Screens
         private Label lblPokemonSpATK = new();
         private Label lblPokemonSpDEF = new();
         private Label lblPokemonSpeed = new();
-        private Image PokemonTypeOne = new();
         private string pokemonHPFormatted, pokemonATKFormatted, pokemonDEFFormatted, pokemonSpATKFormatted, pokemonSpDEFFormatted, pokemonSpeedFormatted;
         private string pokemonNameFormatted, pokemonDexFormatted, pokemonMaleFormatted, pokemonFemaleFormatted, pokemonCatchRate;
         private string pokemonAbilityOneUpper, pokemonAbilityTwoUpper, pokemonAbilityThreeUpper, pokemonAbilityFourUpper;
@@ -53,7 +47,6 @@ namespace NowComesGtk.Screens
 
         public PokemonScreen(Pokemon Pokemon) : base("", 800, 500)
         {
-
             try
             {
                 pokemon = Pokemon;
@@ -83,7 +76,6 @@ namespace NowComesGtk.Screens
                 lblPokemonDexNumber.Text = pokemonDexFormatted;
                 //lblPokemonDexNumber.Markup = $"<span foreground='black' font_desc='MS Gothic Regular 18'>[{pokemonDexFormatted}]</span>";
                 fix.Put(lblPokemonDexNumber, 40, 45);
-=======
 
                 //lblPokemonDexNumber.Text = pokemonDexFormatted;
                 //fix.Put(lblPokemonDexNumber, 40, 45);
