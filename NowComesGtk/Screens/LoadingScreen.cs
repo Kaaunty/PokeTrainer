@@ -41,7 +41,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            await _apiRequest.GetPokemonsListAll();
+            //await _apiRequest.GetPokemonsListAll();
             progressBar.Fraction = 1;
             isLoaded = true;
 

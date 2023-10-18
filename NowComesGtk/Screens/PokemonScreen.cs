@@ -160,11 +160,11 @@ namespace NowComesGtk.Screens
                     fix.Put(megaKey, 138, 42);
                 }
 
-                Button PreviousEvolution = new ButtonGenerator("Images/BackButton.png", 40, 40);
+                Button PreviousEvolution = new ButtonGenerator("Images/BackForm.png", 40, 40);
                 fix.Put(PreviousEvolution, 180, 38);
                 PreviousEvolution.Clicked += GetPreviousVariation;
 
-                Button NextEvolution = new ButtonGenerator("Images/NextButton.png", 40, 40);
+                Button NextEvolution = new ButtonGenerator("Images/NextForm.png", 40, 40);
                 fix.Put(NextEvolution, 230, 38);
                 NextEvolution.Clicked += GetNextVariation;
 
@@ -456,7 +456,7 @@ namespace NowComesGtk.Screens
             PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
 
             int x = (340 - PokemonAnimation.PixbufAnimation.Width) / 2;
-            int y = (450 - PokemonAnimation.PixbufAnimation.Height) / 2;
+            int y = (380 - PokemonAnimation.PixbufAnimation.Height) / 2;
 
             fix.Put(PokemonAnimation, x, y);
         }
