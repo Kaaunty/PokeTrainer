@@ -12,24 +12,27 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
-        private static ApiRequest _apiRequest = new();
-        private bool isLoaded = false;
-        private bool isShiny = false;
-        private int variationId = 0;
         private Pokemon pokemon;
-        private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private List<Ability> pokeAbility = new();
-        private CssProvider cssProvider = new();
-        private Image PokemonAnimation = new();
-        private PokemonSpecies pokeSpecies;
-        private Button ShinyButton;
-        private Image megaKey = new Image();
-        private Image PokemonTypeOne = new Image();
-        private Image imagePokemonTypeSecondary = new();
         private PokemonForm pokeForm;
+        private PokemonSpecies pokeSpecies;
         private PokeApiNet.Type pokemonTypePrimary;
         private PokeApiNet.Type pokemonTypeSecondary;
-        private Fixed fix = new Fixed();
+        private static ApiRequest _apiRequest = new();
+
+        private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
+        private Image imagePokemonTypeSecondary = new();
+        private Image PokemonAnimation = new();
+        private Image PokemonTypeOne = new();
+        private Image megaKey = new();
+
+        private List<Ability> pokeAbility = new();
+        private CssProvider cssProvider = new();
+        private Fixed fix = new();
+
+        private Button ShinyButton;
+
+        #region Labels
+
         private Label lblPokemonName = new();
         private Label lblPokemonDexNumber = new();
         private Label lblPokemonAbilityOne = new();
@@ -42,6 +45,13 @@ namespace NowComesGtk.Screens
         private Label lblPokemonSpATK = new();
         private Label lblPokemonSpDEF = new();
         private Label lblPokemonSpeed = new();
+
+        #endregion
+
+        private bool isLoaded = false;
+        private bool isShiny = false;
+        private int variationId = 0;
+
         private string pokemonHPFormatted, pokemonATKFormatted, pokemonDEFFormatted, pokemonSpATKFormatted, pokemonSpDEFFormatted, pokemonSpeedFormatted;
         private string pokemonNameFormatted, pokemonDexFormatted, pokemonMaleFormatted, pokemonFemaleFormatted, pokemonCatchRate;
         private string pokemonAbilityOneUpper, pokemonAbilityTwoUpper, pokemonAbilityThreeUpper, pokemonAbilityFourUpper;
@@ -65,15 +75,14 @@ namespace NowComesGtk.Screens
                 PokemonFirstTypeFormattedTitle = _apiRequest.Translate(textInfo.ToTitleCase(PokemonFirstTypeFormatted));
                 Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
 
-
                 Image Background = new Image($"Images/pokemon_homescreen/{pokemon.Types[0].Type.Name}.png");
                 fix.Put(Background, 0, 0);
 
                 megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
 
-                Image Background = new Image("Images/pokemon_homescreen/PokemonScreen_Testes.png");
-                fix.Put(Background, 0, 0);
-                megaKey.Pixbuf = new Pixbuf("Images/MegaKeyDesactivated.png");
+                //Image Background = new Image("Images/pokemon_homescreen/PokemonScreen_Testes.png");
+                //fix.Put(Background, 0, 0);
+                megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
 
                 fix.Put(megaKey, 138, 42);
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
@@ -168,8 +177,6 @@ namespace NowComesGtk.Screens
                 ShinyButton = new ButtonGenerator("Images/shinyButtonDesactivated.png", 40, 40);
                 fix.Put(ShinyButton, 80, 38);
                 ShinyButton.Clicked += ShinyButtonClicked;
-
-                Button btnMoves = new ButtonGenerator("Images/buttons_type/MovesIcon.png", 255, 80);
 
                 btnMoves.TooltipMarkup = "<span foreground='white' font_desc='MS Gothic Regular 10'>[Clique para ver os movimentos do Pokémon]</span>";
                 fix.Put(btnMoves, 428, 395);
