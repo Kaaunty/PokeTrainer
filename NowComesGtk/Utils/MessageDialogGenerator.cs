@@ -6,7 +6,7 @@
         {
             var dialog = new Gtk.MessageDialog(null, Gtk.DialogFlags.Modal, Gtk.MessageType.Info, Gtk.ButtonsType.Ok, message);
             dialog.WindowPosition = Gtk.WindowPosition.Center;
-            dialog.SetIconFromFile("Images/poketrainer_icon.png");
+            dialog.SetIconFromFile("Images/pokeball.png");
             dialog.Run();
             dialog.Destroy();
         }
