@@ -156,7 +156,9 @@ namespace NowComesGtk.Screens
                 fix.Put(lblPokemonEggGroup, 668, 195);
                 lblPokemonEggGroup.SetAlignment(0.5f, 0.0f);
                 lblPokemonEggGroup.SetAlignment(0.5f, 0.5f);
+                 
 
+                // vamo
                 lblPokemonHP.Text = pokemonHPFormatted;
                 fix.Put(lblPokemonHP, 373, 327);
                 lblPokemonATK.Text = pokemonATKFormatted;
