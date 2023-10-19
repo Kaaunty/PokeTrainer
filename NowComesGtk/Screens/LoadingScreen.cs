@@ -3,6 +3,7 @@ using Gtk;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
+using System.ComponentModel;
 
 public class PokemonLoad : BaseWindow
 {
@@ -17,6 +18,8 @@ public class PokemonLoad : BaseWindow
     {
         var vbox = new VBox();
 
+        //Image backgroundScreen = new Image($"Images/pokemon_homescreen/loadingScreen.png");
+        
         loadingLabel = new Label("Carregando...");
         vbox.PackStart(loadingLabel, false, false, 10);
 
@@ -26,6 +29,7 @@ public class PokemonLoad : BaseWindow
         progressBar = new ProgressBar();
         vbox.PackStart(progressBar, false, false, 10);
 
+        
         Add(vbox);
         ShowAll();
         LoadPokemonList();
