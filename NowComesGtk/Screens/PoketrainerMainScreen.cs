@@ -12,6 +12,7 @@ namespace NowComesGtk.Screens
 
         private ApiRequest _apiRequest = new();
         private Fixed fix = new Fixed();
+
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
             Image poketrainerBackground = new Image("Images/pokemon_homescreen/homescreen.png");
@@ -128,7 +129,7 @@ namespace NowComesGtk.Screens
             btnBugType.Clicked += BtnTypePokedexScreen;
             fix.Put(btnBugType, 520, 170);
 
-            #endregion Buttons
+            #endregion Buttons Pokédex
 
             Button btnWelcome = new ButtonGenerator("", 70, 40);
             btnWelcome.Image = new Image("Images/buttons/btnWelcome.png");
@@ -145,6 +146,15 @@ namespace NowComesGtk.Screens
             BtnTest.Clicked += btnPokemonTest;
             fix.Put(BtnTest, 640, 300);
 
+            Button BtnTestLegendary = new ButtonGenerator("Teste", 100, 50);
+            BtnTestLegendary.Image = new Image("Images/buttons/btnTeste.png");
+            BtnTestLegendary.Clicked += btnPokemonTestLegendary;
+            fix.Put(BtnTestLegendary, 640, 340);
+            Button BtnTestMythical = new ButtonGenerator("Teste", 100, 50);
+            BtnTestMythical.Image = new Image("Images/buttons/btnTeste.png");
+            BtnTestMythical.Clicked += btnPokemonTestMythical;
+            fix.Put(BtnTestMythical, 640, 380);
+
             DeleteEvent += delegate { Application.Quit(); };
             Add(fix);
             ShowAll();
@@ -153,6 +163,22 @@ namespace NowComesGtk.Screens
         private async void btnPokemonTest(object sender, EventArgs e)
         {
             Pokemon pokemon = await _apiRequest.GetPokemonAsync("charizard");
+
+            PokemonScreen pokemonScreen = new(pokemon);
+            pokemonScreen.Show();
+        }
+
+        private async void btnPokemonTestLegendary(object sender, EventArgs e)
+        {
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("rayquaza");
+
+            PokemonScreen pokemonScreen = new(pokemon);
+            pokemonScreen.Show();
+        }
+
+        private async void btnPokemonTestMythical(object sender, EventArgs e)
+        {
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("hoopa");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();

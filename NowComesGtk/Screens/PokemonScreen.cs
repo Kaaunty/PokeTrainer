@@ -13,12 +13,14 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private Pokemon pokemon;
+    
+        private Button ShinyButton;
+        private Image megaIcon = new("Images/pokemon_forms/MegaKeyDesactivated.png");
         private PokemonForm pokeForm;
         private PokemonSpecies pokeSpecies;
         private PokeApiNet.Type pokemonTypePrimary;
         private PokeApiNet.Type pokemonTypeSecondary;
         private static ApiRequest _apiRequest = new();
-
         private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
         private Image imagePokemonTypeSecondary = new();
         private Image PokemonAnimation = new();
@@ -45,6 +47,10 @@ namespace NowComesGtk.Screens
         private Label lblPokemonSpATK = new();
         private Label lblPokemonSpDEF = new();
         private Label lblPokemonSpeed = new();
+        private Image shinyButtonActivedImage = new Image("Images/buttons/shinyButtonActived.png");
+        private Image shinyButtonDesactivedImage = new Image("Images/buttons/shinyButtonDesactived.png");
+        private Image FormDesactivated = new Image("Images/pokemon_forms/FormDesactivated.png");
+        private Image gMaxIcon = new Image("Images/pokemon_forms/GigaMaxDesactived.png");
 
         #endregion
 
@@ -75,6 +81,7 @@ namespace NowComesGtk.Screens
                 PokemonFirstTypeFormattedTitle = _apiRequest.Translate(textInfo.ToTitleCase(PokemonFirstTypeFormatted));
                 Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
 
+
                 Image Background = new Image($"Images/pokemon_homescreen/{pokemon.Types[0].Type.Name}.png");
                 fix.Put(Background, 0, 0);
 
@@ -94,7 +101,7 @@ namespace NowComesGtk.Screens
                 string damageRelations = GetTypeDamageRelations(pokemonTypePrimary);
                 PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[ {damageRelations} ]</span>";
 
-                fix.Put(PokemonTypeOne, 93, 427);
+                fix.Put(PokemonTypeOne, 93, 429);
 
                 if (pokemon.Types.Count > 1)
                 {
@@ -102,7 +109,7 @@ namespace NowComesGtk.Screens
                     string damageRelationsSecondary = GetTypeDamageRelations(pokemonTypeSecondary);
                     imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[ {damageRelationsSecondary} ]</span>";
 
-                    fix.Put(imagePokemonTypeSecondary, 179, 427);
+                    fix.Put(imagePokemonTypeSecondary, 181, 429);
                 }
 
                 lblPokemonAbilityOne.Text = pokemonAbilityOneUpper;
@@ -138,12 +145,14 @@ namespace NowComesGtk.Screens
                     fix.Put(lblPokemonAbilityFour, 585, 90);
                 }
 
+                #region Labels de Status e Informações
+
                 Label lblPokemonMale = new Label(pokemonMaleFormatted);
                 fix.Put(lblPokemonMale, 377, 225);
                 Label lblPokemnFemale = new Label(pokemonFemaleFormatted);
                 fix.Put(lblPokemnFemale, 487, 225);
                 Label lblPokemonCatchRate = new Label(pokemonCatchRate);
-                fix.Put(lblPokemonCatchRate, 665, 210);
+                fix.Put(lblPokemonCatchRate, 490, 431);
 
                 lblPokemonHP.Text = pokemonHPFormatted;
                 fix.Put(lblPokemonHP, 373, 327);
@@ -158,29 +167,55 @@ namespace NowComesGtk.Screens
                 lblPokemonSpeed.Text = pokemonSpeedFormatted;
                 fix.Put(lblPokemonSpeed, 712, 327);
 
+                #endregion Labels de Status e Informações
+
                 if (pokeForm.IsMega)
                 {
-                    megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
-                    fix.Put(megaKey, 138, 42);
+                    megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
                 }
 
-                Button PreviousEvolution = new ButtonGenerator("Images/buttons/BackForm.png", 40, 40);
-                fix.Put(PreviousEvolution, 180, 38);
+                if (pokeSpecies.IsLegendary)
+                {
+                    FormDesactivated.Pixbuf = new Pixbuf("Images/pokemon_forms/LegendaryIcon.png");
+
+                }
+                else if (pokeSpecies.IsMythical)
+                {
+                    FormDesactivated.Pixbuf = new Pixbuf("Images/pokemon_forms/MythicalIcon.png");
+                }
+
+                fix.Put(FormDesactivated, 61, 35);
+                fix.Put(megaIcon, 36, 35);
+
+
+                #region Buttons UI
+
+                Button PreviousForm = new ButtonGenerator("Images/buttons/BackForm.png", 40, 40);
+                fix.Put(PreviousForm, 185, 30);
+                PreviousForm.Clicked += GetPreviousVariation;
+
+                Button NextForm = new ButtonGenerator("Images/buttons/NextForm.png", 40, 40);
+                fix.Put(NextForm, 235, 30);
+                NextForm.Clicked += GetNextVariation;
+
+                Button PreviousEvolution = new ButtonGenerator("Images/buttons/backEvolution.png", 40, 40);
+                fix.Put(PreviousEvolution, 23, 270);
                 PreviousEvolution.Clicked += GetPreviousVariation;
 
-                Button NextEvolution = new ButtonGenerator("Images/buttons/NextForm.png", 40, 40);
-                fix.Put(NextEvolution, 230, 38);
+                Button NextEvolution = new ButtonGenerator("Images/buttons/NextEvolution.png", 40, 40);
+                fix.Put(NextEvolution, 248, 270);
                 NextEvolution.Clicked += GetNextVariation;
 
-                Button btnMoves = new ButtonGenerator("Images/buttons/btnMoves.png", 192, 85);
-
-                ShinyButton = new ButtonGenerator("Images/shinyButtonDesactivated.png", 40, 40);
-                fix.Put(ShinyButton, 80, 38);
+                ShinyButton = new ButtonGenerator("Images/buttons/shinyButtonDesactived.png", 40, 40);
+                fix.Put(ShinyButton, 138, 270);
                 ShinyButton.Clicked += ShinyButtonClicked;
-
+                Button btnMoves = new ButtonGenerator("Images/buttons/btnMoves.png", 192, 85);
                 btnMoves.TooltipMarkup = "<span foreground='white' font_desc='MS Gothic Regular 10'>[Clique para ver os movimentos do Pokémon]</span>";
-                fix.Put(btnMoves, 428, 395);
+                fix.Put(btnMoves, 580, 393);
                 btnMoves.Clicked += PokemonMoves;
+
+                #endregion Buttons UI
+
                 Add(fix);
 
                 ShowAll();
@@ -195,14 +230,15 @@ namespace NowComesGtk.Screens
         {
             if (isShiny)
             {
-                ShinyButton.Image = new Image("Images/shinyButtonDesactivated.png");
+                ShinyButton.Image = shinyButtonDesactivedImage;
+
                 isShiny = false;
                 await _apiRequest.GetPokemonAnimatedSprite(pokemon.Name);
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
             }
             else
             {
-                ShinyButton.Image = new Image("Images/shinyButtonActivated.png");
+                ShinyButton.Image = shinyButtonActivedImage;
                 isShiny = true;
                 await _apiRequest.GetPokemonShinyAnimatedSprite(pokemon.Name);
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
@@ -581,17 +617,20 @@ namespace NowComesGtk.Screens
 
             if (pokeForm.IsMega)
             {
-                fix.Remove(megaKey);
-                megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
-                fix.Put(megaKey, 138, 42);
+                megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
             }
             else
             {
-                fix.Remove(megaKey);
-                megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
-                fix.Put(megaKey, 138, 42);
+                megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
             }
-
+            if (pokeForm.FormName == "gmax")
+            {
+                gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxActivated.png");
+            }
+            else
+            {
+                gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxDesactived.png");
+            }
             if (pokemon.Types.Count > 1)
             {
                 pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
@@ -603,6 +642,10 @@ namespace NowComesGtk.Screens
             lblPokemonSpATK.Text = pokemonSpATKFormatted;
             lblPokemonSpDEF.Text = pokemonSpDEFFormatted;
             lblPokemonSpeed.Text = pokemonSpeedFormatted;
+        }
+
+        private void UpdateImage()
+        {
         }
     }
 }

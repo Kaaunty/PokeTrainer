@@ -11,9 +11,10 @@ namespace NowComesGtk.Reusable_components
             SetSizeRequest(width, height);
             Relief = ReliefStyle.None;
             Image = imgPokeball;
-
             //// Use ModifyBg para definir a cor de fundo da seleção como transparente (alfa 0)
             //ModifyBg(StateType.Selected, new Color(0, 0, 0, 0));
         }
+
+
     }
 }
