@@ -1,4 +1,5 @@
-﻿using Gtk;
+﻿using Atk;
+using Gtk;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
@@ -12,6 +13,8 @@ public class PokemonLoad : BaseWindow
     private bool isLoaded = false;
     private Label loadingLabel;
     //private Fixed fix = new();
+    private Image runningPikachu;
+
     public PokemonLoad() : base("", 400, 100)
     {
         var vbox = new VBox();
@@ -19,9 +22,10 @@ public class PokemonLoad : BaseWindow
         //Image backgroundScreen = new Image($"Images/pokemon_homescreen/loadingScreen.png");
         
         loadingLabel = new Label("Carregando...");
-
-        /// LEMBRAR DE COLOCAR UM GIF DE UM POKEMONZIN CORRENDO
         vbox.PackStart(loadingLabel, false, false, 10);
+
+        runningPikachu = new Image("Images/pikachu-running.gif");
+        vbox.PackStart(runningPikachu, false, false, 10);
 
         progressBar = new ProgressBar();
         vbox.PackStart(progressBar, false, false, 10);
@@ -29,8 +33,8 @@ public class PokemonLoad : BaseWindow
         
         Add(vbox);
         ShowAll();
-
         LoadPokemonList();
+
         Task.Run(() => UpdateProgressBar());
     }
 
@@ -47,10 +51,9 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            await _apiRequest.GetPokemonsListAll();
+            //await _apiRequest.GetPokemonsListAll();
             progressBar.Fraction = 1;
             isLoaded = true;
-
             loadingLabel.Text = "Carregamento concluído!";
 
             if (isLoaded)
