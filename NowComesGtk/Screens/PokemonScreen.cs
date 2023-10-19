@@ -447,13 +447,15 @@ namespace NowComesGtk.Screens
                 pokemonSpATKFormatted = pokemon.Stats[3].BaseStat.ToString("D3");
                 pokemonSpDEFFormatted = pokemon.Stats[4].BaseStat.ToString("D3");
                 pokemonSpeedFormatted = pokemon.Stats[5].BaseStat.ToString("D3");
-
+                int pokemonMaxForms = 4;
                 await Task.Run(() => GetPokemonSpecies(pokemon.Species.Name)).ConfigureAwait(false);
                 evolutionChain = await _apiRequest.GetEvolutionChain(pokeSpecies.EvolutionChain.Url);
 
                 await Task.Run(() => UpdatePokemonSprite()).ConfigureAwait(false);
-
-                pokeForm = await _apiRequest.GetPokemonForm(pokemon.Name);
+                if (pokemon.Forms.Count < pokemonMaxForms)
+                {
+                    pokeForm = await _apiRequest.GetPokemonForm(pokemon.Name);
+                }
 
                 pokemonDexFormatted = "#" + pokeSpecies.Id.ToString("D4");
 
@@ -565,25 +567,27 @@ namespace NowComesGtk.Screens
                 {
                     pokemonFemaleFormatted = pokeSpecies.GenderRate switch
                     {
+                        -1 => "????",
                         0 => "0,00%",
                         1 => "12,5%",
                         2 => "25,0%",
-                        3 => "50,0%",
-                        4 => "75,0%",
-                        5 => "87,5%",
-                        6 => "100%",
+                        4 => "50,0%",
+                        6 => "75,0%",
+                        7 => "87,5%",
+                        8 => "100%",
                         _ => pokemonFemaleFormatted
                     };
 
                     pokemonMaleFormatted = pokeSpecies.GenderRate switch
                     {
+                        -1 => "????",
                         0 => "100%",
                         1 => "87,5%",
                         2 => "75,0%",
-                        3 => "50,0%",
-                        4 => "25,0%",
-                        5 => "12,5%",
-                        6 => "0,00%",
+                        4 => "50,0%",
+                        6 => "25,0%",
+                        7 => "12,5%",
+                        8 => "0,00%",
                         _ => pokemonMaleFormatted
                     };
 
@@ -591,7 +595,12 @@ namespace NowComesGtk.Screens
                     {
                         3 => "01.6%",
                         45 => "11.9%",
+                        100 => "21.7%",
+                        120 => "24.9%",
+                        150 => "29.5%",
                         190 => "35.2%",
+                        220 => "39.3%",
+                        225 => "39.9%",
                         255 => "43.9%",
                         _ => pokemonCatchRate
                     };

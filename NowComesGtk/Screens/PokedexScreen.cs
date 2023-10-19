@@ -51,7 +51,7 @@ namespace NowComesGtk.Screens
         #endregion Pokeball buttons
 
         public PokedexScreen(string type) : base($"PokéTrainer© // Pokémons tipo - {type} // Pokémons", 500, 600)
-        { 
+        {
             this.type = type;
             string TypeFormatted = textInfo.ToTitleCase(_apiRequest.Translate(type));
             Title = $"PokéTrainer© // Pokémons tipo - {TypeFormatted} // Pokémons";
@@ -62,7 +62,11 @@ namespace NowComesGtk.Screens
             txtSearchPokemon.SetSizeRequest(125, 20);
             fix.Put(txtSearchPokemon, 165, 25);
             txtSearchPokemon.Text = defaultText;
-            txtSearchPokemon.Changed += SearchPokemon;
+
+            if (!string.IsNullOrEmpty(txtSearchPokemon.Text))
+            {
+                //txtSearchPokemon.Changed += SearchPokemon;
+            }
             CssProvider cssProvider = new CssProvider();
             cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
             txtSearchPokemon.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
@@ -123,7 +127,6 @@ namespace NowComesGtk.Screens
             pokeball5.Name = "pokemon5";
             pokeball5.Clicked += OpenPokemonScreenClicked;
             fix.Put(pokeball5, 365, 176);
-
 
             #endregion First row of button
 
@@ -188,9 +191,10 @@ namespace NowComesGtk.Screens
             pokeball15.Clicked += OpenPokemonScreenClicked;
             fix.Put(pokeball15, 365, 322);
 
-            #endregion
+            #endregion Third button row
 
             #region Fourth button row
+
             // Pokeball 16
             pokeball16 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball16.Name = "pokemon16";
@@ -217,9 +221,10 @@ namespace NowComesGtk.Screens
             pokeball20.Clicked += OpenPokemonScreenClicked;
             fix.Put(pokeball20, 365, 394);
 
-            #endregion
+            #endregion Fourth button row
 
             #region Fifth button row
+
             // Pokeball 21
             pokeball21 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball21.Name = "pokemon21";
@@ -246,7 +251,7 @@ namespace NowComesGtk.Screens
             pokeball25.Clicked += OpenPokemonScreenClicked;
             fix.Put(pokeball25, 365, 467);
 
-            #endregion
+            #endregion Fifth button row
 
             #endregion Buttons
 
@@ -302,14 +307,17 @@ namespace NowComesGtk.Screens
 
         private void SearchPokemon(object sender, EventArgs e)
         {
-            if (txtSearchPokemon.Text != string.Empty && txtSearchPokemon.Text != "Buscar Pokémon")
+            if (!string.IsNullOrEmpty(txtSearchPokemon.Text))
             {
-                string PokemonName = txtSearchPokemon.Text.ToLower();
-                _methods.SearchPokemonName(fix, currentPage, type, choice, PokemonName);
-            }
-            else if (txtSearchPokemon.Text == string.Empty)
-            {
-                _methods.UpdateButtons(fix, currentPage, type, choice);
+                if (txtSearchPokemon.Text != string.Empty && txtSearchPokemon.Text != "Buscar Pokémon")
+                {
+                    string PokemonName = txtSearchPokemon.Text.ToLower();
+                    _methods.SearchPokemonName(fix, currentPage, type, choice, PokemonName);
+                }
+                else if (txtSearchPokemon.Text == string.Empty)
+                {
+                    _methods.UpdateButtons(fix, currentPage, type, choice);
+                }
             }
         }
 
