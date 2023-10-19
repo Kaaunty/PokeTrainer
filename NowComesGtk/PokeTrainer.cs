@@ -8,7 +8,6 @@ namespace NowComesGtk
         {
             string caminhoOriginal = System.IO.Directory.GetCurrentDirectory().Replace("bin\\Debug\\net7.0", "");
             Environment.CurrentDirectory = caminhoOriginal;
-
             Application.Init();
             new PokemonLoad();
             Application.Run();
