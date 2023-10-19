@@ -10,8 +10,9 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
+        private SeparateMethods separeteMethods = new();
         private ApiRequest _apiRequest = new();
-        private Fixed fix = new Fixed();
+        private Fixed fix = new();
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
@@ -133,36 +134,46 @@ namespace NowComesGtk.Screens
 
             Button btnWelcome = new ButtonGenerator("", 70, 40);
             btnWelcome.Image = new Image("Images/buttons/btnWelcome.png");
-            //btnDialog.Clicked += btnPokemonTest;
+            btnWelcome.Clicked += Dialog_Start;
             fix.Put(btnWelcome, 620, 75);
-
             Button btnGitHub = new ButtonGenerator("", 40, 40);
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
-            //btnDialog.Clicked += btnPokemonTest;
+            btnGitHub.Clicked += GitHub_Open;
             fix.Put(btnGitHub, 735, 435);
 
             Button BtnTest = new ButtonGenerator("Teste", 100, 50);
             BtnTest.Image = new Image("Images/buttons/btnTeste.png");
             BtnTest.Clicked += btnPokemonTest;
             fix.Put(BtnTest, 640, 300);
-
             Button BtnTestLegendary = new ButtonGenerator("Teste", 100, 50);
             BtnTestLegendary.Image = new Image("Images/buttons/btnTeste.png");
             BtnTestLegendary.Clicked += btnPokemonTestLegendary;
-            fix.Put(BtnTestLegendary, 640, 340);
+            fix.Put(BtnTestLegendary, 640, 360);
             Button BtnTestMythical = new ButtonGenerator("Teste", 100, 50);
             BtnTestMythical.Image = new Image("Images/buttons/btnTeste.png");
             BtnTestMythical.Clicked += btnPokemonTestMythical;
-            fix.Put(BtnTestMythical, 640, 380);
+            fix.Put(BtnTestMythical, 640, 420);
 
             DeleteEvent += delegate { Application.Quit(); };
             Add(fix);
             ShowAll();
         }
 
+        private void GitHub_Open(object sender, EventArgs e)
+        {
+            separeteMethods.GitHubOpen();
+        }
+
+        private async void Dialog_Start(object sender, EventArgs e)
+        {
+            
+            // FAZER A PARTE DO DIALOGO COM O PERSONAGEM!!
+
+        }
+
         private async void btnPokemonTest(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("gastly");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("gengar");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
@@ -170,7 +181,7 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTestLegendary(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("rayquaza");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("mewtwo");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
@@ -178,7 +189,7 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTestMythical(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("hoopa");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("zarude");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();

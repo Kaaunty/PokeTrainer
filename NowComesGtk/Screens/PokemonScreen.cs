@@ -353,6 +353,11 @@ namespace NowComesGtk.Screens
                         HalfDamageFrom = removeLastComma;
                         damageRelationsList.Add(HalfDamageFrom);
                     }
+                    if (string.IsNullOrEmpty(HalfDamageFrom))
+                    {
+                        HalfDamageFrom = "Nenhum";
+                        damageRelationsList.Add(HalfDamageFrom);
+                    }
                     if (type.DamageRelations.HalfDamageTo.Count > 0)
                     {
                         foreach (var halfDamageTo in type.DamageRelations.HalfDamageTo)
@@ -363,6 +368,12 @@ namespace NowComesGtk.Screens
                         HalfDamageTo = removeLastComma;
                         damageRelationsList.Add(HalfDamageTo);
                     }
+                    if (string.IsNullOrEmpty(HalfDamageTo))
+                    {
+                        HalfDamageTo = "Nenhum";
+                        damageRelationsList.Add(HalfDamageTo);
+                    }
+
                     if (type.DamageRelations.DoubleDamageFrom.Count > 0)
                     {
                         foreach (var doubleDamageFrom in type.DamageRelations.DoubleDamageFrom)
@@ -373,6 +384,12 @@ namespace NowComesGtk.Screens
                         DoubleDamageFrom = removeLastComma;
                         damageRelationsList.Add(DoubleDamageFrom);
                     }
+                    if (string.IsNullOrEmpty(DoubleDamageFrom))
+                    {
+                        DoubleDamageFrom = "Nenhum";
+                        damageRelationsList.Add(DoubleDamageFrom);
+                    }
+
                     if (type.DamageRelations.DoubleDamageTo.Count > 0)
                     {
                         foreach (var doubleDamageTo in type.DamageRelations.DoubleDamageTo)
@@ -383,6 +400,12 @@ namespace NowComesGtk.Screens
                         DoubleDamageTo = removeLastComma;
                         damageRelationsList.Add(DoubleDamageTo);
                     }
+                    if (string.IsNullOrEmpty(DoubleDamageTo))
+                    {
+                        DoubleDamageTo = "Nenhum";
+                        damageRelationsList.Add(DoubleDamageTo);
+                    }
+
                     if (type.DamageRelations.NoDamageFrom.Count > 0)
                     {
                         foreach (var noDamageFrom in type.DamageRelations.NoDamageFrom)
@@ -398,6 +421,7 @@ namespace NowComesGtk.Screens
                         NoDamageFrom = "Nenhum";
                         damageRelationsList.Add(NoDamageFrom);
                     }
+
                     if (type.DamageRelations.NoDamageTo.Count > 0)
                     {
                         foreach (var noDamageFrom in type.DamageRelations.NoDamageTo)
@@ -500,9 +524,9 @@ namespace NowComesGtk.Screens
                 else
                 {
                     PokemonFirstTypeFormatted = pokemon.Types[0].Type.Name;
-                    pokemonTypePrimary = await _apiRequest.GetPokemonTypeAsync(PokemonFirstTypeFormatted);
+                    pokemonTypePrimary = await _apiRequest.GetTypeAsync(PokemonFirstTypeFormatted);
                     pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
-                    pokemonTypeSecondary = await _apiRequest.GetPokemonTypeAsync(pokemonSecondaryTypeFormatted);
+                    pokemonTypeSecondary = await _apiRequest.GetTypeAsync(pokemonSecondaryTypeFormatted);
                 }
 
                 foreach (var eggGroup in pokeSpecies.EggGroups)
