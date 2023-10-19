@@ -2,6 +2,7 @@
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
+using System.ComponentModel;
 
 public class PokemonLoad : BaseWindow
 {
@@ -10,11 +11,13 @@ public class PokemonLoad : BaseWindow
     private ProgressBar progressBar;
     private bool isLoaded = false;
     private Label loadingLabel;
-
+    //private Fixed fix = new();
     public PokemonLoad() : base("", 400, 100)
     {
         var vbox = new VBox();
 
+        //Image backgroundScreen = new Image($"Images/pokemon_homescreen/loadingScreen.png");
+        
         loadingLabel = new Label("Carregando...");
 
         /// LEMBRAR DE COLOCAR UM GIF DE UM POKEMONZIN CORRENDO
@@ -23,6 +26,7 @@ public class PokemonLoad : BaseWindow
         progressBar = new ProgressBar();
         vbox.PackStart(progressBar, false, false, 10);
 
+        
         Add(vbox);
         ShowAll();
 
