@@ -1,5 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,dotnetcore
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,dotnetcore
+### Images ###
+Images/PokemonAnimated.gif
+Images/PokemonAnimatedShiny.gif
 
 ### DotnetCore ###
 # .NET Core build folders
