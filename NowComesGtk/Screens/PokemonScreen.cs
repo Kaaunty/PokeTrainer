@@ -58,6 +58,7 @@ namespace NowComesGtk.Screens
         private bool isLoaded = false;
         private bool isShiny = false;
         private int variationId = 0;
+        private int i = 0;
 
         private string pokemonHPFormatted, pokemonATKFormatted, pokemonDEFFormatted, pokemonSpATKFormatted, pokemonSpDEFFormatted, pokemonSpeedFormatted;
         private string pokemonNameFormatted, pokemonDexFormatted, pokemonMaleFormatted, pokemonFemaleFormatted, pokemonCatchRate, pokemonEggGroup;
@@ -84,7 +85,6 @@ namespace NowComesGtk.Screens
                 Image Background = new Image($"Images/pokemon_homescreen/{pokemon.Types[0].Type.Name}.png");
                 fix.Put(Background, 0, 0);
 
-                //fix.Put(Background, 0, 0);
                 megaKey.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
 
@@ -177,6 +177,15 @@ namespace NowComesGtk.Screens
                 {
                     FormDesactivated.Pixbuf = new Pixbuf("Images/pokemon_forms/MythicalIcon.png");
                 }
+
+
+             
+
+
+
+
+
+
 
                 fix.Put(FormDesactivated, 61, 35);
                 fix.Put(megaIcon, 36, 35);
@@ -280,14 +289,34 @@ namespace NowComesGtk.Screens
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
             }
         }
-
+ 
         private async void PokemonMoves(object sender, EventArgs e)
         {
             List<Move> pokemonMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemon);
 
+            var t = pokemon.Moves.Select(x => x.VersionGroupDetails.FirstOrDefault(y => y.MoveLearnMethod.Name == "tutor"));
+
             MovementScreen movementScreen = new(pokemonMoves);
             movementScreen.ShowAll();
+
+            //List<PokemonMoveVersion> test = new();
+
+            //foreach (Move move in pokemonMoves)
+            //{
+            //    pokemon.Moves.ForEach(pMove =>
+            //    {
+            //        if (pMove.VersionGroupDetails.FirstOrDefault(x => x.MoveLearnMethod.Name == "tutor") != null)
+            //        {
+
+            //        }
+            //    });
+            //}
+
+         
+
         }
+
+
 
         public static string GetNextEvolution(EvolutionChain evolutionChain, string currentPokemonName)
         {
