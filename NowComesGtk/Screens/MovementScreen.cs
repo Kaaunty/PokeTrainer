@@ -1,6 +1,7 @@
 ﻿using NowComesGtk.Utils;
 using PokeApiNet;
 using Gtk;
+using PokeApi.BackEnd.Service;
 
 namespace NowComesGtk.Screens
 {
@@ -9,13 +10,13 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private ListStore moves = new(typeof(string), typeof(Gdk.Pixbuf));
+        private ApiRequest _apiRequest = new();
         private ComboBox cbWayOfLearning = new();
         private Entry txtSearchMoves = new();
         private List<Move> Moves = new();
         private ListStore moveList;
 
         private string defaultText = "Buscar Movimento";
-        private int i = 0;
 
         private enum Column
         {
@@ -30,7 +31,7 @@ namespace NowComesGtk.Screens
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
             BorderWidth = 25;
-
+            GetMoveMethodLearner();
             Fixed fix = new();
             VBox vBox = new(false, 50);
             vBox.BorderWidth = 25;
@@ -64,8 +65,7 @@ namespace NowComesGtk.Screens
 
             fix.Put(cbWayOfLearning, 180, 60);
 
-
-            #endregion
+            #endregion ComboBox
 
             ScrolledWindow sw = new ScrolledWindow();
             sw.ShadowType = ShadowType.EtchedIn;
@@ -105,11 +105,8 @@ namespace NowComesGtk.Screens
             return moves;
         }
 
-
-
         private void SearchMove(object sender, EventArgs e)
         {
-
             if (!string.IsNullOrEmpty(txtSearchMoves.Text))
             {
                 string pokeMove = txtSearchMoves.Text;
@@ -129,6 +126,14 @@ namespace NowComesGtk.Screens
                 moveList.Clear();
                 CreateModel();
             }
+        }
+
+        private async void GetMoveMethodLearner()
+        {
+            MoveLearnMethod moveLearnMethod = await _apiRequest.GetMoveLearnMethodAsync("level-up");
+            MoveLearnMethod moveLearnMethod1 = await _apiRequest.GetMoveLearnMethodAsync("egg");
+            MoveLearnMethod moveLearnMethod2 = await _apiRequest.GetMoveLearnMethodAsync("tutor");
+            MoveLearnMethod moveLearnMethod3 = await _apiRequest.GetMoveLearnMethodAsync("machine");
         }
     }
 }

@@ -15,7 +15,6 @@ public class PokemonLoad : BaseWindow
     private bool isLoaded = false;
     private int loadingDots = 0;
 
-
     public PokemonLoad() : base("", 400, 100)
     {
         var vbox = new VBox();
@@ -28,7 +27,7 @@ public class PokemonLoad : BaseWindow
 
         progressBar = new ProgressBar();
         vbox.PackStart(progressBar, false, false, 10);
-        
+
         Add(vbox);
         ShowAll();
         LoadPokemonList();
@@ -44,7 +43,7 @@ public class PokemonLoad : BaseWindow
             Task.Delay(200).Wait();
 
             loadingLabel.Text = "Carregando" + new string('.', loadingDots);
-            loadingDots = (loadingDots + 1) % 4;  
+            loadingDots = (loadingDots + 1) % 4;
         }
     }
 
@@ -53,6 +52,7 @@ public class PokemonLoad : BaseWindow
         try
         {
             await _apiRequest.GetPokemonsListAll();
+            _apiRequest.PopulateTypeDamageRelationDictionary();
             progressBar.Fraction = 1;
             isLoaded = true;
             loadingLabel.Text = "Carregamento concluído!";

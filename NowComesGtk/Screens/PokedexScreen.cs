@@ -53,7 +53,7 @@ namespace NowComesGtk.Screens
         public PokedexScreen(string type) : base($"PokéTrainer© // Pokémons tipo - {type} // Pokémons", 500, 600)
         {
             this.type = type;
-            string TypeFormatted = textInfo.ToTitleCase(_apiRequest.Translate(type));
+            string TypeFormatted = textInfo.ToTitleCase(type);
             Title = $"PokéTrainer© // Pokémons tipo - {TypeFormatted} // Pokémons";
             Image backgroundScreen = new Image($"Images/pokedex_homescreen/{type}.png");
             fix.Put(backgroundScreen, 0, 0);

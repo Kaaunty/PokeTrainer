@@ -164,16 +164,14 @@ namespace NowComesGtk.Screens
             separeteMethods.GitHubOpen();
         }
 
-        private async void Dialog_Start(object sender, EventArgs e)
+        private void Dialog_Start(object sender, EventArgs e)
         {
-            
             // FAZER A PARTE DO DIALOGO COM O PERSONAGEM!!
-
         }
 
         private async void btnPokemonTest(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("gengar");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("furfrou");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
@@ -181,15 +179,14 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTestLegendary(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("mewtwo");
-
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("charizard");
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
         }
 
         private async void btnPokemonTestMythical(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("zarude");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("arceus");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
