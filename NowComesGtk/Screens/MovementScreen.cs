@@ -1,6 +1,9 @@
-﻿using NowComesGtk.Utils;
+﻿using PokeApi.BackEnd.Service;
+using NowComesGtk.Utils;
 using PokeApiNet;
 using Gtk;
+using Google.Apis.Util;
+using System.ComponentModel;
 
 namespace NowComesGtk.Screens
 {
@@ -9,12 +12,16 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private ListStore moves = new(typeof(string), typeof(Gdk.Pixbuf));
-        private ComboBox cbWayOfLearning = new();
         private Entry txtSearchMoves = new();
+        private ApiRequest _apiRequest = new();
+        private Methods _methods = new();
         private List<Move> Moves = new();
+        private List<MoveLearnMethod> MoveLearnMethods = new();
+        private MoveLearnMethod _moveLearnMethod;
         private ListStore moveList;
 
         private string defaultText = "Buscar Movimento";
+        private int choice;
         private int i = 0;
 
         private enum Column
@@ -30,7 +37,7 @@ namespace NowComesGtk.Screens
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
             BorderWidth = 25;
-
+            
             Fixed fix = new();
             VBox vBox = new(false, 50);
             vBox.BorderWidth = 25;
@@ -62,8 +69,56 @@ namespace NowComesGtk.Screens
 
             #region ComboBox
 
+            ComboBox cbWayOfLearning = new();
             fix.Put(cbWayOfLearning, 180, 60);
 
+            ListStore waysToLearn = new ListStore(typeof(string));
+            waysToLearn.AppendValues("Todos");
+            waysToLearn.AppendValues("Ovo");
+            waysToLearn.AppendValues("TM/HM");
+            waysToLearn.AppendValues("Level Up");
+            waysToLearn.AppendValues("Move Tutor");
+            cbWayOfLearning.Model = waysToLearn;
+            cbWayOfLearning.Active = 0;
+
+            CellRendererText cell = new CellRendererText();
+            cbWayOfLearning.PackStart(cell, false);
+            cbWayOfLearning.AddAttribute(cell, "text", 0);
+
+            cbWayOfLearning.Changed += (sender, e) =>
+            {
+                TreeIter searchByLearn;
+                if (cbWayOfLearning.GetActiveIter(out searchByLearn))
+                {
+                    var way = (string)waysToLearn.GetValue(searchByLearn, 0);
+
+                    if (way == "Ovo")
+                    {
+                        choice = 1;
+                        AllTypeClicked();
+                    }
+                    else if (way == "TM/HM")
+                    {
+                        choice = 2;
+                        AllTypeClicked();
+                    }
+                    else if (way == "Level Up")
+                    {
+                        choice = 3;
+                        AllTypeClicked();
+                    }
+                    if (way == "Move tutor")
+                    {
+                        choice = 4;
+                        AllTypeClicked();
+                    }
+                    else
+                    {
+                        choice = 0;
+                        AllTypeClicked();
+                    }
+                }
+            };
 
             #endregion
 
@@ -77,6 +132,7 @@ namespace NowComesGtk.Screens
             TreeView treeView = new TreeView(moveList);
             treeView.RulesHint = true;
             sw.Add(treeView);
+
 
             txtSearchMoves.Changed += SearchMove;
             AddColumns(treeView);
@@ -105,8 +161,6 @@ namespace NowComesGtk.Screens
             return moves;
         }
 
-
-
         private void SearchMove(object sender, EventArgs e)
         {
 
@@ -128,6 +182,41 @@ namespace NowComesGtk.Screens
             {
                 moveList.Clear();
                 CreateModel();
+            }
+        }
+
+        private void AllTypeClicked()
+        {
+            try
+            {
+                if (choice == 0)
+                {
+                    moveList.Clear();
+                    CreateModel();
+                }
+                else if (choice == 1)
+                {
+                   
+                }
+                else if (choice == 2)
+                {
+
+                }
+                else if (choice == 3)
+                {
+                   
+                }
+                else if (choice == 4)
+                {
+                    moveList.Clear();
+                    foreach (var move in Moves)
+                    {
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

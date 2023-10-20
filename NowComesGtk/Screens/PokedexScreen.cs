@@ -15,8 +15,9 @@ namespace NowComesGtk.Screens
         private ApiRequest _apiRequest = new();
         private Entry txtSearchPokemon = new();
         private Methods _methods = new();
-        private int currentPage = 0;
         private Fixed fix = new();
+
+        private int currentPage = 0;
         private int choice = 0;
         private string type;
 
@@ -65,7 +66,7 @@ namespace NowComesGtk.Screens
 
             if (!string.IsNullOrEmpty(txtSearchPokemon.Text))
             {
-                //txtSearchPokemon.Changed += SearchPokemon;
+                txtSearchPokemon.Changed += SearchPokemon;
             }
             CssProvider cssProvider = new CssProvider();
             cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
@@ -79,7 +80,7 @@ namespace NowComesGtk.Screens
                 txtSearchPokemon.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
             };
             txtSearchPokemon.FocusOutEvent += (sender, e) =>
-            {
+            { 
                 txtSearchPokemon.Text = defaultText;
                 CssProvider cssProvider = new CssProvider();
                 cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
@@ -258,7 +259,8 @@ namespace NowComesGtk.Screens
             ListStore typeList = new ListStore(typeof(string));
             typeList.AppendValues("Todos");
             typeList.AppendValues($"Puro tipo {TypeFormatted}");
-            typeList.AppendValues("Meio tipo");
+            typeList.AppendValues($"Meio tipo primário");
+            typeList.AppendValues($"Meio tipo secundário");
             cbTypePokemon.Model = typeList;
             cbTypePokemon.Active = 0;
 
@@ -284,10 +286,15 @@ namespace NowComesGtk.Screens
                         choice = 1;
                         AllTypeClicked();
                     }
-                    else if (typeSelected == "Meio tipo")
+                    else if (typeSelected == $"Meio tipo primário")
                     {
                         currentPage = 0;
-
+                        choice = 2;
+                        AllTypeClicked();
+                    }
+                    else if (typeSelected == $"Meio tipo secundário")
+                    {
+                        currentPage = 0;
                         choice = 2;
                         AllTypeClicked();
                     }
@@ -300,8 +307,8 @@ namespace NowComesGtk.Screens
                 }
             };
 
-            _methods.UpdateButtons(this.fix, currentPage, type, choice);
-            Add(this.fix);
+            _methods.UpdateButtons(fix, currentPage, type, choice);
+            Add(fix);
             ShowAll();
         }
 
