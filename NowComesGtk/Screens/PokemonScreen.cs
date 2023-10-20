@@ -29,6 +29,7 @@ namespace NowComesGtk.Screens
         private Image megaKey = new();
 
         private List<Ability> pokeAbility = new();
+        private List<EggGroup> pokeEggGroup = new();
         private CssProvider cssProvider = new();
         private Fixed fix = new();
         private EvolutionChain evolutionChain = new();
@@ -59,7 +60,7 @@ namespace NowComesGtk.Screens
         private int variationId = 0;
 
         private string pokemonHPFormatted, pokemonATKFormatted, pokemonDEFFormatted, pokemonSpATKFormatted, pokemonSpDEFFormatted, pokemonSpeedFormatted;
-        private string pokemonNameFormatted, pokemonDexFormatted, pokemonMaleFormatted, pokemonFemaleFormatted, pokemonCatchRate;
+        private string pokemonNameFormatted, pokemonDexFormatted, pokemonMaleFormatted, pokemonFemaleFormatted, pokemonCatchRate, pokemonEggGroup;
         private string pokemonAbilityOneUpper, pokemonAbilityTwoUpper, pokemonAbilityThreeUpper, pokemonAbilityFourUpper;
         private string PokemonFirstTypeFormattedTitle, PokemonFirstTypeFormatted, pokemonSecondaryTypeFormatted;
 
@@ -143,6 +144,10 @@ namespace NowComesGtk.Screens
                 fix.Put(lblPokemnFemale, 487, 225);
                 Label lblPokemonCatchRate = new Label(pokemonCatchRate);
                 fix.Put(lblPokemonCatchRate, 490, 431);
+                Label lblPokemonEggGroup = new Label(pokemonEggGroup);
+                fix.Put(lblPokemonEggGroup, 668, 195);
+                lblPokemonEggGroup.SetAlignment(0.5f, 0.0f);
+                lblPokemonEggGroup.SetAlignment(0.5f, 0.5f);
 
                 lblPokemonHP.Text = pokemonHPFormatted;
                 fix.Put(lblPokemonHP, 373, 327);
@@ -326,6 +331,7 @@ namespace NowComesGtk.Screens
 
         private string GetTypeDamageRelations(Type type)
         {
+            
             try
             {
                 List<string> damageRelationsList = new();
@@ -347,6 +353,11 @@ namespace NowComesGtk.Screens
                         HalfDamageFrom = removeLastComma;
                         damageRelationsList.Add(HalfDamageFrom);
                     }
+                    if (string.IsNullOrEmpty(HalfDamageFrom))
+                    {
+                        HalfDamageFrom = "Nenhum";
+                        damageRelationsList.Add(HalfDamageFrom);
+                    }
                     if (type.DamageRelations.HalfDamageTo.Count > 0)
                     {
                         foreach (var halfDamageTo in type.DamageRelations.HalfDamageTo)
@@ -357,6 +368,12 @@ namespace NowComesGtk.Screens
                         HalfDamageTo = removeLastComma;
                         damageRelationsList.Add(HalfDamageTo);
                     }
+                    if (string.IsNullOrEmpty(HalfDamageTo))
+                    {
+                        HalfDamageTo = "Nenhum";
+                        damageRelationsList.Add(HalfDamageTo);
+                    }
+
                     if (type.DamageRelations.DoubleDamageFrom.Count > 0)
                     {
                         foreach (var doubleDamageFrom in type.DamageRelations.DoubleDamageFrom)
@@ -367,6 +384,12 @@ namespace NowComesGtk.Screens
                         DoubleDamageFrom = removeLastComma;
                         damageRelationsList.Add(DoubleDamageFrom);
                     }
+                    if (string.IsNullOrEmpty(DoubleDamageFrom))
+                    {
+                        DoubleDamageFrom = "Nenhum";
+                        damageRelationsList.Add(DoubleDamageFrom);
+                    }
+
                     if (type.DamageRelations.DoubleDamageTo.Count > 0)
                     {
                         foreach (var doubleDamageTo in type.DamageRelations.DoubleDamageTo)
@@ -377,6 +400,12 @@ namespace NowComesGtk.Screens
                         DoubleDamageTo = removeLastComma;
                         damageRelationsList.Add(DoubleDamageTo);
                     }
+                    if (string.IsNullOrEmpty(DoubleDamageTo))
+                    {
+                        DoubleDamageTo = "Nenhum";
+                        damageRelationsList.Add(DoubleDamageTo);
+                    }
+
                     if (type.DamageRelations.NoDamageFrom.Count > 0)
                     {
                         foreach (var noDamageFrom in type.DamageRelations.NoDamageFrom)
@@ -392,6 +421,7 @@ namespace NowComesGtk.Screens
                         NoDamageFrom = "Nenhum";
                         damageRelationsList.Add(NoDamageFrom);
                     }
+
                     if (type.DamageRelations.NoDamageTo.Count > 0)
                     {
                         foreach (var noDamageFrom in type.DamageRelations.NoDamageTo)
@@ -500,6 +530,12 @@ namespace NowComesGtk.Screens
                     pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
                     pokemonTypeSecondary = await _apiRequest.GetTypeAsync(pokemonSecondaryTypeFormatted);
                 }
+
+                foreach (var eggGroup in pokeSpecies.EggGroups)
+                {
+                    pokemonEggGroup += eggGroup.Name + "\n";
+                }
+
                 isLoaded = true;
             }
             catch (Exception ex)

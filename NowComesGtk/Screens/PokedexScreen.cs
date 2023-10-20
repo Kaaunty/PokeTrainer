@@ -342,6 +342,7 @@ namespace NowComesGtk.Screens
                 Pokemon pokemonClicked = await _apiRequest.GetPokemonAsync(pokemonName);
                 PokemonScreen pokemonScreen = new(pokemonClicked);
                 pokemonScreen.Show();
+                Close();
             }
             else
             {
