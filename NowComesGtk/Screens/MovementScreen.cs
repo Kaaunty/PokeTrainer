@@ -1,8 +1,7 @@
-﻿using PokeApi.BackEnd.Service;
+﻿using Gtk;
 using NowComesGtk.Utils;
-using PokeApiNet;
-using Gtk;
 using PokeApi.BackEnd.Service;
+using PokeApiNet;
 
 namespace NowComesGtk.Screens
 {
@@ -14,7 +13,6 @@ namespace NowComesGtk.Screens
         private ApiRequest _apiRequest = new();
         private ComboBox cbWayOfLearning = new();
         private Entry txtSearchMoves = new();
-        private ApiRequest _apiRequest = new();
         private Methods _methods = new();
         private List<Move> Moves = new();
         private List<MoveLearnMethod> MoveLearnMethods = new();
@@ -121,7 +119,7 @@ namespace NowComesGtk.Screens
                 }
             };
 
-            #endregion
+            #endregion ComboBox
 
             ScrolledWindow sw = new ScrolledWindow();
             sw.ShadowType = ShadowType.EtchedIn;
@@ -133,7 +131,6 @@ namespace NowComesGtk.Screens
             TreeView treeView = new TreeView(moveList);
             treeView.RulesHint = true;
             sw.Add(treeView);
-
 
             txtSearchMoves.Changed += SearchMove;
             AddColumns(treeView);
@@ -204,15 +201,12 @@ namespace NowComesGtk.Screens
                 }
                 else if (choice == 1)
                 {
-                   
                 }
                 else if (choice == 2)
                 {
-
                 }
                 else if (choice == 3)
                 {
-                   
                 }
                 else if (choice == 4)
                 {
