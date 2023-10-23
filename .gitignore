@@ -414,3 +414,5 @@ FodyWeavers.xsd
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 *.gif
+NowComesGtk/Images/PokemonAnimated.gif
+NowComesGtk/Images/PokemonAnimatedShiny.gif
