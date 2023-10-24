@@ -8,6 +8,7 @@ using PokeApi.BackEnd.Service;
 using PokeApiNet;
 using System.Drawing.Text;
 using System.Globalization;
+using System.Linq;
 using Type = PokeApiNet.Type;
 
 namespace NowComesGtk.Screens
@@ -430,60 +431,10 @@ namespace NowComesGtk.Screens
 
             List<Move> pokemonSpecieMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemonSpecie);
             List<Move> pokemonMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemon);
-            List<Move> pokemonMovesList = new(pokemonMoves);
 
-            Dictionary<string, string> moveLearnByEgg = new();
-            Dictionary<string, string> moveLearnByTmHm = new();
-            Dictionary<string, string> moveLearnByLevelUp = new();
-            Dictionary<string, string> moveLearnByMoveTutor = new();
+            var MoveList = pokemonSpecieMoves.Where(pokeSpecieMove => !pokemonMoves.Any(pokeMove => pokeMove.Name == pokeSpecieMove.Name)).Concat(pokemonMoves).ToList();
 
-            foreach (var pokeSpecieMove in pokemonSpecieMoves)
-            {
-                foreach (var pokeMove in pokemonMoves)
-                {
-                    if (pokeSpecieMove.Name != pokeMove.Name)
-                    {
-                        pokemonMovesList.Add(pokeSpecieMove);
-                        break;
-                    }
-                }
-            }
-
-            foreach (var move in pokemonMovesList)
-            {
-                string moveNameList = move.Name;
-                string moveTypeList = move.Type.Name;
-
-                foreach (var pokeMove in pokemon.Moves)
-                {
-                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails.Any(x => x.MoveLearnMethod.Name == "egg"))
-                    {
-                        moveLearnByEgg.Add(moveNameList, moveTypeList);
-                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
-                        break;
-                    }
-                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name == "machine")
-                    {
-                        moveLearnByTmHm.Add(moveNameList, moveTypeList);
-                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
-                        break;
-                    }
-                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name == "level-up")
-                    {
-                        moveLearnByLevelUp.Add(moveNameList, moveTypeList);
-                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
-                        break;
-                    }
-                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name == "tutor")
-                    {
-                        moveLearnByMoveTutor.Add(moveNameList, moveTypeList);
-                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
-                        break;
-                    }
-                }
-            }
-
-            MovementScreen movementScreen = new MovementScreen(pokemonMoves, moveLearnByEgg, moveLearnByTmHm, moveLearnByLevelUp, moveLearnByMoveTutor);
+            MovementScreen movementScreen = new(MoveList, pokemon, pokemonSpecie);
             movementScreen.ShowAll();
         }
 
@@ -531,6 +482,8 @@ namespace NowComesGtk.Screens
         {
             try
             {
+
+
                 pokemonNameFormatted = textInfo.ToTitleCase(pokemon.Name);
                 pokemonHPFormatted = pokemon.Stats[0].BaseStat.ToString("D3");
                 pokemonATKFormatted = pokemon.Stats[1].BaseStat.ToString("D3");
@@ -544,6 +497,7 @@ namespace NowComesGtk.Screens
                 {
                     evolutionChain = await _apiRequest.GetEvolutionChain(pokeSpecies.EvolutionChain.Url);
                 }
+
 
                 await UpdatePokemonSprite(pokemon.Name);
 

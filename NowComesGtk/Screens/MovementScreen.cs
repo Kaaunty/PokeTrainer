@@ -2,6 +2,7 @@
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
 using PokeApiNet;
+using System.Security.Authentication.ExtendedProtection;
 
 namespace NowComesGtk.Screens
 {
@@ -10,14 +11,16 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private ListStore moves = new(typeof(string), typeof(Gdk.Pixbuf));
-        private Dictionary<string, string> MoveByEgg = new();
-        private Dictionary<string, string> MoveByMachine = new();
-        private Dictionary<string, string> MoveByLevelUp = new();
-        private Dictionary<string, string> MoveByTutor = new();
+        private Dictionary<string, string> moveLearnByEgg = new();
+        private Dictionary<string, string> moveLearnByTmHm = new();
+        private Dictionary<string, string> moveLearnByLevelUp = new();
+        private Dictionary<string, string> moveLearnByMoveTutor = new();
         private ApiRequest _apiRequest = new();
         private Entry txtSearchMoves = new();
         private List<Move> Moves = new();
         private ListStore moveList;
+        private Pokemon poke;
+        private Pokemon pokeSpecie;
 
         private string defaultText = "Buscar Movimento";
         private int choice;
@@ -29,17 +32,17 @@ namespace NowComesGtk.Screens
             Type
         }
 
-        public MovementScreen(List<Move> move, Dictionary<string, string> moveByEgg, Dictionary<string, string> moveByMachine, Dictionary<string, string> moveByLevelUp, Dictionary<string, string> moveByTutor) : base("", 500, 500)
+        public MovementScreen(List<Move> move, Pokemon pokemon, Pokemon pokemonSpecie) : base("", 500, 500)
         {
             Moves = move;
-            MoveByEgg = moveByEgg;
-            MoveByMachine = moveByMachine;
-            MoveByLevelUp = moveByLevelUp;
-            MoveByTutor = moveByTutor;
+            poke = pokemon;
+            pokeSpecie = pokemonSpecie;
 
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
             BorderWidth = 25;
+
+            GetMoveLearnMethod();
 
             Fixed fix = new();
             VBox vBox = new(false, 50);
@@ -92,7 +95,7 @@ namespace NowComesGtk.Screens
             cbWayOfLearning.Changed += (sender, e) =>
             {
                 TreeIter searchByLearn;
-                if (cbWayOfLearning.GetActiveIter(out searchByLearn) )
+                if (cbWayOfLearning.GetActiveIter(out searchByLearn))
                 {
                     var way = (string)waysToLearn.GetValue(searchByLearn, 0);
 
@@ -186,7 +189,6 @@ namespace NowComesGtk.Screens
                 CreateModel();
             }
         }
-
         private void AllTypeClicked()
         {
             try
@@ -199,7 +201,7 @@ namespace NowComesGtk.Screens
                 else if (choice == 1)
                 {
                     moveList.Clear();
-                    foreach (var move in MoveByEgg)
+                    foreach (var move in moveLearnByEgg)
                     {
                         Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
                         moveList.AppendValues(move.Key, pixbuf);
@@ -208,7 +210,7 @@ namespace NowComesGtk.Screens
                 else if (choice == 2)
                 {
                     moveList.Clear();
-                    foreach (var move in MoveByMachine)
+                    foreach (var move in moveLearnByTmHm)
                     {
                         Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
                         moveList.AppendValues(move.Key, pixbuf);
@@ -217,7 +219,7 @@ namespace NowComesGtk.Screens
                 else if (choice == 3)
                 {
                     moveList.Clear();
-                    foreach (var move in MoveByLevelUp)
+                    foreach (var move in moveLearnByLevelUp)
                     {
                         Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
                         moveList.AppendValues(move.Key, pixbuf);
@@ -226,7 +228,7 @@ namespace NowComesGtk.Screens
                 else if (choice == 4)
                 {
                     moveList.Clear();
-                    foreach (var move in MoveByTutor)
+                    foreach (var move in moveLearnByMoveTutor)
                     {
                         Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
                         moveList.AppendValues(move.Key, pixbuf);
@@ -236,6 +238,40 @@ namespace NowComesGtk.Screens
             catch (Exception)
             {
                 throw;
+            }
+        }
+        private void GetMoveLearnMethod()
+        { 
+            foreach (var move in Moves)
+            {
+                var MoveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
+                || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
+
+                bool MoveLearnByMachine = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"
+                || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"));
+
+                bool MoveLearnByLevelUp = poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"
+                || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"));
+
+                bool MoveLearnByTutor = poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"
+                || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"));
+
+                if (MoveLearnByEgg)
+                {
+                    moveLearnByEgg.Add(move.Name, move.Type.Name);
+                }
+                if (MoveLearnByMachine)
+                {
+                    moveLearnByTmHm.Add(move.Name, move.Type.Name);
+                }
+                if (MoveLearnByLevelUp)
+                {
+                    moveLearnByLevelUp.Add(move.Name, move.Type.Name);
+                }
+                if (MoveLearnByTutor)
+                {
+                    moveLearnByMoveTutor.Add(move.Name, move.Type.Name);;
+                }
             }
         }
     }

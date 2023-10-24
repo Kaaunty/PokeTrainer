@@ -56,7 +56,9 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
+
             await _apiRequest.GetPokemonsListAll();
+
 
             PopulateTypeDamageRelationDictionary();
 
