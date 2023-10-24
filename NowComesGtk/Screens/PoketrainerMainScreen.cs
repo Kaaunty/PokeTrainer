@@ -171,7 +171,7 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTest(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("furfrou");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("silvally");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();

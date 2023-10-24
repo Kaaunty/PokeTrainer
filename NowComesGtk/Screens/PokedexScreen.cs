@@ -107,27 +107,27 @@ namespace NowComesGtk.Screens
             pokeball1 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball1.Name = "pokemon1";
             pokeball1.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball1, 72, 176);
+            fix.Put(pokeball1, 72, 177);
             // Pokeball 2
             pokeball2 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball2.Name = "pokemon2";
             pokeball2.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball2, 146, 176);
+            fix.Put(pokeball2, 146, 177);
             // Pokeball 3
             pokeball3 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball3.Name = "pokemon3";
             pokeball3.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball3, 219, 176);
+            fix.Put(pokeball3, 219, 177);
             // Pokeball 4
             pokeball4 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball4.Name = "pokemon4";
             pokeball4.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball4, 292, 176);
+            fix.Put(pokeball4, 292, 177);
             // Pokeball 5
             pokeball5 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball5.Name = "pokemon5";
             pokeball5.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball5, 365, 176);
+            fix.Put(pokeball5, 365, 177);
 
             #endregion First row of button
 
@@ -168,29 +168,29 @@ namespace NowComesGtk.Screens
             pokeball11 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball11.Name = "pokemon11";
             pokeball11.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball11, 72, 322);
+            fix.Put(pokeball11, 72, 323);
             // Pokeball 12
             pokeball12 = new ButtonGenerator("Images/pokeball.png", 50, 50);
 
             pokeball12.Name = "pokemon12";
             pokeball12.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball12, 146, 322);
+            fix.Put(pokeball12, 146, 323);
             // Pokeball 13
             pokeball13 = new ButtonGenerator("Images/pokeball.png", 50, 50);
 
             pokeball13.Name = "pokemon13";
             pokeball13.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball13, 219, 322);
+            fix.Put(pokeball13, 219, 323);
             // Pokeball 14
             pokeball14 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball14.Name = "pokemon14";
             pokeball14.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball14, 292, 322);
+            fix.Put(pokeball14, 292, 323);
             // Pokeball 15
             pokeball15 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball15.Name = "pokemon15";
             pokeball15.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball15, 365, 322);
+            fix.Put(pokeball15, 365, 323);
 
             #endregion Third button row
 
@@ -200,27 +200,27 @@ namespace NowComesGtk.Screens
             pokeball16 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball16.Name = "pokemon16";
             pokeball16.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball16, 72, 394);
+            fix.Put(pokeball16, 72, 395);
             // Pokeball 17
             pokeball17 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball17.Name = "pokemon17";
             pokeball17.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball17, 146, 394);
+            fix.Put(pokeball17, 146, 395);
             // Pokeball 18
             pokeball18 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball18.Name = "pokemon18";
             pokeball18.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball18, 219, 394);
+            fix.Put(pokeball18, 219, 395);
             // Pokeball 19
             pokeball19 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball19.Name = "pokemon19";
             pokeball19.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball19, 292, 394);
+            fix.Put(pokeball19, 292, 395);
             // Pokeball 20
             pokeball20 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball20.Name = "pokemon20";
             pokeball20.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball20, 365, 394);
+            fix.Put(pokeball20, 365, 395);
 
             #endregion Fourth button row
 
@@ -230,27 +230,27 @@ namespace NowComesGtk.Screens
             pokeball21 = new ButtonGenerator("Images/pokeball.png", 40, 40);
             pokeball21.Name = "pokemon21";
             pokeball21.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball21, 72, 467);
+            fix.Put(pokeball21, 72, 468);
             // Pokeball 22
             pokeball22 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball22.Name = "pokemon22";
             pokeball22.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball22, 146, 467);
+            fix.Put(pokeball22, 146, 468);
             // Pokeball 23
             pokeball23 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball23.Name = "pokemon23";
             pokeball23.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball23, 219, 467);
+            fix.Put(pokeball23, 219, 468);
             // Pokeball 24
             pokeball24 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball24.Name = "pokemon24";
             pokeball24.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball24, 292, 467);
+            fix.Put(pokeball24, 292, 468);
             // Pokeball 25
             pokeball25 = new ButtonGenerator("Images/pokeball.png", 50, 50);
             pokeball25.Name = "pokemon25";
             pokeball25.Clicked += OpenPokemonScreenClicked;
-            fix.Put(pokeball25, 365, 467);
+            fix.Put(pokeball25, 365, 468);
 
             #endregion Fifth button row
 
@@ -349,7 +349,7 @@ namespace NowComesGtk.Screens
                 Pokemon pokemonClicked = await _apiRequest.GetPokemonAsync(pokemonName);
                 PokemonScreen pokemonScreen = new(pokemonClicked);
                 pokemonScreen.Show();
-                Close();
+                //Close();
             }
             else
             {

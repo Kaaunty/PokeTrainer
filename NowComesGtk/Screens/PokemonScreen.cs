@@ -51,6 +51,10 @@ namespace NowComesGtk.Screens
         private Label lblPokemonHP = new();
         private Label lblPokemonATK = new();
         private Label lblPokemonDEF = new();
+        private Label lblPokemonMale = new();
+        private Label lblPokemnFemale = new();
+        private Label lblPokemonCatchRate = new();
+        private Label lblPokemonEggGroup = new();
         private Label lblPokemonSpATK = new();
         private Label lblPokemonSpDEF = new();
         private Label lblPokemonSpeed = new();
@@ -138,15 +142,13 @@ namespace NowComesGtk.Screens
                     fix.Put(lblPokemonAbilityFour, 585, 90);
                 }
 
-                #region Labels de Status e Informações
-
-                Label lblPokemonMale = new Label(pokemonMaleFormatted);
+                lblPokemonMale = new Label(pokemonMaleFormatted);
                 fix.Put(lblPokemonMale, 377, 225);
-                Label lblPokemnFemale = new Label(pokemonFemaleFormatted);
+                lblPokemnFemale = new Label(pokemonFemaleFormatted);
                 fix.Put(lblPokemnFemale, 487, 225);
-                Label lblPokemonCatchRate = new Label(pokemonCatchRate);
+                lblPokemonCatchRate = new Label(pokemonCatchRate);
                 fix.Put(lblPokemonCatchRate, 490, 431);
-                Label lblPokemonEggGroup = new Label(pokemonEggGroup);
+                lblPokemonEggGroup = new Label(pokemonEggGroup);
                 fix.Put(lblPokemonEggGroup, 668, 195);
                 lblPokemonEggGroup.SetAlignment(0.5f, 0.5f);
 
@@ -162,8 +164,6 @@ namespace NowComesGtk.Screens
                 fix.Put(lblPokemonSpDEF, 644, 327);
                 lblPokemonSpeed.Text = pokemonSpeedFormatted;
                 fix.Put(lblPokemonSpeed, 712, 327);
-
-                #endregion Labels de Status e Informações
 
                 if (pokeForm.IsMega)
                 {
@@ -233,7 +233,7 @@ namespace NowComesGtk.Screens
             {
                 if (pokemon.Abilities.Count == 1)
                 {
-                    lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
+                    lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries.Last().Effect);
                     lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
                 }
                 else
@@ -244,7 +244,7 @@ namespace NowComesGtk.Screens
                 {
                     if (pokeAbility[0].EffectEntries.Count > 0)
                     {
-                        lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
+                        lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries.Last().Effect);
                         lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
                     }
                     else
@@ -253,7 +253,7 @@ namespace NowComesGtk.Screens
                     }
                     if (pokeAbility[1].EffectEntries.Count > 0)
                     {
-                        lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect);
+                        lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries.Last().Effect);
                         lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityTwoToolTip}</span>";
                     }
                     else
@@ -264,7 +264,7 @@ namespace NowComesGtk.Screens
                     {
                         if (pokeAbility[0].EffectEntries.Count > 0)
                         {
-                            lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
+                            lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries.Last().Effect);
                             lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
                         }
                         else
@@ -273,7 +273,7 @@ namespace NowComesGtk.Screens
                         }
                         if (pokeAbility[1].EffectEntries.Count > 0)
                         {
-                            lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect);
+                            lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries.Last().Effect);
                             lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
                         }
                         else
@@ -282,7 +282,7 @@ namespace NowComesGtk.Screens
                         }
                         if (pokeAbility[2].EffectEntries.Count > 0)
                         {
-                            lblPokemonAbilityThreeToolTip = await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect);
+                            lblPokemonAbilityThreeToolTip = await _apiRequest.Translate(pokeAbility[2].EffectEntries.Last().Effect);
                             lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
                         }
                         else
@@ -294,7 +294,7 @@ namespace NowComesGtk.Screens
                     {
                         if (pokeAbility[0].EffectEntries.Count > 0)
                         {
-                            lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
+                            lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries.Last().Effect);
                             lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
                         }
                         else
@@ -303,7 +303,7 @@ namespace NowComesGtk.Screens
                         }
                         if (pokeAbility[1].EffectEntries.Count > 0)
                         {
-                            lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect);
+                            lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries.Last().Effect);
                             lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
                         }
                         else
@@ -312,7 +312,7 @@ namespace NowComesGtk.Screens
                         }
                         if (pokeAbility[2].EffectEntries.Count > 0)
                         {
-                            lblPokemonAbilityThreeToolTip = await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect);
+                            lblPokemonAbilityThreeToolTip = await _apiRequest.Translate(pokeAbility[2].EffectEntries.Last().Effect);
                             lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
                         }
                         else
@@ -322,7 +322,7 @@ namespace NowComesGtk.Screens
 
                         if (pokeAbility[3].EffectEntries.Count > 0)
                         {
-                            lblPokemonAbilityFourToolTip = await _apiRequest.Translate(pokeAbility[3].EffectEntries[1].Effect);
+                            lblPokemonAbilityFourToolTip = await _apiRequest.Translate(pokeAbility[3].EffectEntries.Last().Effect);
                             lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityFourToolTip} </span>";
                         }
                         else
@@ -392,7 +392,15 @@ namespace NowComesGtk.Screens
                 isShiny = false;
                 if (pokemon.Forms.Count > 1)
                 {
-                    await _apiRequest.GetPokemonAnimatedSprite(pokemon.Forms[pokemonFormId].Name);
+                    try
+                    {
+                        await _apiRequest.GetPokemonAnimatedSprite(pokemon.Forms[pokemonFormId].Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro ao carregar a sprite animada do Pokémon: {ex.Message}");
+                        PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/pokemonSpriteError.png");
+                    }
                 }
                 else
                 {
@@ -477,7 +485,6 @@ namespace NowComesGtk.Screens
 
             MovementScreen movementScreen = new MovementScreen(pokemonMoves, moveLearnByEgg, moveLearnByTmHm, moveLearnByLevelUp, moveLearnByMoveTutor);
             movementScreen.ShowAll();
-
         }
 
         public static string GetNextEvolution(EvolutionChain evolutionChain, string currentPokemonName)
@@ -735,6 +742,8 @@ namespace NowComesGtk.Screens
                     {
                         3 => "01.6%",
                         45 => "11.9%",
+                        75 => "17.5%",
+                        90 => "20.8%",
                         100 => "21.7%",
                         120 => "24.9%",
                         127 => "26,0%",
@@ -756,23 +765,27 @@ namespace NowComesGtk.Screens
 
         private async Task UpdatePokemonSprite(string pokemonForm)
         {
-            try
+
+            if (!isShiny)
             {
-                if (!isShiny)
+                try
                 {
                     await _apiRequest.GetPokemonAnimatedSprite(pokemonForm);
                     PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
                 }
-                else
+                catch (Exception ex)
                 {
-                    await _apiRequest.GetPokemonShinyAnimatedSprite(pokemonForm);
-                    PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
+                    Console.WriteLine($"Erro ao carregar a sprite animada do Pokémon: {ex.Message}");
+                    PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/pokemonSpriteError.png");
                 }
+
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Erro ao atualizar a imagem do Pokémon: {ex.Message}");
+                await _apiRequest.GetPokemonShinyAnimatedSprite(pokemonForm);
+                PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
             }
+
         }
 
         private void GetPokemonGifSize()
@@ -799,7 +812,7 @@ namespace NowComesGtk.Screens
 
             if (pokeAbility[0].EffectEntries.Count > 0)
             {
-                lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect)}]</span>";
+                lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[0].EffectEntries.Last().Effect)}]</span>";
             }
             Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
             if (pokemon.Abilities.Count == 2)
@@ -807,7 +820,7 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
                 if (pokeAbility[1].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries.Last().Effect)}]</span>";
                 }
             }
             else if (pokemon.Abilities.Count == 3)
@@ -815,12 +828,12 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
                 if (pokeAbility[1].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries.Last().Effect)}]</span>";
                 }
                 lblPokemonAbilityThree.Text = pokemonAbilityThreeUpper;
                 if (pokeAbility[2].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries.Last().Effect)}]</span>";
                 }
             }
             else if (pokemon.Abilities.Count == 4)
@@ -828,17 +841,17 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
                 if (pokeAbility[1].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries.Last().Effect)}]</span>";
                 }
                 lblPokemonAbilityThree.Text = pokemonAbilityThreeUpper;
                 if (pokeAbility[2].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries.Last().Effect)}]</span>";
                 }
                 lblPokemonAbilityFour.Text = pokemonAbilityFourUpper;
                 if (pokeAbility[3].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[3].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[3].EffectEntries.Last().Effect)}]</span>";
                 }
             }
 
@@ -878,7 +891,9 @@ namespace NowComesGtk.Screens
             {
                 pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
             }
-
+            lblPokemonCatchRate.Text = pokemonCatchRate;
+            lblPokemnFemale.Text = pokemonFemaleFormatted;
+            lblPokemonMale.Text = pokemonMaleFormatted;
             lblPokemonHP.Text = pokemonHPFormatted;
             lblPokemonATK.Text = pokemonATKFormatted;
             lblPokemonDEF.Text = pokemonDEFFormatted;
