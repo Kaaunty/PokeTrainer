@@ -14,15 +14,15 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
+        private static ApiRequest _apiRequest = new();
+
         private Pokemon pokemon;
         private Button ShinyButton;
-
         private Image megaIcon = new("Images/pokemon_forms/MegaKeyDesactivated.png");
         private PokemonForm pokeForm = new();
         private PokemonSpecies pokeSpecies = new();
         private Type pokemonTypePrimary = new();
         private Type pokemonTypeSecondary = new();
-        private static ApiRequest _apiRequest = new();
         private TextInfo textInfo = new CultureInfo("pt-BR", false).TextInfo;
         private Image imagePokemonTypeSecondary = new();
         private Image PokemonAnimation = new();
@@ -410,39 +410,66 @@ namespace NowComesGtk.Screens
 
         private async void PokemonMoves(object sender, EventArgs e)
         {
-            Dictionary<string, string> pokemonMoves2 = new();
-            int id = 0;
-            try
+            Pokemon pokemonSpecie = await _apiRequest.GetPokemonAsync(evolutionChain.Chain.Species.Name);
+
+            List<Move> pokemonSpecieMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemonSpecie);
+            List<Move> pokemonMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemon);
+            List<Move> pokemonMovesList = new(pokemonMoves);
+
+            Dictionary<string, string> moveLearnByEgg = new();
+            Dictionary<string, string> moveLearnByTmHm = new();
+            Dictionary<string, string> moveLearnByLevelUp = new();
+            Dictionary<string, string> moveLearnByMoveTutor = new();
+
+            foreach (var pokeSpecieMove in pokemonSpecieMoves)
             {
-                foreach (var pokemonMove in pokemon.Moves)
+                foreach (var pokeMove in pokemonMoves)
                 {
-                    pokemonMoves2.Add(pokemonMove.Move.Name, pokemonMove.VersionGroupDetails[0].MoveLearnMethod.Name);
-                    id++;
+                    if (pokeSpecieMove.Name != pokeMove.Name)
+                    {
+                        pokemonMovesList.Add(pokeSpecieMove);
+                        break;
+                    }
                 }
             }
-            catch (Exception ex)
+
+            foreach (var move in pokemonMovesList)
             {
-                Console.WriteLine($"Erro ao carregar os movimentos do Pokémon: {ex.Message} erro no movimento de id: {id}");
+                string moveNameList = move.Name;
+                string moveTypeList = move.Type.Name;
+
+                foreach (var pokeMove in pokemon.Moves)
+                {
+                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails.Any(x => x.MoveLearnMethod.Name == "egg"))
+                    {
+                        moveLearnByEgg.Add(moveNameList, moveTypeList);
+                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
+                        break;
+                    }
+                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name == "machine")
+                    {
+                        moveLearnByTmHm.Add(moveNameList, moveTypeList);
+                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
+                        break;
+                    }
+                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name == "level-up")
+                    {
+                        moveLearnByLevelUp.Add(moveNameList, moveTypeList);
+                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
+                        break;
+                    }
+                    if (pokeMove.Move.Name == moveNameList && pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name == "tutor")
+                    {
+                        moveLearnByMoveTutor.Add(moveNameList, moveTypeList);
+                        Console.WriteLine(pokeMove.Move.Name + " = " + moveTypeList + " = " + pokeMove.VersionGroupDetails[0].MoveLearnMethod.Name);
+                        break;
+                    }
+                }
             }
 
-            List<Move> pokemonMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemon);
-
-            var t = pokemon.Moves.Select(x => x.VersionGroupDetails.FirstOrDefault(y => y.MoveLearnMethod.Name == "tutor"));
-
-            MovementScreen movementScreen = new(pokemonMoves);
+            MovementScreen movementScreen = new MovementScreen(pokemonMoves, moveLearnByEgg, moveLearnByTmHm, moveLearnByLevelUp, moveLearnByMoveTutor);
             movementScreen.ShowAll();
 
-            //List<PokemonMoveVersion> test = new();
-
-            //foreach (Move move in pokemonMoves)
-            //{
-            //    pokemon.Moves.ForEach(pMove =>
-            //    {
-            //        if (pMove.VersionGroupDetails.FirstOrDefault(x => x.MoveLearnMethod.Name == "tutor") != null)
-            //        {
-            //        }
-            //    });
-            //}
         }
 
         public static string GetNextEvolution(EvolutionChain evolutionChain, string currentPokemonName)

@@ -53,7 +53,10 @@ public class PokemonLoad : BaseWindow
         try
         {
             //await _apiRequest.GetPokemonsListAll();
+
+            _apiRequest.PopulateTypeDamageRelationDictionary();
             PopulateTypeDamageRelationDictionary();
+
             progressBar.Fraction = 1;
             isLoaded = true;
             loadingLabel.Text = "Carregamento concluído!";
