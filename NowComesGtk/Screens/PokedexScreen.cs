@@ -80,7 +80,7 @@ namespace NowComesGtk.Screens
                 txtSearchPokemon.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
             };
             txtSearchPokemon.FocusOutEvent += (sender, e) =>
-            { 
+            {
                 txtSearchPokemon.Text = defaultText;
                 CssProvider cssProvider = new CssProvider();
                 cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");

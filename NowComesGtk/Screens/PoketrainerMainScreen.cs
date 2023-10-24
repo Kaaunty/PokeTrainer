@@ -1,8 +1,8 @@
-﻿using NowComesGtk.Reusable_components;
-using PokeApi.BackEnd.Service;
+﻿using Gtk;
+using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
+using PokeApi.BackEnd.Service;
 using PokeApiNet;
-using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -18,7 +18,6 @@ namespace NowComesGtk.Screens
         {
             Image poketrainerBackground = new Image("Images/pokemon_homescreen/homescreen.png");
             fix.Put(poketrainerBackground, 0, 0);
-            var fontDescription = Pango.FontDescription.FromString("RetroPix Regular 15");
 
             #region Buttons Pokédex
 
