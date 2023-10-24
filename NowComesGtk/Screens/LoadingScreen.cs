@@ -1,8 +1,12 @@
 ﻿using Gtk;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
+using Pango;
 using PokeApi.BackEnd.Service;
+using System.Drawing;
+using System.Drawing.Text;
 using static PokeApi.BackEnd.Service.ApiRequest;
+using Image = Gtk.Image;
 
 public class PokemonLoad : BaseWindow
 {
@@ -52,7 +56,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            //await _apiRequest.GetPokemonsListAll();
+            await _apiRequest.GetPokemonsListAll();
             PopulateTypeDamageRelationDictionary();
             progressBar.Fraction = 1;
             isLoaded = true;

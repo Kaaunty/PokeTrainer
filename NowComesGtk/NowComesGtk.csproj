@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
+		<OutputType>WinExe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
@@ -15,14 +15,14 @@
 
 	<ItemGroup>
 		<Compile Remove="Back\**" />
-		<Compile Remove="fonts\**" />
 		<Compile Remove="Front\**" />
+		<Compile Remove="Styles\**" />
 		<EmbeddedResource Remove="Back\**" />
-		<EmbeddedResource Remove="fonts\**" />
 		<EmbeddedResource Remove="Front\**" />
+		<EmbeddedResource Remove="Styles\**" />
 		<None Remove="Back\**" />
-		<None Remove="fonts\**" />
 		<None Remove="Front\**" />
+		<None Remove="Styles\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,6 +37,7 @@
 		<PackageReference Include="Google.Apis.Translate.v2" Version="1.62.0.875" />
 		<PackageReference Include="GtkSharp" Version="3.24.24.95" />
 		<PackageReference Include="PokeApiNet" Version="3.0.10" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,10 +45,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Styles\" />
-	</ItemGroup>
-
-	<ItemGroup>
+		<None Update="Fonts\Pixeloid.ttf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Images\buttons\backEvolution.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
@@ -242,6 +242,12 @@
 		</None>
 		<None Update="Images\pokedex_homescreen\water.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Images\PokemonAnimated.gif">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Images\PokemonAnimatedShiny.gif">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokemon_forms\FormDesactivated.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
