@@ -1,7 +1,5 @@
 ﻿using Gtk;
-using System.Drawing;
 using System.Drawing.Text;
-using System.Runtime.InteropServices;
 
 namespace NowComesGtk
 {
@@ -9,11 +7,18 @@ namespace NowComesGtk
     {
         public static void Main(string[] args)
         {
-            Environment.CurrentDirectory = System.IO.Directory.GetCurrentDirectory().Replace("bin\\Debug\\net7.0", "");
-            InstallFont("Fonts/Pixeloid.ttf");
-            Application.Init();
-            new PokemonLoad();
-            Application.Run();
+            try
+            {
+                Environment.CurrentDirectory = System.IO.Directory.GetCurrentDirectory().Replace("bin\\Debug\\net7.0", "");
+                InstallFont("Fonts/Pixeloid.ttf");
+                Application.Init();
+                new PokemonLoad();
+                Application.Run();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private static void InstallFont(string fontFile)

@@ -56,9 +56,10 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-          //  await _apiRequest.GetPokemonsListAll();
 
-           
+            await _apiRequest.GetPokemonsListAll();
+
+
             PopulateTypeDamageRelationDictionary();
 
             progressBar.Fraction = 1;
@@ -75,7 +76,7 @@ public class PokemonLoad : BaseWindow
         catch (Exception ex)
         {
             MessageDialogGenerator.ShowMessageDialog("Erro ao carregar a lista de Pokémon:" + ex);
-            Destroy();
+            Application.Quit();
         }
 
         void PopulateTypeDamageRelationDictionary()
