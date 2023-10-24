@@ -10,13 +10,13 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private ListStore moves = new(typeof(string), typeof(Gdk.Pixbuf));
+        private Dictionary<string, string> MoveByEgg = new();
+        private Dictionary<string, string> MoveByMachine = new();
+        private Dictionary<string, string> MoveByLevelUp = new();
+        private Dictionary<string, string> MoveByTutor = new();
         private ApiRequest _apiRequest = new();
-        private ComboBox cbWayOfLearning = new();
         private Entry txtSearchMoves = new();
-        private Methods _methods = new();
         private List<Move> Moves = new();
-        private List<MoveLearnMethod> MoveLearnMethods = new();
-        private MoveLearnMethod _moveLearnMethod;
         private ListStore moveList;
 
         private string defaultText = "Buscar Movimento";
@@ -29,14 +29,18 @@ namespace NowComesGtk.Screens
             Type
         }
 
-        public MovementScreen(List<Move> move) : base("", 500, 500)
+        public MovementScreen(List<Move> move, Dictionary<string, string> moveByEgg, Dictionary<string, string> moveByMachine, Dictionary<string, string> moveByLevelUp, Dictionary<string, string> moveByTutor) : base("", 500, 500)
         {
             Moves = move;
+            MoveByEgg = moveByEgg;
+            MoveByMachine = moveByMachine;
+            MoveByLevelUp = moveByLevelUp;
+            MoveByTutor = moveByTutor;
 
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
             BorderWidth = 25;
-            GetMoveMethodLearner();
+
             Fixed fix = new();
             VBox vBox = new(false, 50);
             vBox.BorderWidth = 25;
@@ -62,6 +66,7 @@ namespace NowComesGtk.Screens
                 CssProvider cssProvider = new CssProvider();
                 cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
                 txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
+
             };
 
             #endregion FocusIn and FocusOut Event (txtSearchMove)
@@ -87,7 +92,7 @@ namespace NowComesGtk.Screens
             cbWayOfLearning.Changed += (sender, e) =>
             {
                 TreeIter searchByLearn;
-                if (cbWayOfLearning.GetActiveIter(out searchByLearn))
+                if (cbWayOfLearning.GetActiveIter(out searchByLearn) )
                 {
                     var way = (string)waysToLearn.GetValue(searchByLearn, 0);
 
@@ -106,7 +111,7 @@ namespace NowComesGtk.Screens
                         choice = 3;
                         AllTypeClicked();
                     }
-                    if (way == "Move tutor")
+                    else if (way == "Move Tutor")
                     {
                         choice = 4;
                         AllTypeClicked();
@@ -161,7 +166,7 @@ namespace NowComesGtk.Screens
 
         private void SearchMove(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtSearchMoves.Text))
+            if (!string.IsNullOrEmpty(txtSearchMoves.Text) && txtSearchMoves.Text != "Buscar Movimento")
             {
                 string pokeMove = txtSearchMoves.Text;
                 pokeMove = pokeMove.Replace(' ', '-');
@@ -182,14 +187,6 @@ namespace NowComesGtk.Screens
             }
         }
 
-        private async void GetMoveMethodLearner()
-        {
-            MoveLearnMethod moveLearnMethod = await _apiRequest.GetMoveLearnMethodAsync("level-up");
-            MoveLearnMethod moveLearnMethod1 = await _apiRequest.GetMoveLearnMethodAsync("egg");
-            MoveLearnMethod moveLearnMethod2 = await _apiRequest.GetMoveLearnMethodAsync("tutor");
-            MoveLearnMethod moveLearnMethod3 = await _apiRequest.GetMoveLearnMethodAsync("machine");
-        }
-
         private void AllTypeClicked()
         {
             try
@@ -201,18 +198,38 @@ namespace NowComesGtk.Screens
                 }
                 else if (choice == 1)
                 {
+                    moveList.Clear();
+                    foreach (var move in MoveByEgg)
+                    {
+                        Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
+                        moveList.AppendValues(move.Key, pixbuf);
+                    }
                 }
                 else if (choice == 2)
                 {
+                    moveList.Clear();
+                    foreach (var move in MoveByMachine)
+                    {
+                        Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
+                        moveList.AppendValues(move.Key, pixbuf);
+                    }
                 }
                 else if (choice == 3)
                 {
+                    moveList.Clear();
+                    foreach (var move in MoveByLevelUp)
+                    {
+                        Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
+                        moveList.AppendValues(move.Key, pixbuf);
+                    }
                 }
                 else if (choice == 4)
                 {
                     moveList.Clear();
-                    foreach (var move in Moves)
+                    foreach (var move in MoveByTutor)
                     {
+                        Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Value}.png");
+                        moveList.AppendValues(move.Key, pixbuf);
                     }
                 }
             }
