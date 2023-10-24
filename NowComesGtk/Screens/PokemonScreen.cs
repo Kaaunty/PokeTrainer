@@ -1,10 +1,12 @@
-﻿using Gdk;
+﻿using Cairo;
+using Gdk;
 using Gtk;
 using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using Pango;
 using PokeApi.BackEnd.Service;
 using PokeApiNet;
+using System.Drawing.Text;
 using System.Globalization;
 using Type = PokeApiNet.Type;
 
@@ -65,7 +67,7 @@ namespace NowComesGtk.Screens
         private int pokemonFormId = 0;
         private string pokemonHPFormatted, pokemonATKFormatted, pokemonDEFFormatted, pokemonSpATKFormatted, pokemonSpDEFFormatted, pokemonSpeedFormatted;
         private string pokemonNameFormatted, pokemonDexFormatted, pokemonMaleFormatted, pokemonFemaleFormatted, pokemonCatchRate, pokemonEggGroup;
-        private string pokemonAbilityOneUpper, pokemonAbilityTwoUpper, pokemonAbilityThreeUpper, pokemonAbilityFourUpper;
+        private string pokemonAbilityOneUpper, pokemonAbilityTwoUpper, pokemonAbilityThreeUpper, pokemonAbilityFourUpper, pokemonFlavorText;
         private string PokemonFirstTypeFormattedTitle, PokemonFirstTypeFormatted, pokemonSecondaryTypeFormatted, damageRelations, damageRelationsSecondary;
 
         public PokemonScreen(Pokemon Pokemon) : base("", 800, 500)
@@ -97,16 +99,15 @@ namespace NowComesGtk.Screens
                 GetPokemonGifSize();
 
                 lblPokemonName.Text = pokemonNameFormatted;
-                lblPokemonAbilityOneToolTip = "";
 
                 TranslateString();
 
-                lblPokemonName.TooltipMarkup = lblPokemonAbilityOneToolTip;
+                lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{pokemonFlavorText}</span>";
                 fix.Put(lblPokemonName, 40, 357);
 
                 PokemonTypeOne = new Image($"Images/pokemon_types/{pokemon.Types[0].Type.Name}.png");
                 damageRelations = _apiRequest.GetTypeDamageRelation(pokemon.Types[0].Type.Name);
-                PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {damageRelations}</span>";
+                PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelations}</span>";
                 fix.Put(PokemonTypeOne, 93, 429);
 
                 if (pokemon.Types.Count > 1)
@@ -126,14 +127,12 @@ namespace NowComesGtk.Screens
                     lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
                     fix.Put(lblPokemonAbilityTwo, 375, 90);
                 }
-
-                if (pokemon.Abilities.Count == 3 && !String.IsNullOrEmpty(pokemon.Abilities[2].Ability.Name))
+                else if (pokemon.Abilities.Count == 3 && !String.IsNullOrEmpty(pokemon.Abilities[2].Ability.Name))
                 {
                     lblPokemonAbilityThree.Text = pokemonAbilityThreeUpper;
                     fix.Put(lblPokemonAbilityThree, 585, 63);
                 }
-
-                if (pokemon.Abilities.Count == 4 && !String.IsNullOrEmpty(pokemon.Abilities[3].Ability.Name))
+                else if (pokemon.Abilities.Count == 4 && !String.IsNullOrEmpty(pokemon.Abilities[3].Ability.Name))
                 {
                     lblPokemonAbilityFour.Text = pokemonAbilityFourUpper;
                     fix.Put(lblPokemonAbilityFour, 585, 90);
@@ -189,24 +188,30 @@ namespace NowComesGtk.Screens
                 Button PreviousForm = new ButtonGenerator("Images/buttons/BackForm.png", 40, 40);
                 fix.Put(PreviousForm, 185, 30);
                 PreviousForm.Clicked += GetPreviousVariation;
+                PreviousForm.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a variação anterior do Pokémon</span>";
 
                 Button NextForm = new ButtonGenerator("Images/buttons/NextForm.png", 40, 40);
                 fix.Put(NextForm, 235, 30);
                 NextForm.Clicked += GetNextVariation;
+                NextForm.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a próxima variação do Pokémon</span>";
 
                 Button PreviousEvolution = new ButtonGenerator("Images/buttons/backEvolution.png", 40, 40);
                 fix.Put(PreviousEvolution, 23, 270);
                 PreviousEvolution.Clicked += GetPreviousEvolutionPokemon;
+                PreviousEvolution.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a evolução anterior do Pokémon</span>";
 
                 Button NextEvolution = new ButtonGenerator("Images/buttons/NextEvolution.png", 40, 40);
                 fix.Put(NextEvolution, 248, 270);
                 NextEvolution.Clicked += GetNextEvolutionPokemon;
+                NextEvolution.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a próxima evolução do Pokémon</span>";
 
                 ShinyButton = new ButtonGenerator("Images/buttons/shinyButtonDesactived.png", 40, 40);
                 fix.Put(ShinyButton, 138, 270);
                 ShinyButton.Clicked += ShinyButtonClicked;
+                ShinyButton.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a versão shiny do Pokémon</span>";
+
                 Button btnMoves = new ButtonGenerator("Images/buttons/btnMoves.png", 192, 85);
-                btnMoves.TooltipMarkup = "<span foreground='white' font_desc='MS Gothic Regular 10'>[Clique para ver os movimentos do Pokémon]</span>";
+                btnMoves.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver os movimentos do Pokémon</span>";
                 fix.Put(btnMoves, 580, 393);
                 btnMoves.Clicked += PokemonMoves;
 
@@ -229,60 +234,60 @@ namespace NowComesGtk.Screens
                 if (pokemon.Abilities.Count == 1)
                 {
                     lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
-                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityOneToolTip}]</span>";
+                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
                 }
                 else
                 {
-                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                 }
                 if (pokemon.Abilities.Count == 2)
                 {
                     if (pokeAbility[0].EffectEntries.Count > 0)
                     {
                         lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
-                        lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityOneToolTip}]</span>";
+                        lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
                     }
                     else
                     {
-                        lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                        lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                     }
                     if (pokeAbility[1].EffectEntries.Count > 0)
                     {
                         lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect);
-                        lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityTwoToolTip}]</span>";
+                        lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityTwoToolTip}</span>";
                     }
                     else
                     {
-                        lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                        lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                     }
                     if (pokemon.Abilities.Count == 3)
                     {
                         if (pokeAbility[0].EffectEntries.Count > 0)
                         {
                             lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
-                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityOneToolTip}]</span>";
+                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
                         }
                         else
                         {
-                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                         }
                         if (pokeAbility[1].EffectEntries.Count > 0)
                         {
                             lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect);
-                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityTwoToolTip}]</span>";
+                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
                         }
                         else
                         {
-                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                         }
                         if (pokeAbility[2].EffectEntries.Count > 0)
                         {
                             lblPokemonAbilityThreeToolTip = await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect);
-                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityThreeToolTip}]</span>";
+                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
                         }
                         else
                         {
-                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                         }
                     }
                     if (pokemon.Abilities.Count == 4)
@@ -290,42 +295,45 @@ namespace NowComesGtk.Screens
                         if (pokeAbility[0].EffectEntries.Count > 0)
                         {
                             lblPokemonAbilityOneToolTip = await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect);
-                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityOneToolTip}]</span>";
+                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
                         }
                         else
                         {
-                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                         }
                         if (pokeAbility[1].EffectEntries.Count > 0)
                         {
                             lblPokemonAbilityTwoToolTip = await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect);
-                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityTwoToolTip}]</span>";
+                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
                         }
                         else
                         {
-                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                            lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                         }
                         if (pokeAbility[2].EffectEntries.Count > 0)
                         {
                             lblPokemonAbilityThreeToolTip = await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect);
-                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityThreeToolTip}]</span>";
+                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
                         }
                         else
                         {
-                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                            lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                         }
 
                         if (pokeAbility[3].EffectEntries.Count > 0)
                         {
                             lblPokemonAbilityFourToolTip = await _apiRequest.Translate(pokeAbility[3].EffectEntries[1].Effect);
-                            lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{lblPokemonAbilityFourToolTip}]</span>";
+                            lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityFourToolTip} </span>";
                         }
                         else
                         {
-                            lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[Sem Descrição]</span>";
+                            lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
                         }
                     }
                 }
+                string pokemonFlavorTextReplaced = textInfo.ToTitleCase(pokeSpecies.FlavorTextEntries[6].FlavorText.Replace("\n", "").ToLower());
+                pokemonFlavorText = await _apiRequest.Translate(pokemonFlavorTextReplaced);
+                lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{pokemonFlavorText}</span>";
             }
             catch (Exception ex)
             {
@@ -580,7 +588,7 @@ namespace NowComesGtk.Screens
 
                 foreach (var eggGroup in pokeSpecies.EggGroups)
                 {
-                    pokemonEggGroup += eggGroup.Name + "\n";
+                    pokemonEggGroup += textInfo.ToTitleCase(eggGroup.Name) + "\n";
                 }
 
                 isLoaded = true;
@@ -791,7 +799,7 @@ namespace NowComesGtk.Screens
 
             if (pokeAbility[0].EffectEntries.Count > 0)
             {
-                lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect)}]</span>";
+                lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[0].EffectEntries[1].Effect)}]</span>";
             }
             Title = $"PokéTrainer© // Pokémon tipo - {PokemonFirstTypeFormattedTitle} // Pokémon - {pokemonNameFormatted} [{pokemonDexFormatted}]";
             if (pokemon.Abilities.Count == 2)
@@ -799,7 +807,7 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
                 if (pokeAbility[1].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
                 }
             }
             else if (pokemon.Abilities.Count == 3)
@@ -807,12 +815,12 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
                 if (pokeAbility[1].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
                 }
                 lblPokemonAbilityThree.Text = pokemonAbilityThreeUpper;
                 if (pokeAbility[2].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect)}]</span>";
                 }
             }
             else if (pokemon.Abilities.Count == 4)
@@ -820,17 +828,17 @@ namespace NowComesGtk.Screens
                 lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
                 if (pokeAbility[1].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[1].EffectEntries[1].Effect)}]</span>";
                 }
                 lblPokemonAbilityThree.Text = pokemonAbilityThreeUpper;
                 if (pokeAbility[2].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[2].EffectEntries[1].Effect)}]</span>";
                 }
                 lblPokemonAbilityFour.Text = pokemonAbilityFourUpper;
                 if (pokeAbility[3].EffectEntries.Count > 0)
                 {
-                    lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 15'>[{await _apiRequest.Translate(pokeAbility[3].EffectEntries[1].Effect)}]</span>";
+                    lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{await _apiRequest.Translate(pokeAbility[3].EffectEntries[1].Effect)}]</span>";
                 }
             }
 
@@ -839,7 +847,7 @@ namespace NowComesGtk.Screens
                 PokemonFirstTypeFormatted = pokemonTypePrimary.Name;
                 PokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{PokemonFirstTypeFormatted}.png");
                 damageRelations = _apiRequest.GetTypeDamageRelation(pokemonTypePrimary.Name);
-                PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>{damageRelations}</span>";
+                PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{damageRelations}]</span>";
             }
 
             if (pokemon.Types.Count > 1)
@@ -847,7 +855,7 @@ namespace NowComesGtk.Screens
                 pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
                 imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{pokemonSecondaryTypeFormatted}.png");
                 damageRelationsSecondary = _apiRequest.GetTypeDamageRelation(pokemonTypeSecondary.Name);
-                imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[ {damageRelationsSecondary} ]</span>";
+                imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{damageRelationsSecondary}]</span>";
             }
 
             if (pokeForm.IsMega)

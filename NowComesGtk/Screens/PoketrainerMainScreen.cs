@@ -137,6 +137,7 @@ namespace NowComesGtk.Screens
             fix.Put(btnWelcome, 620, 75);
             Button btnGitHub = new ButtonGenerator("", 40, 40);
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
+            btnGitHub.TooltipMarkup = "Clique para abrir o gitHub do projeto.";
             btnGitHub.Clicked += GitHub_Open;
             fix.Put(btnGitHub, 735, 435);
 
