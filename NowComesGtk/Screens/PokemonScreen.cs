@@ -1,3 +1,7 @@
+
+﻿using NowComesGtk.Reusable_components;
+using PokeApi.BackEnd.Service;
+
 ﻿using Gdk;
 using Gtk;
 using NowComesGtk.Reusable_components;
@@ -6,7 +10,13 @@ using PokeApi.BackEnd.Service;
 using PokeApiNet;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+
 using Type = PokeApiNet.Type;
+using System.Globalization;
+using NowComesGtk.Utils;
+using PokeApiNet;
+using Gdk;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -16,8 +26,12 @@ namespace NowComesGtk.Screens
 
         private static ApiRequest _apiRequest = new();
 
+        private Pokemon pokemon;
+        private Button ShinyButton;
+
         private Pokemon pokemon = new();
         private Button ShinyButton = new();
+
         private Image megaIcon = new("Images/pokemon_forms/MegaKeyDesactivated.png");
         private PokemonForm pokeForm = new();
         private PokemonSpecies pokeSpecies = new();
@@ -65,10 +79,13 @@ namespace NowComesGtk.Screens
         private bool isShiny = false;
         private int variationId = 0;
         private int pokemonFormId = 0;
+
+        
         private string pokemonHPFormatted = "", pokemonATKFormatted = "", pokemonDEFFormatted = "", pokemonSpATKFormatted = "", pokemonSpDEFFormatted = "", pokemonSpeedFormatted = "";
         private string pokemonNameFormatted = "", pokemonDexFormatted = "", pokemonMaleFormatted = "", pokemonFemaleFormatted = "", pokemonCatchRate = "", pokemonEggGroup = "";
         private string pokemonAbilityOneUpper = "", pokemonAbilityTwoUpper = "", pokemonAbilityThreeUpper = "", pokemonAbilityFourUpper = "", pokemonFlavorText = "";
         private string PokemonFirstTypeFormattedTitle = "", PokemonFirstTypeFormatted = "", pokemonSecondaryTypeFormatted = "", damageRelations = "", damageRelationsSecondary = "";
+
 
         public PokemonScreen(Pokemon Pokemon) : base("", 800, 500)
         {
@@ -423,7 +440,6 @@ namespace NowComesGtk.Screens
         private async void PokemonMoves(object sender, EventArgs e)
         {
             Pokemon pokemonSpecie = await _apiRequest.GetPokemonAsync(evolutionChain.Chain.Species.Name);
-
             List<Move> pokemonSpecieMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemonSpecie);
             List<Move> pokemonMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemon);
 
@@ -436,7 +452,10 @@ namespace NowComesGtk.Screens
         public static string GetNextEvolution(EvolutionChain evolutionChain, string currentPokemonName)
         {
             var primaryevolution = evolutionChain.Chain.Species.Name;
+
+
             string thirdEvolution = "";
+
             if (primaryevolution == currentPokemonName)
             {
                 var secondaryEvolution = evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.Species.Name;
@@ -518,6 +537,85 @@ namespace NowComesGtk.Screens
                     evolutionChain = await _apiRequest.GetEvolutionChain(pokeSpecies.EvolutionChain.Url);
                 }
 
+
+                var details = evolutionChain.Chain.EvolvesTo.Select(evolutionDetails => evolutionDetails.EvolutionDetails).ToList();
+
+                foreach (var detail in details)
+                {
+                    foreach (var how in detail)
+                    {
+                        if (how.HeldItem.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.HeldItem.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.Item.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.Item.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.KnownMove.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.KnownMove.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.KnownMoveType.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.KnownMoveType.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.Location.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.Location.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.MinAffection.Value != 0)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.MinAffection.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.MinBeauty.Value != 0)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.MinBeauty.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.MinHappiness.Value != 0)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.MinHappiness.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.MinLevel.Value != 0)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.MinLevel.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.NeedsOverworldRain == true)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.NeedsOverworldRain + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.PartySpecies.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.PartySpecies.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.PartyType.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.PartyType.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.RelativePhysicalStats != 0)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.RelativePhysicalStats + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.TimeOfDay != "")
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.TimeOfDay + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.TradeSpecies.Name != null)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.TradeSpecies + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                        if (how.TurnUpsideDown == true)
+                        {
+                            Console.WriteLine(how.Trigger + ": " + how.TurnUpsideDown + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
+                        }
+                    }
+                }
+
+
+
+
+
+=======
                 foreach (var evo in evolutionChain.Chain.EvolvesTo)
                 {
                     foreach (var i in evo.EvolutionDetails)
@@ -561,6 +659,7 @@ namespace NowComesGtk.Screens
                 {
                     Console.WriteLine(sse);
                 }
+
 
                 await UpdatePokemonSprite(pokemon.Name);
 
@@ -790,6 +889,7 @@ namespace NowComesGtk.Screens
                 {
                     await _apiRequest.GetPokemonAnimatedSprite(pokemonForm, isShiny);
                     PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
+
                 }
                 catch (Exception ex)
                 {
