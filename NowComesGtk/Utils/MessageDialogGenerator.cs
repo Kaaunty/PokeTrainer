@@ -8,6 +8,7 @@
             dialog.WindowPosition = Gtk.WindowPosition.Center;
             dialog.SetIconFromFile("Images/pokeball.png");
             dialog.Run();
+
             dialog.Destroy();
         }
     }

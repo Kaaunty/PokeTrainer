@@ -1,10 +1,7 @@
 ﻿using Gtk;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
-using Pango;
 using PokeApi.BackEnd.Service;
-using System.Drawing;
-using System.Drawing.Text;
 using static PokeApi.BackEnd.Service.ApiRequest;
 using Image = Gtk.Image;
 
@@ -13,9 +10,9 @@ public class PokemonLoad : BaseWindow
 #nullable disable
 
     private ApiRequest _apiRequest = new ApiRequest();
-    private ProgressBar progressBar;
-    private Image runningPikachu;
-    private Label loadingLabel;
+    private ProgressBar progressBar = new();
+    private Image runningPikachu = new();
+    private Label loadingLabel = new();
 
     private bool isLoaded = false;
     private int loadingDots = 0;
@@ -56,9 +53,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-
-            await _apiRequest.GetPokemonsListAll();
-
+            //await _apiRequest.GetPokemonsListAll();
 
             PopulateTypeDamageRelationDictionary();
 

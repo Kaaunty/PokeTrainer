@@ -241,9 +241,11 @@ namespace NowComesGtk.Screens
             }
         }
         private void GetMoveLearnMethod()
-        { 
+        {
             foreach (var move in Moves)
             {
+
+
                 var MoveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
                 || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
 
@@ -270,7 +272,7 @@ namespace NowComesGtk.Screens
                 }
                 if (MoveLearnByTutor)
                 {
-                    moveLearnByMoveTutor.Add(move.Name, move.Type.Name);;
+                    moveLearnByMoveTutor.Add(move.Name, move.Type.Name); ;
                 }
             }
         }
