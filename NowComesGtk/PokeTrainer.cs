@@ -17,6 +17,7 @@ namespace NowComesGtk
             }
             catch (Exception e)
             {
+                GLib.ExceptionManager.RaiseUnhandledException(e, true);
                 Console.WriteLine(e.Message);
             }
         }

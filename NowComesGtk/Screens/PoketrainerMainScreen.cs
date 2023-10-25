@@ -1,4 +1,5 @@
-﻿using Gtk;
+﻿using GLib;
+using Gtk;
 using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
@@ -154,7 +155,6 @@ namespace NowComesGtk.Screens
             BtnTestMythical.Clicked += btnPokemonTestMythical;
             fix.Put(BtnTestMythical, 640, 420);
 
-            DeleteEvent += delegate { Application.Quit(); };
             Add(fix);
             ShowAll();
         }
@@ -171,7 +171,7 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTest(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("silvally");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("mr-mime");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
@@ -179,14 +179,14 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTestLegendary(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("charizard");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("meowth");
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
         }
 
         private async void btnPokemonTestMythical(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("arceus");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("slowbro");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
@@ -194,11 +194,19 @@ namespace NowComesGtk.Screens
 
         private void BtnTypePokedexScreen(object sender, EventArgs e)
         {
-            Button btn = (Button)sender;
-            string type = btn.Data["type"].ToString();
+            try
+            {
+                Button btn = (Button)sender;
+                string type = btn.Data["type"].ToString();
 
-            PokedexScreen pokemonsWater = new(type);
-            pokemonsWater.ShowAll();
+                PokedexScreen pokemonsWater = new(type);
+                pokemonsWater.ShowAll();
+            }
+            catch (Exception ex)
+            {
+                MessageDialogGenerator.ShowMessageDialog("Erro ao carregar a lista de Pokémon:" + ex);
+                ExceptionManager.RaiseUnhandledException(ex, true);
+            }
         }
     }
 }
