@@ -8,6 +8,7 @@ namespace NowComesGtk.Utils
         {
             Title = title;
             Resizable = false;
+            
             SetPosition(WindowPosition.Center);
             SetDefaultSize(width, height);
             SetIconFromFile("Images/pokeball.png");
