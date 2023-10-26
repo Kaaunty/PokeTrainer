@@ -181,7 +181,7 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTest(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("mr-mime");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("scizor");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
@@ -189,14 +189,14 @@ namespace NowComesGtk.Screens
 
         private async void btnPokemonTestLegendary(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("meowth");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("basculin-red-striped");
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
         }
 
         private async void btnPokemonTestMythical(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("slowbro");
+            Pokemon pokemon = await _apiRequest.GetPokemonAsync("arceus");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();

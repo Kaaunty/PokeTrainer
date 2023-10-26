@@ -4,7 +4,9 @@ using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
 using PokeApiNet;
+using System.Data.Common;
 using System.Globalization;
+using static PokeApi.BackEnd.Service.ApiRequest;
 using Type = PokeApiNet.Type;
 
 namespace NowComesGtk.Screens
@@ -28,8 +30,17 @@ namespace NowComesGtk.Screens
         private Image PokemonAnimation = new();
         private Image PokemonTypeOne = new();
         private Image megaKey = new();
+        private ListStore formsList;
         private List<Ability> pokeAbility = new();
         private Fixed fix = new();
+        private ListStore forms = new(typeof(string), (typeof(string)));
+
+        private enum Column
+        {
+            Form,
+            FormMethod
+        }
+
         private EvolutionChain evolutionChain = new();
 
         #region Labels
@@ -71,7 +82,7 @@ namespace NowComesGtk.Screens
         private string pokemonNameFormatted = "", pokemonDexFormatted = "", pokemonMaleFormatted = "", pokemonFemaleFormatted = "", pokemonCatchRate = "", pokemonEggGroup = "";
         private string pokemonAbilityOneUpper = "", pokemonAbilityTwoUpper = "", pokemonAbilityThreeUpper = "", pokemonAbilityFourUpper = "", pokemonFlavorText = "";
 
-        public PokemonScreen(Pokemon Pokemon) : base("", 800, 500)
+        public PokemonScreen(Pokemon Pokemon) : base("", 1000, 500)
         {
             try
             {
@@ -109,7 +120,7 @@ namespace NowComesGtk.Screens
                 PokemonTypeOne = new Image($"Images/pokemon_types/{pokemon.Types[0].Type.Name}.png");
                 damageRelations = _apiRequest.GetTypeDamageRelation(pokemon.Types[0].Type.Name);
                 PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelations}</span>";
-                fix.Put(PokemonTypeOne, 93, 429);
+                fix.Put(PokemonTypeOne, 100, 433);
 
                 if (pokemon.Types.Count > 1)
                 {
@@ -117,50 +128,56 @@ namespace NowComesGtk.Screens
                     damageRelationsSecondary = _apiRequest.GetTypeDamageRelation(pokemon.Types[1].Type.Name);
                     imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelationsSecondary}</span>";
 
-                    fix.Put(imagePokemonTypeSecondary, 181, 429);
+                    fix.Put(imagePokemonTypeSecondary, 188, 433);
                 }
 
                 lblPokemonAbilityOne.Text = pokemonAbilityOneUpper;
-                fix.Put(lblPokemonAbilityOne, 375, 63);
+                fix.Put(lblPokemonAbilityOne, 345, 50);
 
                 if (pokemon.Abilities.Count == 2 && !String.IsNullOrEmpty(pokemon.Abilities[1].Ability.Name))
                 {
                     lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
-                    fix.Put(lblPokemonAbilityTwo, 375, 90);
+                    fix.Put(lblPokemonAbilityTwo, 345, 85);
                 }
                 else if (pokemon.Abilities.Count == 3 && !String.IsNullOrEmpty(pokemon.Abilities[2].Ability.Name))
                 {
+                    lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
+                    fix.Put(lblPokemonAbilityTwo, 345, 85);
                     lblPokemonAbilityThree.Text = pokemonAbilityThreeUpper;
-                    fix.Put(lblPokemonAbilityThree, 585, 63);
+                    fix.Put(lblPokemonAbilityThree, 575, 50);
                 }
                 else if (pokemon.Abilities.Count == 4 && !String.IsNullOrEmpty(pokemon.Abilities[3].Ability.Name))
                 {
+                    lblPokemonAbilityTwo.Text = pokemonAbilityTwoUpper;
+                    fix.Put(lblPokemonAbilityTwo, 345, 85);
+                    lblPokemonAbilityThree.Text = pokemonAbilityThreeUpper;
+                    fix.Put(lblPokemonAbilityThree, 575, 50);
                     lblPokemonAbilityFour.Text = pokemonAbilityFourUpper;
-                    fix.Put(lblPokemonAbilityFour, 585, 90);
+                    fix.Put(lblPokemonAbilityFour, 575, 85);
                 }
 
                 lblPokemonMale = new Label(pokemonMaleFormatted);
-                fix.Put(lblPokemonMale, 377, 225);
+                fix.Put(lblPokemonMale, 793, 110);
                 lblPokemnFemale = new Label(pokemonFemaleFormatted);
-                fix.Put(lblPokemnFemale, 487, 225);
+                fix.Put(lblPokemnFemale, 905, 110);
                 lblPokemonCatchRate = new Label(pokemonCatchRate);
-                fix.Put(lblPokemonCatchRate, 490, 431);
+                fix.Put(lblPokemonCatchRate, 897, 192);
                 lblPokemonEggGroup = new Label(pokemonEggGroup);
-                fix.Put(lblPokemonEggGroup, 668, 195);
+                fix.Put(lblPokemonEggGroup, 840, 295);
                 lblPokemonEggGroup.SetAlignment(0.5f, 0.5f);
 
                 lblPokemonHP.Text = pokemonHPFormatted;
-                fix.Put(lblPokemonHP, 373, 327);
+                fix.Put(lblPokemonHP, 353, 195);
                 lblPokemonATK.Text = pokemonATKFormatted;
-                fix.Put(lblPokemonATK, 440, 327);
+                fix.Put(lblPokemonATK, 417, 195);
                 lblPokemonDEF.Text = pokemonDEFFormatted;
-                fix.Put(lblPokemonDEF, 509, 327);
+                fix.Put(lblPokemonDEF, 485, 195);
                 lblPokemonSpATK.Text = pokemonSpATKFormatted;
-                fix.Put(lblPokemonSpATK, 576, 327);
+                fix.Put(lblPokemonSpATK, 553, 195);
                 lblPokemonSpDEF.Text = pokemonSpDEFFormatted;
-                fix.Put(lblPokemonSpDEF, 644, 327);
+                fix.Put(lblPokemonSpDEF, 621, 195);
                 lblPokemonSpeed.Text = pokemonSpeedFormatted;
-                fix.Put(lblPokemonSpeed, 712, 327);
+                fix.Put(lblPokemonSpeed, 689, 195);
 
                 if (pokeForm.IsMega)
                 {
@@ -182,25 +199,18 @@ namespace NowComesGtk.Screens
 
                 #region Buttons UI
 
-                Button PreviousForm = new ButtonGenerator("Images/buttons/BackForm.png", 40, 40);
-                fix.Put(PreviousForm, 185, 30);
-                PreviousForm.Clicked += GetPreviousVariation;
-                PreviousForm.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a variação anterior do Pokémon</span>";
+                ScrolledWindow sw = new ScrolledWindow();
+                sw.ShadowType = ShadowType.EtchedIn;
+                sw.SetPolicy(PolicyType.Automatic, PolicyType.Automatic);
+                sw.SetSizeRequest(390, 170);
+                formsList = CreateModel();
+                TreeView treeView = new(formsList);
+                treeView.RulesHint = true;
+                treeView.RowActivated += OnRowActivated;
+                sw.Add(treeView);
+                AddColumns(treeView);
 
-                Button NextForm = new ButtonGenerator("Images/buttons/NextForm.png", 40, 40);
-                fix.Put(NextForm, 235, 30);
-                NextForm.Clicked += GetNextVariation;
-                NextForm.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a próxima variação do Pokémon</span>";
-
-                Button PreviousEvolution = new ButtonGenerator("Images/buttons/backEvolution.png", 40, 40);
-                fix.Put(PreviousEvolution, 23, 270);
-                PreviousEvolution.Clicked += GetPreviousEvolutionPokemon;
-                PreviousEvolution.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a evolução anterior do Pokémon</span>";
-
-                Button NextEvolution = new ButtonGenerator("Images/buttons/NextEvolution.png", 40, 40);
-                fix.Put(NextEvolution, 248, 270);
-                NextEvolution.Clicked += GetNextEvolutionPokemon;
-                NextEvolution.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver a próxima evolução do Pokémon</span>";
+                fix.Put(sw, 340, 295);
 
                 ShinyButton = new ButtonGenerator("Images/buttons/shinyButtonDesactived.png", 40, 40);
                 fix.Put(ShinyButton, 138, 270);
@@ -209,7 +219,7 @@ namespace NowComesGtk.Screens
 
                 Button btnMoves = new ButtonGenerator("Images/buttons/btnMoves.png", 192, 85);
                 btnMoves.TooltipMarkup = "<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Clique para ver os movimentos do Pokémon</span>";
-                fix.Put(btnMoves, 580, 393);
+                fix.Put(btnMoves, 767, 393);
                 btnMoves.Clicked += PokemonMoves;
 
                 #endregion Buttons UI
@@ -222,6 +232,128 @@ namespace NowComesGtk.Screens
             {
                 Console.WriteLine($"Erro ao carregar os dados do Pokémon: {ex.Message}");
             }
+        }
+
+        private async void OnRowActivated(object o, RowActivatedArgs args)
+        {
+            TreeIter iter;
+            if (formsList.GetIter(out iter, args.Path))
+            {
+                string value = (string)formsList.GetValue(iter, 0);
+                if (pokemon.Forms.Count > 1)
+                {
+                    var d = pokemon.Forms.FindIndex(x => x.Name == value);
+                    pokemonFormId = d;
+                    string pokemonName = pokemon.Forms[d].Name;
+                    pokeForm = await _apiRequest.GetPokemonForm(pokemonName);
+                    if (VerifyType(pokemonName))
+                    {
+                        pokemonTypePrimary = await _apiRequest.GetTypeAsync(pokeForm.Name);
+                        await UpdateLabels();
+                    }
+                    await UpdatePokemonSprite(pokemonName);
+                    GetPokemonGifSize();
+                    CreateModel();
+                }
+                else if (value.Contains("Primeira Evolução:"))
+                {
+                    pokeAbility.Clear();
+                    pokemon = await _apiRequest.GetPokemonAsync(evolutionChain.Chain.Species.Name);
+                    await PopulateFields();
+                    GetPokemonGifSize();
+                    await UpdateLabels();
+                }
+                else
+                {
+                    pokeAbility.Clear();
+                    string pokemonName = value;
+                    pokemon = await _apiRequest.GetPokemonAsync(pokemonName);
+                    await PopulateFields();
+                    GetPokemonGifSize();
+                    await UpdateLabels();
+                    CreateModel();
+                }
+            }
+        }
+
+        private void AddColumns(TreeView treeView)
+        {
+            CellRendererText rendererText = new CellRendererText();
+            TreeViewColumn column = new TreeViewColumn("Evoluções e Formas", rendererText,
+                "text", (int)Column.Form);
+            column.SortColumnId = (int)Column.Form;
+            treeView.AppendColumn(column);
+            column = new TreeViewColumn("Forma de Evolução", rendererText,
+                               "text", (int)Column.FormMethod);
+            treeView.AppendColumn(column);
+            //column.FixedWidth = 200;
+        }
+
+        private ListStore CreateModel()
+        {
+            if (evolutionChain.Chain.Species.Name == pokemon.Name)
+            {
+                forms.AppendValues(evolutionChain.Chain.Species.Name, "Primeira Evolução");
+            }
+
+            if (evolutionChain.Chain.EvolvesTo.Count > 0)
+            {
+                foreach (var evo in evolutionChain.Chain.EvolvesTo)
+                {
+                    foreach (var i in evo.EvolutionDetails)
+                    {
+                        if (i != null)
+                        {
+                            if (i.Trigger.Name == "level-up")
+                            {
+                                if (i.MinLevel != null)
+                                {
+                                    forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
+                                }
+                            }
+                            else if (i.Trigger.Name == "trade")
+                            {
+                                forms.AppendValues(evo.Species.Name, i.Trigger.Name);
+                            }
+                            else if (i.Trigger.Name == "use-item")
+                            {
+                                forms.AppendValues("Metodo de Evolução: " + evo.Species.Name, " " + i.Trigger.Name + " - " + i.Item.Name);
+                            }
+                        }
+                    }
+                }
+                if (evolutionChain.Chain.EvolvesTo[0].EvolvesTo.Count > 0)
+                {
+                    foreach (var evo in evolutionChain.Chain.EvolvesTo[0].EvolvesTo)
+                    {
+                        foreach (var i in evo.EvolutionDetails)
+                        {
+                            if (i != null)
+                            {
+                                forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
+                            }
+                        }
+                    }
+                }
+            }
+            if (pokemon.Forms.Count > 1)
+            {
+                foreach (var form in pokemon.Forms)
+                {
+                    forms.AppendValues(form.Name);
+                }
+            }
+            if (pokeSpecies.Varieties.Count > 1)
+            {
+                foreach (var poke in pokeSpecies.Varieties)
+                {
+                    if (poke.IsDefault == false)
+                    {
+                        forms.AppendValues(poke.Pokemon.Name);
+                    }
+                }
+            }
+            return forms;
         }
 
         private async void TranslateString()
@@ -338,48 +470,6 @@ namespace NowComesGtk.Screens
             }
         }
 
-        private async void GetNextEvolutionPokemon(object sender, EventArgs e)
-        {
-            if (evolutionChain != null)
-            {
-                var nextEvolution = GetNextEvolution(evolutionChain, pokemon.Name);
-                if (nextEvolution != null && nextEvolution != "")
-                {
-                    pokemon = await _apiRequest.GetPokemonAsync(nextEvolution);
-                    await PopulateFields();
-                    GetPokemonGifSize();
-                    await UpdateLabels();
-                }
-                else
-                {
-                    MessageDialogGenerator.ShowMessageDialog("Não há proximas evoluções para este Pokémon.");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Não foi possível encontrar informações de evolução para {pokemon.Name}.");
-            }
-        }
-
-        private async void GetPreviousEvolutionPokemon(object sender, EventArgs e)
-        {
-            if (evolutionChain != null)
-            {
-                var previousEvolution = GetPreviousEvolution(evolutionChain, pokemon.Name);
-                if (previousEvolution != null && previousEvolution != "")
-                {
-                    pokemon = await _apiRequest.GetPokemonAsync(previousEvolution);
-                    await PopulateFields();
-                    GetPokemonGifSize();
-                    await UpdateLabels();
-                }
-                else
-                {
-                    MessageDialogGenerator.ShowMessageDialog("Não há evoluções anteriores para este Pokémon.");
-                }
-            }
-        }
-
         private async void ShinyButtonClicked(object sender, EventArgs e)
         {
             if (isShiny)
@@ -435,66 +525,7 @@ namespace NowComesGtk.Screens
             movementScreen.ShowAll();
         }
 
-        public static string GetNextEvolution(EvolutionChain evolutionChain, string currentPokemonName)
-        {
-            var primaryevolution = evolutionChain.Chain.Species.Name;
-
-            string thirdEvolution = "";
-
-            if (primaryevolution == currentPokemonName)
-            {
-                var secondaryEvolution = evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.Species.Name;
-                return secondaryEvolution;
-            }
-            if (evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.Species.Name == currentPokemonName)
-            {
-                if (evolutionChain.Chain.EvolvesTo.LastOrDefault().EvolvesTo.Count > 1)
-                {
-                    thirdEvolution = evolutionChain.Chain.EvolvesTo.LastOrDefault()?.Species.Name;
-                }
-                else if (evolutionChain.Chain.EvolvesTo.LastOrDefault().EvolvesTo.Count == 1)
-                {
-                    thirdEvolution = evolutionChain.Chain.EvolvesTo.LastOrDefault()?.EvolvesTo.LastOrDefault()?.Species.Name;
-                }
-                else
-                {
-                    thirdEvolution = evolutionChain.Chain.EvolvesTo.LastOrDefault()?.Species.Name;
-                }
-
-                return thirdEvolution;
-            }
-            return "";
-        }
-
-        private string GetPreviousEvolution(EvolutionChain evolutionChain, string name)
-        {
-            var primaryevolution = evolutionChain.Chain.Species.Name;
-            string secondaryEvolution = "";
-            if (primaryevolution == name)
-            {
-                return "";
-            }
-            if (evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.Species.Name == name)
-            {
-                return primaryevolution;
-            }
-            if (evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.EvolvesTo.FirstOrDefault()?.Species.Name == name)
-            {
-                return evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.Species.Name;
-            }
-            if (evolutionChain.Chain.EvolvesTo.Count > 1)
-            {
-                secondaryEvolution = evolutionChain.Chain.EvolvesTo.LastOrDefault()?.EvolvesTo.LastOrDefault()?.Species.Name;
-                return secondaryEvolution;
-            }
-            else
-            {
-                secondaryEvolution = evolutionChain.Chain.EvolvesTo.LastOrDefault()?.Species.Name;
-                return secondaryEvolution;
-            }
-        }
-
-        private async Task PopulateFields()
+        public async Task PopulateFields()
         {
             try
             {
@@ -505,98 +536,12 @@ namespace NowComesGtk.Screens
                 pokemonSpATKFormatted = pokemon.Stats[3].BaseStat.ToString("D3");
                 pokemonSpDEFFormatted = pokemon.Stats[4].BaseStat.ToString("D3");
                 pokemonSpeedFormatted = pokemon.Stats[5].BaseStat.ToString("D3");
-                List<string> s = new();
-                List<string> ee = new();
-                List<string> level = new();
 
                 await Task.Run(() => GetPokemonSpecies(pokemon.Species.Name)).ConfigureAwait(false);
                 if (pokeSpecies != null)
                 {
                     evolutionChain = await _apiRequest.GetEvolutionChain(pokeSpecies.EvolutionChain.Url);
                 }
-
-                foreach (var evolutionDetails in evolutionChain.Chain.EvolvesTo)
-                {
-                    foreach (var details in evolutionDetails.EvolutionDetails)
-                    {
-                        if (details != null)
-                        {
-                            if (details.HeldItem != null)
-                            {
-                                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Metodo de Evolução: {details.Trigger.Name} \nItem retido: {details.HeldItem.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                            }
-                            if (details.Item != null)
-                            {
-                                PokemonAnimation.TooltipMarkup += $"\n\n<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Metodo de Evolução: {details.Trigger.Name} \nItem: {details.Item.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                            }
-                        }
-                    }
-                }
-                //          
-                //            else if (details.KnownMove.Name != null)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nSaber o movimento: {details.KnownMove.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.KnownMoveType.Name != null)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nSaber o movimento: {details.KnownMoveType.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.Location.Name != null)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nLocalização: {details.Location.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.MinAffection != 0)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nAfeição mínima: {details.MinAffection}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.MinBeauty != 0)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nBeleza mínima: {details.MinBeauty}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.MinHappiness != 0)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nFelicidade mínima: {details.MinHappiness}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.MinLevel != 0)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nLevel Minimo: {details.MinLevel}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.NeedsOverworldRain != false)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nPrecisa de chuva no mundo superior\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.PartySpecies.Name != null)
-                //            {//perguntar para o césar.
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \n{details.PartySpecies.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.PartyType.Name != null)
-                //            {//perguntar para o mano césar
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \n{details.PartyType.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.RelativePhysicalStats != null)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nEstatísticas Físicas Relativas: {details.RelativePhysicalStats}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.TimeOfDay != "")
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nHora do dia: {details.TimeOfDay}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.TradeSpecies.Name != null)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nEspécie comercial: {details.TradeSpecies.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else if (details.TurnUpsideDown != false)
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //            else
-                //            {
-                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nPrecisa virar de cabeça para baixo\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
-                //            }
-                //        }
-                //    }
-                //}
-
 
                 await UpdatePokemonSprite(pokemon.Name);
 
@@ -659,99 +604,6 @@ namespace NowComesGtk.Screens
             }
         }
 
-        private async void GetNextVariation(object sender, EventArgs e)
-        {
-            if (pokemon.Forms.Count > 1)
-            {
-                pokemonFormId += 1;
-                if (pokemonFormId != 0 && pokemonFormId < pokemon.Forms.Count)
-                {
-                    string nextPokemon = pokemon.Forms[pokemonFormId].Name;
-                    pokeForm = await _apiRequest.GetPokemonForm(nextPokemon);
-                    if (VerifyType(nextPokemon))
-                    {
-                        pokemonTypePrimary = await _apiRequest.GetTypeAsync(pokeForm.Name);
-                        await UpdateLabels();
-                    }
-                    await UpdatePokemonSprite(pokeForm.Name);
-                    GetPokemonGifSize();
-                }
-                else if (pokemonFormId >= pokemon.Forms.Count)
-                {
-                    MessageDialogGenerator.ShowMessageDialog("Não há proximas variações para este Pokémon.");
-                    pokemonFormId--;
-                }
-            }
-            else if (pokemon.Forms.Count <= 1)
-            {
-                variationId += 1;
-                if (variationId != 0 && variationId < pokeSpecies.Varieties.Count && variationId > -1)
-                {
-                    pokeAbility.Clear();
-                    string nextPokemon = pokeSpecies.Varieties[variationId].Pokemon.Name;
-                    pokemon = await _apiRequest.GetPokemonAsync(nextPokemon);
-                    await PopulateFields();
-                    GetPokemonGifSize();
-                    await UpdateLabels();
-                }
-                else
-                {
-                    MessageDialogGenerator.ShowMessageDialog("Não há proximas variações para este Pokémon.");
-                    variationId -= 1;
-                }
-            }
-        }
-
-        private async void GetPreviousVariation(object sender, EventArgs e)
-        {
-            if (pokemon.Forms.Count > 1)
-            {
-                pokemonFormId -= 1;
-                if (pokemonFormId < pokemon.Forms.Count && pokemonFormId > -1)
-                {
-                    string previousPokemon = pokemon.Forms[pokemonFormId].Name;
-                    pokeForm = await _apiRequest.GetPokemonForm(previousPokemon);
-                    if (VerifyType(previousPokemon))
-                    {
-                        pokemonTypePrimary = await _apiRequest.GetTypeAsync(pokeForm.Name);
-                        await UpdateLabels();
-                    }
-
-                    await UpdatePokemonSprite(pokeForm.Name);
-                    GetPokemonGifSize();
-                }
-                else
-                {
-                    MessageDialogGenerator.ShowMessageDialog("Não há proximas formas para este Pokémon.");
-                }
-                if (pokemonFormId < 0)
-                {
-                    pokemonFormId = 0;
-                }
-            }
-            else
-            {
-                variationId -= 1;
-                if (variationId < pokeSpecies.Varieties.Count && variationId > -1)
-                {
-                    pokeAbility.Clear();
-                    string previousPokemon = pokeSpecies.Varieties[variationId].Pokemon.Name;
-                    pokemon = await _apiRequest.GetPokemonAsync(previousPokemon);
-                    await PopulateFields();
-                    GetPokemonGifSize();
-                    await UpdateLabels();
-                }
-                else
-                {
-                    MessageDialogGenerator.ShowMessageDialog("Não há proximas variações para este Pokémon.");
-                }
-                if (variationId < 0)
-                {
-                    variationId = 0;
-                }
-            }
-        }
-
         private async Task GetPokemonAbilitiesList(string abilityName)
         {
             Ability ability = await _apiRequest.GetPokemonAbility(abilityName);
@@ -794,6 +646,7 @@ namespace NowComesGtk.Screens
                     pokemonCatchRate = pokeSpecies.CaptureRate switch
                     {
                         3 => "01.6%",
+                        25 => "07.7%",
                         45 => "11.9%",
                         60 => "14.8%",
                         75 => "17.5%",
@@ -823,18 +676,10 @@ namespace NowComesGtk.Screens
 
             if (!isShiny)
             {
-                try
-                {
-                    await _apiRequest.GetPokemonAnimatedSprite(pokemonForm, isShiny);
-                    PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Erro ao carregar a sprite animada do Pokémon: {ex.Message}");
-                    PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/pokemonSpriteError.png");
-                }
+                await _apiRequest.GetPokemonAnimatedSprite(pokemonForm, isShiny);
+                PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
             }
-            else
+            else if (isShiny)
             {
                 await _apiRequest.GetPokemonAnimatedSprite(pokemonForm, isShiny);
                 PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
