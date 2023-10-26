@@ -78,9 +78,9 @@ namespace NowComesGtk.Screens
         private int pokemonFormId = 0;
 
         private string pokemonHPFormatted = "", pokemonATKFormatted = "", pokemonDEFFormatted = "", pokemonSpATKFormatted = "", pokemonSpDEFFormatted = "", pokemonSpeedFormatted = "";
+        private string PokemonFirstTypeFormattedTitle = "", PokemonFirstTypeFormatted = "", pokemonSecondaryTypeFormatted = "", damageRelations = "", damageRelationsSecondary = "";
         private string pokemonNameFormatted = "", pokemonDexFormatted = "", pokemonMaleFormatted = "", pokemonFemaleFormatted = "", pokemonCatchRate = "", pokemonEggGroup = "";
         private string pokemonAbilityOneUpper = "", pokemonAbilityTwoUpper = "", pokemonAbilityThreeUpper = "", pokemonAbilityFourUpper = "", pokemonFlavorText = "";
-        private string PokemonFirstTypeFormattedTitle = "", PokemonFirstTypeFormatted = "", pokemonSecondaryTypeFormatted = "", damageRelations = "", damageRelationsSecondary = "";
 
         public PokemonScreen(Pokemon Pokemon) : base("", 1000, 500)
         {
@@ -519,7 +519,9 @@ namespace NowComesGtk.Screens
 
             var MoveList = pokemonSpecieMoves.Where(pokeSpecieMove => !pokemonMoves.Any(pokeMove => pokeMove.Name == pokeSpecieMove.Name)).Concat(pokemonMoves).ToList();
 
-            MovementScreen movementScreen = new(MoveList, pokemon, pokemonSpecie);
+            string pokemonType = pokemon.Types[0].Type.Name;
+
+            MovementScreen movementScreen = new(MoveList, pokemon, pokemonSpecie, pokemonType);
             movementScreen.ShowAll();
         }
 
@@ -671,6 +673,7 @@ namespace NowComesGtk.Screens
 
         private async Task UpdatePokemonSprite(string pokemonForm)
         {
+
             if (!isShiny)
             {
                 await _apiRequest.GetPokemonAnimatedSprite(pokemonForm, isShiny);
