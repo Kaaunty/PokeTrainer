@@ -1,22 +1,11 @@
-
-﻿using NowComesGtk.Reusable_components;
-using PokeApi.BackEnd.Service;
-
-﻿using Gdk;
+using Gdk;
 using Gtk;
 using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
 using PokeApiNet;
 using System.Globalization;
-using System.Runtime.CompilerServices;
-
 using Type = PokeApiNet.Type;
-using System.Globalization;
-using NowComesGtk.Utils;
-using PokeApiNet;
-using Gdk;
-using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -25,9 +14,6 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private static ApiRequest _apiRequest = new();
-
-        private Pokemon pokemon;
-        private Button ShinyButton;
 
         private Pokemon pokemon = new();
         private Button ShinyButton = new();
@@ -80,12 +66,10 @@ namespace NowComesGtk.Screens
         private int variationId = 0;
         private int pokemonFormId = 0;
 
-        
         private string pokemonHPFormatted = "", pokemonATKFormatted = "", pokemonDEFFormatted = "", pokemonSpATKFormatted = "", pokemonSpDEFFormatted = "", pokemonSpeedFormatted = "";
         private string pokemonNameFormatted = "", pokemonDexFormatted = "", pokemonMaleFormatted = "", pokemonFemaleFormatted = "", pokemonCatchRate = "", pokemonEggGroup = "";
         private string pokemonAbilityOneUpper = "", pokemonAbilityTwoUpper = "", pokemonAbilityThreeUpper = "", pokemonAbilityFourUpper = "", pokemonFlavorText = "";
         private string PokemonFirstTypeFormattedTitle = "", PokemonFirstTypeFormatted = "", pokemonSecondaryTypeFormatted = "", damageRelations = "", damageRelationsSecondary = "";
-
 
         public PokemonScreen(Pokemon Pokemon) : base("", 800, 500)
         {
@@ -453,7 +437,6 @@ namespace NowComesGtk.Screens
         {
             var primaryevolution = evolutionChain.Chain.Species.Name;
 
-
             string thirdEvolution = "";
 
             if (primaryevolution == currentPokemonName)
@@ -470,7 +453,6 @@ namespace NowComesGtk.Screens
                 else if (evolutionChain.Chain.EvolvesTo.LastOrDefault().EvolvesTo.Count == 1)
                 {
                     thirdEvolution = evolutionChain.Chain.EvolvesTo.LastOrDefault()?.EvolvesTo.LastOrDefault()?.Species.Name;
-
                 }
                 else
                 {
@@ -508,12 +490,6 @@ namespace NowComesGtk.Screens
                 secondaryEvolution = evolutionChain.Chain.EvolvesTo.LastOrDefault()?.Species.Name;
                 return secondaryEvolution;
             }
-            if (evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.EvolvesTo.FirstOrDefault()?.Species.Name == name)
-            {
-                var thirdevolution = evolutionChain.Chain.EvolvesTo.FirstOrDefault()?.Species.Name;
-                return thirdevolution;
-            }
-            return "";
         }
 
         private async Task PopulateFields()
@@ -536,7 +512,6 @@ namespace NowComesGtk.Screens
                 {
                     evolutionChain = await _apiRequest.GetEvolutionChain(pokeSpecies.EvolutionChain.Url);
                 }
-
 
                 var details = evolutionChain.Chain.EvolvesTo.Select(evolutionDetails => evolutionDetails.EvolutionDetails).ToList();
 
@@ -611,11 +586,6 @@ namespace NowComesGtk.Screens
                     }
                 }
 
-
-
-
-
-=======
                 foreach (var evo in evolutionChain.Chain.EvolvesTo)
                 {
                     foreach (var i in evo.EvolutionDetails)
@@ -659,7 +629,6 @@ namespace NowComesGtk.Screens
                 {
                     Console.WriteLine(sse);
                 }
-
 
                 await UpdatePokemonSprite(pokemon.Name);
 
@@ -889,7 +858,6 @@ namespace NowComesGtk.Screens
                 {
                     await _apiRequest.GetPokemonAnimatedSprite(pokemonForm, isShiny);
                     PokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
-
                 }
                 catch (Exception ex)
                 {
