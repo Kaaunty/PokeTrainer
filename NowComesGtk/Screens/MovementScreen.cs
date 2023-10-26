@@ -29,7 +29,7 @@ namespace NowComesGtk.Screens
             Type
         }
 
-        public MovementScreen(List<Move> move, Pokemon pokemon, Pokemon pokemonSpecie) : base("", 500, 500)
+        public MovementScreen(List<Move> move, Pokemon pokemon, Pokemon pokemonSpecie, string pokemonType) : base("", 500, 500)
         {
             Moves = move;
             poke = pokemon;
@@ -37,7 +37,6 @@ namespace NowComesGtk.Screens
 
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
-            BorderWidth = 25;
 
             GetMoveLearnMethod();
 
@@ -242,12 +241,11 @@ namespace NowComesGtk.Screens
             foreach (var move in Moves)
             {
 
-                bool moveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
+                bool moveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg");
 
 
-                var MoveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
-
-                || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
+                var MoveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg")
+                || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg");
 
                 bool moveLearnByMachine = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"
                 || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"));
@@ -272,11 +270,7 @@ namespace NowComesGtk.Screens
                 }
                 if (moveLearnByTutor)
                 {
-
-                    _moveLearnByMoveTutor.Add(move.Name, move.Type.Name);;
-
-                    moveLearnByMoveTutor.Add(move.Name, move.Type.Name); ;
-
+                    _moveLearnByMoveTutor.Add(move.Name, move.Type.Name);
                 }
             }
         }

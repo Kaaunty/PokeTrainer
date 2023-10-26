@@ -67,9 +67,9 @@ namespace NowComesGtk.Screens
         private int pokemonFormId = 0;
 
         private string pokemonHPFormatted = "", pokemonATKFormatted = "", pokemonDEFFormatted = "", pokemonSpATKFormatted = "", pokemonSpDEFFormatted = "", pokemonSpeedFormatted = "";
+        private string PokemonFirstTypeFormattedTitle = "", PokemonFirstTypeFormatted = "", pokemonSecondaryTypeFormatted = "", damageRelations = "", damageRelationsSecondary = "";
         private string pokemonNameFormatted = "", pokemonDexFormatted = "", pokemonMaleFormatted = "", pokemonFemaleFormatted = "", pokemonCatchRate = "", pokemonEggGroup = "";
         private string pokemonAbilityOneUpper = "", pokemonAbilityTwoUpper = "", pokemonAbilityThreeUpper = "", pokemonAbilityFourUpper = "", pokemonFlavorText = "";
-        private string PokemonFirstTypeFormattedTitle = "", PokemonFirstTypeFormatted = "", pokemonSecondaryTypeFormatted = "", damageRelations = "", damageRelationsSecondary = "";
 
         public PokemonScreen(Pokemon Pokemon) : base("", 800, 500)
         {
@@ -429,7 +429,9 @@ namespace NowComesGtk.Screens
 
             var MoveList = pokemonSpecieMoves.Where(pokeSpecieMove => !pokemonMoves.Any(pokeMove => pokeMove.Name == pokeSpecieMove.Name)).Concat(pokemonMoves).ToList();
 
-            MovementScreen movementScreen = new(MoveList, pokemon, pokemonSpecie);
+            string pokemonType = pokemon.Types[0].Type.Name;
+
+            MovementScreen movementScreen = new(MoveList, pokemon, pokemonSpecie, pokemonType);
             movementScreen.ShowAll();
         }
 
@@ -513,122 +515,88 @@ namespace NowComesGtk.Screens
                     evolutionChain = await _apiRequest.GetEvolutionChain(pokeSpecies.EvolutionChain.Url);
                 }
 
-                var details = evolutionChain.Chain.EvolvesTo.Select(evolutionDetails => evolutionDetails.EvolutionDetails).ToList();
-
-                foreach (var detail in details)
+                foreach (var evolutionDetails in evolutionChain.Chain.EvolvesTo)
                 {
-                    foreach (var how in detail)
+                    foreach (var details in evolutionDetails.EvolutionDetails)
                     {
-                        if (how.HeldItem.Name != null)
+                        if (details != null)
                         {
-                            Console.WriteLine(how.Trigger + ": " + how.HeldItem.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.Item.Name != null)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.Item.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.KnownMove.Name != null)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.KnownMove.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.KnownMoveType.Name != null)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.KnownMoveType.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.Location.Name != null)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.Location.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.MinAffection.Value != 0)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.MinAffection.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.MinBeauty.Value != 0)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.MinBeauty.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.MinHappiness.Value != 0)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.MinHappiness.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.MinLevel.Value != 0)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.MinLevel.Value + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.NeedsOverworldRain == true)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.NeedsOverworldRain + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.PartySpecies.Name != null)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.PartySpecies.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.PartyType.Name != null)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.PartyType.Name + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.RelativePhysicalStats != 0)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.RelativePhysicalStats + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.TimeOfDay != "")
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.TimeOfDay + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.TradeSpecies.Name != null)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.TradeSpecies + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                        if (how.TurnUpsideDown == true)
-                        {
-                            Console.WriteLine(how.Trigger + ": " + how.TurnUpsideDown + "/n Evolui para: " + evolutionChain.Chain.Species.Name);
-                        }
-                    }
-                }
-
-                foreach (var evo in evolutionChain.Chain.EvolvesTo)
-                {
-                    foreach (var i in evo.EvolutionDetails)
-                    {
-                        if (i != null)
-                        {
-                            if (i.MinLevel != null)
+                            if (details.HeldItem != null)
                             {
-                                s.Add($"Metodo de Evolução: {i.Trigger.Name} \nLevel Minimo: {i.MinLevel}\nProximo Pokemon: {evo.Species.Name}");
+                                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Metodo de Evolução: {details.Trigger.Name} \nItem retido: {details.HeldItem.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
                             }
-                            else if (i.Trigger.Name == "use-item")
+                            if (details.Item != null)
                             {
-                                s.Add($"Metodo de Evolução: {i.Trigger.Name} \nItem: {i.Item.Name}\nProximo Pokemon: {evo.Species.Name}");
-                            }
-                            else
-                            {
-                                s.Add($"Metodo de Evolução: {i.Trigger.Name} \nProximo Pokemon: {evo.Species.Name}");
+                                PokemonAnimation.TooltipMarkup += $"\n\n<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Metodo de Evolução: {details.Trigger.Name} \nItem: {details.Item.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
                             }
                         }
                     }
                 }
-                if (evolutionChain.Chain.EvolvesTo[0].EvolvesTo.Count > 0)
-                {
-                    foreach (var evo in evolutionChain.Chain.EvolvesTo[0].EvolvesTo)
-                    {
-                        foreach (var i in evo.EvolutionDetails)
-                        {
-                            if (i != null)
-                            {
-                                s.Add($"Metodo de Evolução: {i.Trigger.Name} \nLevel Minimo: {i.MinLevel}\nProximo Pokemon: {evo.Species.Name}");
-                            }
-                        }
-                    }
-                }
-                foreach (var ss in s)
-                {
-                    ee.Add(textInfo.ToTitleCase(ss));
-                }
+                //          
+                //            else if (details.KnownMove.Name != null)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nSaber o movimento: {details.KnownMove.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.KnownMoveType.Name != null)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nSaber o movimento: {details.KnownMoveType.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.Location.Name != null)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nLocalização: {details.Location.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.MinAffection != 0)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nAfeição mínima: {details.MinAffection}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.MinBeauty != 0)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nBeleza mínima: {details.MinBeauty}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.MinHappiness != 0)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nFelicidade mínima: {details.MinHappiness}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.MinLevel != 0)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nLevel Minimo: {details.MinLevel}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.NeedsOverworldRain != false)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nPrecisa de chuva no mundo superior\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.PartySpecies.Name != null)
+                //            {//perguntar para o césar.
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \n{details.PartySpecies.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.PartyType.Name != null)
+                //            {//perguntar para o mano césar
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \n{details.PartyType.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.RelativePhysicalStats != null)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nEstatísticas Físicas Relativas: {details.RelativePhysicalStats}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.TimeOfDay != "")
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nHora do dia: {details.TimeOfDay}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.TradeSpecies.Name != null)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nEspécie comercial: {details.TradeSpecies.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else if (details.TurnUpsideDown != false)
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name}\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //            else
+                //            {
+                //                PokemonAnimation.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> Metodo de Evolução: {details.Trigger.Name} \nPrecisa virar de cabeça para baixo\nProximo Pokemon: {evolutionDetails.Species.Name} </span>";
+                //            }
+                //        }
+                //    }
+                //}
 
-                foreach (var sse in ee)
-                {
-                    Console.WriteLine(sse);
-                }
 
                 await UpdatePokemonSprite(pokemon.Name);
 
@@ -852,6 +820,7 @@ namespace NowComesGtk.Screens
 
         private async Task UpdatePokemonSprite(string pokemonForm)
         {
+
             if (!isShiny)
             {
                 try
