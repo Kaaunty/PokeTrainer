@@ -66,7 +66,6 @@ namespace NowComesGtk.Screens
                 CssProvider cssProvider = new CssProvider();
                 cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
                 txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
-
             };
 
             #endregion FocusIn and FocusOut Event (txtSearchMove)
@@ -186,6 +185,7 @@ namespace NowComesGtk.Screens
                 CreateModel();
             }
         }
+
         private void AllTypeClicked()
         {
             try
@@ -237,15 +237,12 @@ namespace NowComesGtk.Screens
                 throw;
             }
         }
+
         private void GetMoveLearnMethod()
         {
             foreach (var move in Moves)
             {
-
-                bool moveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
-
-
-                var MoveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
+                bool MoveLearnByEgg = poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
 
                 || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
 
@@ -258,7 +255,7 @@ namespace NowComesGtk.Screens
                 bool moveLearnByTutor = poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"
                 || pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"));
 
-                if (moveLearnByEgg)
+                if (MoveLearnByEgg)
                 {
                     _moveLearnByEgg.Add(move.Name, move.Type.Name);
                 }
@@ -272,11 +269,7 @@ namespace NowComesGtk.Screens
                 }
                 if (moveLearnByTutor)
                 {
-
-                    _moveLearnByMoveTutor.Add(move.Name, move.Type.Name);;
-
-                    moveLearnByMoveTutor.Add(move.Name, move.Type.Name); ;
-
+                    _moveLearnByMoveTutor.Add(move.Name, move.Type.Name);
                 }
             }
         }
