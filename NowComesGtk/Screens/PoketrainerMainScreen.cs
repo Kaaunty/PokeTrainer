@@ -157,6 +157,7 @@ namespace NowComesGtk.Screens
             BtnTestMythical.Image = new Image("Images/buttons/btnTeste.png");
             BtnTestMythical.Clicked += btnPokemonTestMythical;
             fix.Put(BtnTestMythical, 640, 420);
+            DeleteEvent += delegate { Gtk.Application.Quit(); };
 
             Add(fix);
             ShowAll();
