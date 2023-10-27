@@ -1,36 +1,36 @@
-﻿using Gtk;
-using NowComesGtk.Screens;
-using NowComesGtk.Utils;
+﻿using static PokeApi.BackEnd.Service.ApiRequest;
 using PokeApi.BackEnd.Service;
-using static PokeApi.BackEnd.Service.ApiRequest;
+using NowComesGtk.Screens;
 using Image = Gtk.Image;
+using NowComesGtk.Utils;
+using Gtk;
 
 public class PokemonLoad : BaseWindow
 {
 #nullable disable
 
-    private ApiRequest _apiRequest = new ApiRequest();
-    private ProgressBar progressBar = new();
-    private Image runningPikachu = new();
-    private Label loadingLabel = new();
+    private ProgressBar _progressBar = new();
+    private ApiRequest _apiRequest = new();
+    private Image _redAndPikachuRunning = new();
+    private Label _loadingLabel = new();
 
-    private bool isLoaded = false;
-    private int loadingDots = 0;
+    private bool _isLoaded = false;
+    private int _loadingDots = 0;
 
     public PokemonLoad() : base("", 400, 100)
     {
-        var vbox = new VBox();
+        VBox vBox = new();
 
-        loadingLabel = new Label("Carregando");
-        vbox.PackStart(loadingLabel, false, false, 10);
+        _loadingLabel = new Label("Carregando");
+        vBox.PackStart(_loadingLabel, false, false, 10);
 
-        runningPikachu = new Image("Images/pikachu-running.gif");
-        vbox.PackStart(runningPikachu, false, false, 10);
+        _redAndPikachuRunning = new Image("Images/red-and-pikachu-running.gif");
+        vBox.PackStart(_redAndPikachuRunning, false, false, 10);
 
-        progressBar = new ProgressBar();
-        vbox.PackStart(progressBar, false, false, 10);
+        _progressBar = new ProgressBar();
+        vBox.PackStart(_progressBar, false, false, 10);
 
-        Add(vbox);
+        Add(vBox);
         ShowAll();
         LoadPokemonList();
 
@@ -39,13 +39,13 @@ public class PokemonLoad : BaseWindow
 
     private void UpdateProgressBar()
     {
-        while (!isLoaded)
+        while (!_isLoaded)
         {
-            progressBar.Fraction = _apiRequest.GetProgress();
+            _progressBar.Fraction = _apiRequest.GetProgress();
             Task.Delay(200).Wait();
 
-            loadingLabel.Text = "Carregando" + new string('.', loadingDots);
-            loadingDots = (loadingDots + 1) % 4;
+            _loadingLabel.Text = "Carregando" + new string('.', _loadingDots);
+            _loadingDots = (_loadingDots + 1) % 4;
         }
     }
 
@@ -57,11 +57,11 @@ public class PokemonLoad : BaseWindow
 
             PopulateTypeDamageRelationDictionary();
 
-            progressBar.Fraction = 1;
-            isLoaded = true;
-            loadingLabel.Text = "Carregamento concluído!";
+            _progressBar.Fraction = 1;
+            _isLoaded = true;
+            _loadingLabel.Text = "Carregamento concluído!";
 
-            if (isLoaded)
+            if (_isLoaded)
             {
                 PoketrainerMainScreen poketrainerMainScreen = new();
                 poketrainerMainScreen.Show();
