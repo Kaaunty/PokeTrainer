@@ -295,7 +295,7 @@ namespace NowComesGtk.Screens
         {
             if (!string.IsNullOrEmpty(txtSearchPokemon.Text))
             {
-                if (txtSearchPokemon.Text != string.Empty && txtSearchPokemon.Text != "Buscar Pokémon")
+                if (txtSearchPokemon.Text != "" && txtSearchPokemon.Text != "Buscar Pokémon")
                 {
                     string PokemonName = txtSearchPokemon.Text.ToLower();
                     PokemonName = PokemonName.Replace(' ', '-');

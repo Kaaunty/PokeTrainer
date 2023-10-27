@@ -7,6 +7,7 @@ using NowComesGtk.Screens;
 using Image = Gtk.Image;
 using NowComesGtk.Utils;
 using Gtk;
+using NAudio.Wave;
 
 public class PokemonLoad : BaseWindow
 {
@@ -45,10 +46,7 @@ public class PokemonLoad : BaseWindow
     {
         while (!_isLoaded)
         {
-
-            _progressBar.Fraction = _apiRequest.GetProgress();
-
-            progressBar.Fraction = GetProgress();
+            _progressBar.Fraction = GetProgress();
 
             Task.Delay(200).Wait();
 
@@ -86,6 +84,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
+
             MediaFoundationReader readers = new MediaFoundationReader("Sounds/pokemon-opening2.mp3");
 
             var waveOut = new WaveOutEvent();
