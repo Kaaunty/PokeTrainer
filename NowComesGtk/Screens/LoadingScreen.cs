@@ -82,6 +82,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
+
             MediaFoundationReader readers = new MediaFoundationReader("Sounds/pokemon-opening2.mp3");
 
             var waveOut = new WaveOutEvent();
