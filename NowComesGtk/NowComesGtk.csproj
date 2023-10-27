@@ -46,6 +46,7 @@
 	<ItemGroup>
 		<PackageReference Include="Google.Apis.Translate.v2" Version="1.62.0.875" />
 		<PackageReference Include="GtkSharp" Version="3.24.24.95" />
+		<PackageReference Include="NAudio" Version="2.2.1" />
 		<PackageReference Include="PokeApiNet" Version="3.0.10" />
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 	</ItemGroup>

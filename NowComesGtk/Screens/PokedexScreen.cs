@@ -328,7 +328,7 @@ namespace NowComesGtk.Screens
             var pokemonName = (string)btn.Data["name"];
             if (pokemonName != string.Empty)
             {
-                Pokemon pokemonClicked = await _apiRequest.GetPokemonAsync(pokemonName);
+                Pokemon pokemonClicked = await _apiRequest.GetPokemon(pokemonName);
                 PokemonScreen pokemonScreen = new(pokemonClicked);
                 pokemonScreen.Show();
             }

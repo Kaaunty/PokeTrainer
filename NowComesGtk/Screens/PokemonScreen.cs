@@ -118,14 +118,14 @@ namespace NowComesGtk.Screens
                 fix.Put(lblPokemonName, 40, 357);
 
                 PokemonTypeOne = new Image($"Images/pokemon_types/{pokemon.Types[0].Type.Name}.png");
-                damageRelations = _apiRequest.GetTypeDamageRelation(pokemon.Types[0].Type.Name);
+                damageRelations = GetTypeDamageRelation(pokemon.Types[0].Type.Name);
                 PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelations}</span>";
                 fix.Put(PokemonTypeOne, 100, 433);
 
                 if (pokemon.Types.Count > 1)
                 {
                     imagePokemonTypeSecondary = new Image($"Images/pokemon_types/{pokemon.Types[1].Type.Name}.png");
-                    damageRelationsSecondary = _apiRequest.GetTypeDamageRelation(pokemon.Types[1].Type.Name);
+                    damageRelationsSecondary = GetTypeDamageRelation(pokemon.Types[1].Type.Name);
                     imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelationsSecondary}</span>";
 
                     fix.Put(imagePokemonTypeSecondary, 188, 433);
@@ -234,6 +234,11 @@ namespace NowComesGtk.Screens
             }
         }
 
+        public string GetTypeDamageRelation(string type)
+        {
+            return PokeList.TypeDamageRelations[type];
+        }
+
         private async void OnRowActivated(object o, RowActivatedArgs args)
         {
             TreeIter iter;
@@ -253,24 +258,28 @@ namespace NowComesGtk.Screens
                     }
                     await UpdatePokemonSprite(pokemonName);
                     GetPokemonGifSize();
+                    formsList.Clear();
                     CreateModel();
                 }
                 else if (value.Contains("Primeira Evolução:"))
                 {
                     pokeAbility.Clear();
-                    pokemon = await _apiRequest.GetPokemonAsync(evolutionChain.Chain.Species.Name);
+                    pokemon = await _apiRequest.GetPokemon(evolutionChain.Chain.Species.Name);
                     await PopulateFields();
                     GetPokemonGifSize();
                     await UpdateLabels();
+                    formsList.Clear();
+                    CreateModel();
                 }
                 else
                 {
                     pokeAbility.Clear();
                     string pokemonName = value;
-                    pokemon = await _apiRequest.GetPokemonAsync(pokemonName);
+                    pokemon = await _apiRequest.GetPokemon(pokemonName);
                     await PopulateFields();
                     GetPokemonGifSize();
                     await UpdateLabels();
+                    formsList.Clear();
                     CreateModel();
                 }
             }
@@ -291,10 +300,7 @@ namespace NowComesGtk.Screens
 
         private ListStore CreateModel()
         {
-            if (evolutionChain.Chain.Species.Name == pokemon.Name)
-            {
-                forms.AppendValues(evolutionChain.Chain.Species.Name, "Primeira Evolução");
-            }
+            forms.AppendValues(evolutionChain.Chain.Species.Name, "Primeira Evolução");
 
             if (evolutionChain.Chain.EvolvesTo.Count > 0)
             {
@@ -317,7 +323,7 @@ namespace NowComesGtk.Screens
                             }
                             else if (i.Trigger.Name == "use-item")
                             {
-                                forms.AppendValues("Metodo de Evolução: " + evo.Species.Name, " " + i.Trigger.Name + " - " + i.Item.Name);
+                                forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Item Usado: {i.Item.Name}");
                             }
                         }
                     }
@@ -513,7 +519,7 @@ namespace NowComesGtk.Screens
 
         private async void PokemonMoves(object sender, EventArgs e)
         {
-            Pokemon pokemonSpecie = await _apiRequest.GetPokemonAsync(evolutionChain.Chain.Species.Name);
+            Pokemon pokemonSpecie = await _apiRequest.GetPokemon(evolutionChain.Chain.Species.Name);
             List<Move> pokemonSpecieMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemonSpecie);
             List<Move> pokemonMoves = await _apiRequest.GetMoveLearnedByPokemon(pokemon);
 
@@ -673,7 +679,6 @@ namespace NowComesGtk.Screens
 
         private async Task UpdatePokemonSprite(string pokemonForm)
         {
-
             if (!isShiny)
             {
                 await _apiRequest.GetPokemonAnimatedSprite(pokemonForm, isShiny);
@@ -758,7 +763,7 @@ namespace NowComesGtk.Screens
                 {
                     PokemonFirstTypeFormatted = pokemonTypePrimary.Name;
                     PokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{PokemonFirstTypeFormatted}.png");
-                    damageRelations = _apiRequest.GetTypeDamageRelation(pokemonTypePrimary.Name);
+                    damageRelations = GetTypeDamageRelation(pokemonTypePrimary.Name);
                     PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{damageRelations}]</span>";
                 }
 
@@ -766,7 +771,7 @@ namespace NowComesGtk.Screens
                 {
                     pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
                     imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{pokemonSecondaryTypeFormatted}.png");
-                    damageRelationsSecondary = _apiRequest.GetTypeDamageRelation(pokemonTypeSecondary.Name);
+                    damageRelationsSecondary = GetTypeDamageRelation(pokemonTypeSecondary.Name);
                     imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{damageRelationsSecondary}]</span>";
                 }
 
