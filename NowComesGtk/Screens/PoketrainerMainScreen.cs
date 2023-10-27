@@ -15,13 +15,11 @@ namespace NowComesGtk.Screens
         private SeparateMethods separeteMethods = new();
         private ApiRequest _apiRequest = new();
         private Fixed fix = new();
+
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
             Image poketrainerBackground = new Image("Images/pokemon_homescreen/homescreen.png");
             fix.Put(poketrainerBackground, 0, 0);
-
-            
-           
 
             #region Buttons Pokédex
 
@@ -139,7 +137,7 @@ namespace NowComesGtk.Screens
             btnWelcome.Image = new Image("Images/buttons/btnWelcome.png");
             btnWelcome.TooltipMarkup = "Olá...";
             btnWelcome.Clicked += Dialog_Start;
-         
+
             fix.Put(btnWelcome, 620, 75);
             Button btnGitHub = new ButtonGenerator("", 40, 40);
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
@@ -169,34 +167,37 @@ namespace NowComesGtk.Screens
             separeteMethods.GitHubOpen();
         }
 
-        private  void Dialog_Start(object sender, EventArgs e)
+        private void Dialog_Start(object sender, EventArgs e)
         {
             ShowMessageDialogWithAnimation(
                   "Bem-vindo, Pokémon Trainer!\r\n\r\nVocê acaba de entrar no mundo emocionante dos Pokémon, e estamos felizes em tê-lo aqui.\r\n\r\n" +
                   "Aqui, você encontrará sua ferramenta essencial: a Pokédex.\r\n\r\n" +
                   "Ela é o seu guia para o vasto mundo dos Pokémon. Ao usá-la, você terá acesso a informações valiosas sobre cada Pokémon que encontrar.\r\n\r\n" +
                   "Simplesmente selecione um Pokémon da lista e desbloqueie um tesouro de conhecimento, incluindo seus tipos, habilidades, evoluções e muito mais.");
-
         }
 
         private async void btnPokemonTest(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("scizor");
+            //Pokemon pokemon = await _apiRequest.GetPokemonAsync("scizor");
+            Pokemon poke = await _apiRequest.GetPokemon("rayquaza");
+            Console.WriteLine(poke.Name);
 
-            PokemonScreen pokemonScreen = new(pokemon);
-            pokemonScreen.Show();
+            Console.WriteLine(poke.Types[0].Type.Name);
+
+            //PokemonScreen pokemonScreen = new(pokemon);
+            //pokemonScreen.Show();
         }
 
         private async void btnPokemonTestLegendary(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("basculin-red-striped");
+            Pokemon pokemon = await _apiRequest.GetPokemon("basculin-red-striped");
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
         }
 
         private async void btnPokemonTestMythical(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemonAsync("arceus");
+            Pokemon pokemon = await _apiRequest.GetPokemon("arceus");
 
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
@@ -218,22 +219,21 @@ namespace NowComesGtk.Screens
                 ExceptionManager.RaiseUnhandledException(ex, true);
             }
         }
+
         private async void ShowMessageDialogWithAnimation(string text)
         {
             var dialog = new MessageDialog(this, DialogFlags.Modal, MessageType.Info, ButtonsType.Ok, null);
             dialog.Text = "                                                                                                                              \n";
             dialog.WindowPosition = WindowPosition.Center;
 
-            dialog.DeleteEvent += (sender, args) => { args.RetVal = true;  };
+            dialog.DeleteEvent += (sender, args) => { args.RetVal = true; };
 
             dialog.ShowAll();
-
-         
 
             foreach (char letter in text)
             {
                 dialog.Text += letter.ToString();
-              dialog.WindowPosition = WindowPosition.Center;   
+                dialog.WindowPosition = WindowPosition.Center;
                 await Task.Delay(15);
             }
 
