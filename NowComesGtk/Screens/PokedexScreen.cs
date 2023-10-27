@@ -1,9 +1,9 @@
-﻿using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
-using PokeApiNet;
 using System.Globalization;
+using NowComesGtk.Utils;
+using PokeApiNet;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -80,7 +80,7 @@ namespace NowComesGtk.Screens
 
             txtSearchPokemon.FocusInEvent += (sender, e) =>
             {
-                txtSearchPokemon.Text = string.Empty;
+                txtSearchPokemon.Text = "";
                 CssProvider cssProvider = new CssProvider();
                 cssProvider.LoadFromData("entry { color: rgb(0, 0, 0); }");
                 txtSearchPokemon.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
@@ -298,12 +298,13 @@ namespace NowComesGtk.Screens
                 if (txtSearchPokemon.Text != string.Empty && txtSearchPokemon.Text != "Buscar Pokémon")
                 {
                     string PokemonName = txtSearchPokemon.Text.ToLower();
+                    PokemonName = PokemonName.Replace(' ', '-');
                     _methods.SearchPokemonName(fix, currentPage, type, choice, PokemonName);
                 }
-                else if (txtSearchPokemon.Text == string.Empty)
-                {
-                    _methods.UpdateButtons(fix, currentPage, type, choice);
-                }
+            }
+            else 
+            {
+                _methods.UpdateButtons(fix, currentPage, type, choice);
             }
         }
 

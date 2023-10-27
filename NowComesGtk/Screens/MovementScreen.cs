@@ -1,7 +1,7 @@
 ﻿using Gtk;
 using PokeApiNet;
 using NowComesGtk.Utils;
-using PokeApi.BackEnd.Service;
+using Gdk;
 
 namespace NowComesGtk.Screens
 {
@@ -41,16 +41,19 @@ namespace NowComesGtk.Screens
             GetMoveLearnMethod();
 
             Fixed fix = new();
+
+            Image backgroundScreen = new($"Images/moves_homescreen/{pokemonType}.png");
+            fix.Put(backgroundScreen, 0, 0);
+
             VBox vBox = new(false, 50);
-            vBox.BorderWidth = 25;
-            fix.Put(vBox, 0, 75);
+            fix.Put(vBox, 50, 85);
 
             #region FocusIn and FocusOut Event (txtSearchMove)
 
             CssProvider cssProvider = new();
             cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
             txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
-            fix.Put(txtSearchMoves, 150, 25);
+            fix.Put(txtSearchMoves, 165, 10);
 
             txtSearchMoves.FocusInEvent += (sender, e) =>
             {
@@ -72,7 +75,7 @@ namespace NowComesGtk.Screens
             #region ComboBox
 
             ComboBox cbWayOfLearning = new();
-            fix.Put(cbWayOfLearning, 180, 60);
+            fix.Put(cbWayOfLearning, 200, 45);
 
             ListStore waysToLearn = new ListStore(typeof(string));
             waysToLearn.AppendValues("Todos");
@@ -124,15 +127,17 @@ namespace NowComesGtk.Screens
 
             #endregion ComboBox
 
-            ScrolledWindow sw = new ScrolledWindow();
+            ScrolledWindow sw = new();
             sw.ShadowType = ShadowType.EtchedIn;
             sw.SetPolicy(PolicyType.Automatic, PolicyType.Automatic);
             sw.SetSizeRequest(400, 400);
             vBox.PackStart(sw, true, true, 0);
 
             moveList = CreateModel();
-            TreeView treeView = new TreeView(moveList);
+            TreeView treeView = new(moveList);
             treeView.RulesHint = true;
+
+           
             sw.Add(treeView);
 
             txtSearchMoves.Changed += SearchMove;
