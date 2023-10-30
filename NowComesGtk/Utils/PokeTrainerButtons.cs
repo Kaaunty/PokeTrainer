@@ -3,7 +3,7 @@ using Gtk;
 
 namespace NowComesGtk.Utils
 {
-    public class SeparateMethods
+    public class SeparatedMethods
     {
         public void GitHubOpen()
         {

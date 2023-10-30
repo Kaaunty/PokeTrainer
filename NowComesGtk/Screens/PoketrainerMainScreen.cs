@@ -11,7 +11,7 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
-        private SeparateMethods _separeteMethods = new();
+        private SeparatedMethods _separetedMethods = new();
         private ApiRequest _apiRequest = new();
         private Fixed _fix = new();
 
@@ -170,12 +170,12 @@ namespace NowComesGtk.Screens
 
         private void GitHub_Open(object sender, EventArgs e)
         {
-            _separeteMethods.GitHubOpen();
+            _separetedMethods.GitHubOpen();
         }
 
         private void Dialog_Start(object sender, EventArgs e)
         {
-            _separeteMethods.DialogWithXamuca();
+            _separetedMethods.DialogWithXamuca();
         }
 
         private async void btnPokemonTest(object sender, EventArgs e)
