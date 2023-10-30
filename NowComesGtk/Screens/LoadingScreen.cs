@@ -6,7 +6,6 @@ using NowComesGtk.Utils;
 using NAudio.Wave;
 using Gtk;
 
-
 public class PokemonLoad : BaseWindow
 {
 #nullable disable
@@ -57,7 +56,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            //await _apiRequest.GetPokemonsListAll();
+            await _apiRequest.GetPokemonsListAll();
             PopulateTypeDamageRelationDictionary();
             _progressBar.Fraction = 1;
             _isLoaded = true;
