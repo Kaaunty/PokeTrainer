@@ -15,12 +15,14 @@ namespace NowComesGtk.Screens
         private ApiRequest _apiRequest = new();
         private Entry _txtSearchPokemon = new();
         private Methods _methods = new();
-        private Fixed _fix = new();
-        private Button _btnNext = new();
-        private string _TypeFormatted = "";
-        private int _currentPage = 0;
-        private int _choice = 0;
-        private string _type = "";
+        private Fixed fix = new();
+        private Button btnNext = new();
+        private ComboBox cbTypePokemon = new ComboBox();
+
+        private string TypeFormatted = "";
+        private int currentPage = 0;
+        private int choice = 0;
+        private string type = "";
 
         #region Pokeball buttons
 
@@ -237,54 +239,58 @@ namespace NowComesGtk.Screens
 
             #endregion Buttons
 
-            ListStore typeList = new(typeof(string));
-            typeList.AppendValues("Todos");
-            typeList.AppendValues($"Puro tipo {_TypeFormatted}");
-            typeList.AppendValues($"Meio tipo primário");
-            typeList.AppendValues($"Meio tipo secundário");
-            cbTypePokemon.Model = typeList;
-            cbTypePokemon.Active = 0;
-
-            CellRendererText cell = new();
-            cbTypePokemon.PackStart(cell, false);
-            cbTypePokemon.AddAttribute(cell, "text", 0);
-
-            cbTypePokemon.Changed += (sender, e) =>
+            if (type != "all")
             {
-                TreeIter searchByType;
-                if (cbTypePokemon.GetActiveIter(out searchByType))
+                fix.Put(cbTypePokemon, 175, 60);
+                ListStore typeList = new ListStore(typeof(string));
+                typeList.AppendValues("Todos");
+                typeList.AppendValues($"Puro tipo {TypeFormatted}");
+                typeList.AppendValues($"Meio tipo primário");
+                typeList.AppendValues($"Meio tipo secundário");
+                cbTypePokemon.Model = typeList;
+                cbTypePokemon.Active = 0;
+
+                CellRendererText cell = new CellRendererText();
+                cbTypePokemon.PackStart(cell, false);
+                cbTypePokemon.AddAttribute(cell, "text", 0);
+
+                cbTypePokemon.Changed += (sender, e) =>
                 {
-                    var typeSelected = (string)typeList.GetValue(searchByType, 0);
-                    if (typeSelected == "Todos")
+                    TreeIter searchByType;
+                    if (cbTypePokemon.GetActiveIter(out searchByType))
                     {
-                        _currentPage = 0;
-                        _choice = 0;
-                        AllTypeClicked();
-                        _methods.DisableButtons(_btnNext);
+                        var typeSelected = (string)typeList.GetValue(searchByType, 0);
+                        if (typeSelected == "Todos")
+                        {
+                            currentPage = 0;
+                            choice = 0;
+                            AllTypeClicked();
+                            _methods.DisableButtons(btnNext);
+                        }
+                        else if (typeSelected == $"Puro tipo {TypeFormatted}")
+                        {
+                            currentPage = 0;
+                            choice = 1;
+                            AllTypeClicked();
+                            _methods.DisableButtons(btnNext);
+                        }
+                        else if (typeSelected == $"Meio tipo primário")
+                        {
+                            currentPage = 0;
+                            choice = 2;
+                            AllTypeClicked();
+                            _methods.DisableButtons(btnNext);
+                        }
+                        else if (typeSelected == $"Meio tipo secundário")
+                        {
+                            currentPage = 0;
+                            choice = 3;
+                            AllTypeClicked();
+                            _methods.DisableButtons(btnNext);
+                        }
                     }
-                    else if (typeSelected == $"Puro tipo {_TypeFormatted}")
-                    {
-                        _currentPage = 0;
-                        _choice = 1;
-                        AllTypeClicked();
-                        _methods.DisableButtons(_btnNext);
-                    }
-                    else if (typeSelected == $"Meio tipo primário")
-                    {
-                        _currentPage = 0;
-                        _choice = 2;
-                        AllTypeClicked();
-                        _methods.DisableButtons(_btnNext);
-                    }
-                    else if (typeSelected == $"Meio tipo secundário")
-                    {
-                        _currentPage = 0;
-                        _choice = 3;
-                        AllTypeClicked();
-                        _methods.DisableButtons(_btnNext);
-                    }
-                }
-            };
+                };
+            }
 
             _methods.UpdateButtons(_fix, _currentPage, type, _choice);
             Add(_fix);
@@ -302,7 +308,7 @@ namespace NowComesGtk.Screens
                     _methods.SearchPokemonName(_fix, _currentPage, _type, _choice, PokemonName);
                 }
             }
-            else 
+            else
             {
                 _methods.UpdateButtons(_fix, _currentPage, _type, _choice);
             }

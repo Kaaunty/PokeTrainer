@@ -137,7 +137,6 @@ namespace NowComesGtk.Screens
             TreeView treeView = new(_moveList);
             treeView.RulesHint = true;
 
-           
             sw.Add(treeView);
 
             _txtSearchMoves.Changed += SearchMove;
