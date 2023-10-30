@@ -4,9 +4,6 @@
 
 ## Demonstração
 
-![Pokédex Demo](demo.gif)
-
-
 https://github.com/Kaaunty/PokeTrainer/assets/83998740/42c5b0d0-d10f-499d-a60e-dd93c3530b8a
 
 
