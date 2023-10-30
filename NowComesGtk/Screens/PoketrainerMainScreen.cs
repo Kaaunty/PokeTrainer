@@ -131,6 +131,12 @@ namespace NowComesGtk.Screens
             btnBugType.Clicked += BtnTypePokedexScreen;
             fix.Put(btnBugType, 520, 270);
 
+            Button btnAllPokemons = new ButtonGenerator("", 50, 70);
+            btnAllPokemons.Image = new Image("Images/buttons_type/AllPokemonsIcon.png");
+            btnAllPokemons.Data["type"] = "all";
+            btnAllPokemons.Clicked += BtnTypePokedexScreen;
+            fix.Put(btnAllPokemons, 580, 270);
+
             #endregion Buttons Pokédex
 
             Button btnWelcome = new ButtonGenerator("", 70, 40);
@@ -180,28 +186,21 @@ namespace NowComesGtk.Screens
         private async void btnPokemonTest(object sender, EventArgs e)
         {
             //Pokemon pokemon = await _apiRequest.GetPokemonAsync("scizor");
-            Pokemon poke = await _apiRequest.GetPokemon("rayquaza");
-            Console.WriteLine(poke.Name);
+            Pokemon poke = await _apiRequest.GetPokemon("mudkip");
 
-            Console.WriteLine(poke.Types[0].Type.Name);
-
-            //PokemonScreen pokemonScreen = new(pokemon);
-            //pokemonScreen.Show();
+            PokemonScreen pokemonScreen = new(poke);
+            pokemonScreen.Show();
         }
 
         private async void btnPokemonTestLegendary(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemon("basculin-red-striped");
+            Pokemon pokemon = await _apiRequest.GetPokemon("charizard");
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
         }
 
         private async void btnPokemonTestMythical(object sender, EventArgs e)
         {
-            Pokemon pokemon = await _apiRequest.GetPokemon("arceus");
-
-            PokemonScreen pokemonScreen = new(pokemon);
-            pokemonScreen.Show();
         }
 
         private void BtnTypePokedexScreen(object sender, EventArgs e)
@@ -211,8 +210,8 @@ namespace NowComesGtk.Screens
                 Button btn = (Button)sender;
                 string type = btn.Data["type"].ToString();
 
-                PokedexScreen pokemonsWater = new(type);
-                pokemonsWater.ShowAll();
+                PokedexScreen pokedexScreen = new(type);
+                pokedexScreen.ShowAll();
             }
             catch (Exception ex)
             {

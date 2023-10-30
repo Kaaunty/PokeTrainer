@@ -1,11 +1,10 @@
-using static PokeApi.BackEnd.Service.ApiRequest;
-
-using PokeApi.BackEnd.Service;
-using NowComesGtk.Screens;
-using Image = Gtk.Image;
-using NowComesGtk.Utils;
 using Gtk;
 using NAudio.Wave;
+using NowComesGtk.Screens;
+using NowComesGtk.Utils;
+using PokeApi.BackEnd.Service;
+using static PokeApi.BackEnd.Service.ApiRequest;
+using Image = Gtk.Image;
 
 public class PokemonLoad : BaseWindow
 {
@@ -23,14 +22,14 @@ public class PokemonLoad : BaseWindow
     {
         VBox vBox = new();
 
-        _loadingLabel = new Label("Carregando");
-        vBox.PackStart(_loadingLabel, false, false, 10);
-
         _redAndPikachuRunning = new Image("Images/red-and-pikachu-running.gif");
         vBox.PackStart(_redAndPikachuRunning, false, false, 10);
 
         _progressBar = new ProgressBar();
-        vBox.PackStart(_progressBar, false, false, 10);
+        vBox.PackEnd(_progressBar, false, false, 10);
+
+        _loadingLabel = new Label("Carregando");
+        vBox.PackEnd(_loadingLabel, false, false, 10);
 
         Add(vBox);
         ShowAll();
@@ -59,11 +58,9 @@ public class PokemonLoad : BaseWindow
         {
             await _apiRequest.GetPokemonsListAll();
             PopulateTypeDamageRelationDictionary();
-
             _progressBar.Fraction = 1;
             _isLoaded = true;
             _loadingLabel.Text = "Carregamento concluído!";
-
             if (_isLoaded)
             {
                 PoketrainerMainScreen poketrainerMainScreen = new();
@@ -82,13 +79,12 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-
             MediaFoundationReader readers = new MediaFoundationReader("Sounds/pokemon-opening2.mp3");
 
             var waveOut = new WaveOutEvent();
             waveOut.Init(readers);
             waveOut.Volume = 0.1f;
-            waveOut.Play();
+            //waveOut.Play();
         }
         catch (Exception ex)
         {

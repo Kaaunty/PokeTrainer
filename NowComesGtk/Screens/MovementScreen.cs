@@ -1,7 +1,6 @@
 ﻿using Gtk;
-using PokeApiNet;
 using NowComesGtk.Utils;
-using Gdk;
+using PokeApiNet;
 
 namespace NowComesGtk.Screens
 {
@@ -137,7 +136,6 @@ namespace NowComesGtk.Screens
             TreeView treeView = new(moveList);
             treeView.RulesHint = true;
 
-           
             sw.Add(treeView);
 
             txtSearchMoves.Changed += SearchMove;

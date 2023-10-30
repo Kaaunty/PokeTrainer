@@ -4,7 +4,6 @@ using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Service;
 using PokeApiNet;
-using System.Data.Common;
 using System.Globalization;
 using static PokeApi.BackEnd.Service.ApiRequest;
 using Type = PokeApiNet.Type;
@@ -82,13 +81,19 @@ namespace NowComesGtk.Screens
         private string pokemonNameFormatted = "", pokemonDexFormatted = "", pokemonMaleFormatted = "", pokemonFemaleFormatted = "", pokemonCatchRate = "", pokemonEggGroup = "";
         private string pokemonAbilityOneUpper = "", pokemonAbilityTwoUpper = "", pokemonAbilityThreeUpper = "", pokemonAbilityFourUpper = "", pokemonFlavorText = "";
 
+        public class CombinedPokemon
+        {
+            public Pokemon pokemon { get; set; }
+            public PokemonForm pokemonForm { get; set; }
+            public PokemonSpecies pokemonSpecies { get; set; }
+        }
+
         public PokemonScreen(Pokemon Pokemon) : base("", 1000, 500)
         {
             try
             {
                 pokemon = Pokemon;
                 PopulateFields();
-
                 while (!isLoaded)
                 {
                     Task.Delay(100).Wait();
@@ -121,14 +126,13 @@ namespace NowComesGtk.Screens
                 damageRelations = GetTypeDamageRelation(pokemon.Types[0].Type.Name);
                 PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelations}</span>";
                 fix.Put(PokemonTypeOne, 100, 433);
+                fix.Put(imagePokemonTypeSecondary, 188, 433);
 
                 if (pokemon.Types.Count > 1)
                 {
                     imagePokemonTypeSecondary = new Image($"Images/pokemon_types/{pokemon.Types[1].Type.Name}.png");
                     damageRelationsSecondary = GetTypeDamageRelation(pokemon.Types[1].Type.Name);
                     imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelationsSecondary}</span>";
-
-                    fix.Put(imagePokemonTypeSecondary, 188, 433);
                 }
 
                 lblPokemonAbilityOne.Text = pokemonAbilityOneUpper;
@@ -163,7 +167,7 @@ namespace NowComesGtk.Screens
                 lblPokemonCatchRate = new Label(pokemonCatchRate);
                 fix.Put(lblPokemonCatchRate, 897, 192);
                 lblPokemonEggGroup = new Label(pokemonEggGroup);
-                fix.Put(lblPokemonEggGroup, 840, 295);
+                fix.Put(lblPokemonEggGroup, 850, 305);
                 lblPokemonEggGroup.SetAlignment(0.5f, 0.5f);
 
                 lblPokemonHP.Text = pokemonHPFormatted;
@@ -177,7 +181,7 @@ namespace NowComesGtk.Screens
                 lblPokemonSpDEF.Text = pokemonSpDEFFormatted;
                 fix.Put(lblPokemonSpDEF, 621, 195);
                 lblPokemonSpeed.Text = pokemonSpeedFormatted;
-                fix.Put(lblPokemonSpeed, 689, 195);
+                fix.Put(lblPokemonSpeed, 688, 195);
 
                 if (pokeForm.IsMega)
                 {
@@ -247,9 +251,9 @@ namespace NowComesGtk.Screens
                 string value = (string)formsList.GetValue(iter, 0);
                 if (pokemon.Forms.Count > 1)
                 {
-                    var d = pokemon.Forms.FindIndex(x => x.Name == value);
-                    pokemonFormId = d;
-                    string pokemonName = pokemon.Forms[d].Name;
+                    var pokemonFormIndex = pokemon.Forms.FindIndex(x => x.Name == value);
+                    pokemonFormId = pokemonFormIndex;
+                    string pokemonName = pokemon.Forms[pokemonFormIndex].Name;
                     pokeForm = await _apiRequest.GetPokemonForm(pokemonName);
                     if (VerifyType(pokemonName))
                     {
@@ -355,7 +359,26 @@ namespace NowComesGtk.Screens
                 {
                     if (poke.IsDefault == false)
                     {
-                        forms.AppendValues(poke.Pokemon.Name);
+                        if (poke.Pokemon.Name.Contains("mega"))
+                        {
+                            forms.AppendValues(poke.Pokemon.Name, "Mega Stone");
+                        }
+                        else if (poke.Pokemon.Name.Contains("gmax"))
+                        {
+                            forms.AppendValues(poke.Pokemon.Name, "Dynamax");
+                        }
+                        else if (poke.Pokemon.Name.Contains("alola"))
+                        {
+                            forms.AppendValues(poke.Pokemon.Name, "Alola");
+                        }
+                        else if (poke.Pokemon.Name.Contains("galar"))
+                        {
+                            forms.AppendValues(poke.Pokemon.Name, "Galar");
+                        }
+                        else
+                        {
+                            forms.AppendValues(poke.Pokemon.Name);
+                        }
                     }
                 }
             }
@@ -601,6 +624,13 @@ namespace NowComesGtk.Screens
                 {
                     pokemonEggGroup += textInfo.ToTitleCase(eggGroup.Name) + "\n";
                 }
+                CombinedPokemon combinedPokemon = new CombinedPokemon();
+                combinedPokemon.pokemon = pokemon;
+                combinedPokemon.pokemonForm = pokeForm;
+                combinedPokemon.pokemonSpecies = pokeSpecies;
+                combinedPokemon.pokemon.Name = pokemon.Name;
+                combinedPokemon.pokemonForm.Name = pokeForm.Name;
+                combinedPokemon.pokemonSpecies.Name = pokeSpecies.Name;
 
                 isLoaded = true;
             }
@@ -652,6 +682,7 @@ namespace NowComesGtk.Screens
                     pokemonCatchRate = pokeSpecies.CaptureRate switch
                     {
                         3 => "01.6%",
+                        10 => "03.9%",
                         25 => "07.7%",
                         45 => "11.9%",
                         60 => "14.8%",
@@ -766,13 +797,18 @@ namespace NowComesGtk.Screens
                     damageRelations = GetTypeDamageRelation(pokemonTypePrimary.Name);
                     PokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{damageRelations}]</span>";
                 }
+                if (pokemon.Types.Count == 1)
+                {
+                    imagePokemonTypeSecondary.Pixbuf = new Pixbuf("Images/pokemon_types/none.png");
+                    imagePokemonTypeSecondary.TooltipMarkup = "";
+                }
 
                 if (pokemon.Types.Count > 1)
                 {
                     pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
                     imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{pokemonSecondaryTypeFormatted}.png");
                     damageRelationsSecondary = GetTypeDamageRelation(pokemonTypeSecondary.Name);
-                    imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{damageRelationsSecondary}]</span>";
+                    imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{damageRelationsSecondary}</span>";
                 }
 
                 if (pokeForm.IsMega)
@@ -790,10 +826,6 @@ namespace NowComesGtk.Screens
                 else
                 {
                     gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxDesactived.png");
-                }
-                if (pokemon.Types.Count > 1)
-                {
-                    pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
                 }
                 lblPokemonCatchRate.Text = pokemonCatchRate;
                 lblPokemnFemale.Text = pokemonFemaleFormatted;
