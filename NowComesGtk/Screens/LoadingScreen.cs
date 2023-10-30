@@ -6,7 +6,6 @@ using NowComesGtk.Utils;
 using NAudio.Wave;
 using Gtk;
 
-
 public class PokemonLoad : BaseWindow
 {
 #nullable disable

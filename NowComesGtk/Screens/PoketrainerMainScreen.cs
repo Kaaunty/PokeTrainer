@@ -141,6 +141,7 @@ namespace NowComesGtk.Screens
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
             btnAllPokemons.Image = new Image("Images/buttons_type/AllPokémons.png");
             btnAllPokemons.TooltipMarkup = "Todos os Pokémons";
+            btnAllPokemons.Data["_type"] = "all";
             btnAllPokemons.Clicked += BtnTypePokedexScreen;
             _fix.Put(btnAllPokemons, 67, 90);
 
