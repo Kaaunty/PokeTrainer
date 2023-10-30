@@ -13,7 +13,6 @@ namespace NowComesGtk.Screens
         private Dictionary<string, string> _moveLearnByTmHm = new();
         private Dictionary<string, string> _moveLearnByLevelUp = new();
         private Dictionary<string, string> _moveLearnByMoveTutor = new();
-        private Entry _txtSearchMoves = new();
         private List<Move> _Moves = new();
         private ListStore _moveList;
         private Pokemon _poke;
@@ -46,31 +45,6 @@ namespace NowComesGtk.Screens
 
             VBox vBox = new(false, 50);
             fix.Put(vBox, 50, 85);
-
-            #region FocusIn and FocusOut Event (txtSearchMove)
-
-            CssProvider cssProvider = new();
-            cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
-            _txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
-            fix.Put(_txtSearchMoves, 165, 10);
-
-            _txtSearchMoves.FocusInEvent += (sender, e) =>
-            {
-                _txtSearchMoves.Text = string.Empty;
-                CssProvider cssProvider = new CssProvider();
-                cssProvider.LoadFromData("entry { color: rgb(0, 0, 0); }");
-                _txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
-
-            };
-            _txtSearchMoves.FocusOutEvent += (sender, e) =>
-            {
-                _txtSearchMoves.Text = _defaultText;
-                CssProvider cssProvider = new CssProvider();
-                cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
-                _txtSearchMoves.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
-            };
-
-            #endregion FocusIn and FocusOut Event (txtSearchMove)
 
             #region ComboBox
 
@@ -139,7 +113,6 @@ namespace NowComesGtk.Screens
 
             sw.Add(treeView);
 
-            _txtSearchMoves.Changed += SearchMove;
             AddColumns(treeView);
             Add(fix);
             ShowAll();
@@ -164,29 +137,6 @@ namespace NowComesGtk.Screens
                 _moves.AppendValues(move.Name, pixbuf);
             }
             return _moves;
-        }
-
-        private void SearchMove(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(_txtSearchMoves.Text) && _txtSearchMoves.Text != "Buscar Movimento")
-            {
-                string pokeMove = _txtSearchMoves.Text;
-                pokeMove = pokeMove.Replace(' ', '-');
-                _moveList.Clear();
-                foreach (Move move in _Moves)
-                {
-                    if (move.Name.StartsWith(pokeMove))
-                    {
-                        Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Type.Name}.png");
-                        _moveList.AppendValues(move.Name, pixbuf);
-                    }
-                }
-            }
-            else
-            {
-                _moveList.Clear();
-                CreateModel();
-            }
         }
 
         private void AllTypeClicked()
