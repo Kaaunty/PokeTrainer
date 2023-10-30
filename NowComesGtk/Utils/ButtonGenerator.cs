@@ -1,5 +1,4 @@
-﻿using Gdk;
-using Gtk;
+﻿using Gtk;
 
 namespace NowComesGtk.Reusable_components
 {
