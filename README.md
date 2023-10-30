@@ -4,8 +4,8 @@
 
 ## Demonstração
 
-https://github.com/Kaaunty/PokeTrainer/assets/83998740/42c5b0d0-d10f-499d-a60e-dd93c3530b8a
 
+https://github.com/Kaaunty/PokeTrainer/assets/83998740/901beca4-ade8-4e00-8e01-14abd6e08df0
 
 ## Funcionalidades
 
