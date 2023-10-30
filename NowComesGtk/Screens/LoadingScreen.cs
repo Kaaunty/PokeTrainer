@@ -1,11 +1,11 @@
 using static PokeApi.BackEnd.Service.ApiRequest;
-
 using PokeApi.BackEnd.Service;
 using NowComesGtk.Screens;
 using Image = Gtk.Image;
 using NowComesGtk.Utils;
-using Gtk;
 using NAudio.Wave;
+using Gtk;
+
 
 public class PokemonLoad : BaseWindow
 {
@@ -23,7 +23,7 @@ public class PokemonLoad : BaseWindow
     {
         VBox vBox = new();
 
-        _loadingLabel = new Label("Carregando");
+        _loadingLabel.Text = "Carregando";
         vBox.PackStart(_loadingLabel, false, false, 10);
 
         _redAndPikachuRunning = new Image("Images/red-and-pikachu-running.gif");
@@ -57,7 +57,7 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            await _apiRequest.GetPokemonsListAll();
+            //await _apiRequest.GetPokemonsListAll();
             PopulateTypeDamageRelationDictionary();
 
             _progressBar.Fraction = 1;
