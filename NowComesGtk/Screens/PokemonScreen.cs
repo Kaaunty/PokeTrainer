@@ -79,13 +79,6 @@ namespace NowComesGtk.Screens
         private string _pokemonNameFormatted = "", _pokemonDexFormatted = "", _pokemonMaleFormatted = "", _pokemonFemaleFormatted = "", _pokemonCatchRate = "", _pokemonEggGroup = "";
         private string _pokemonAbilityOneUpper = "", _pokemonAbilityTwoUpper = "", _pokemonAbilityThreeUpper = "", _pokemonAbilityFourUpper = "", _pokemonFlavorText = "";
 
-        public class CombinedPokemon
-        {
-            public Pokemon pokemon { get; set; }
-            public PokemonForm pokemonForm { get; set; }
-            public PokemonSpecies pokemonSpecies { get; set; }
-        }
-
         public PokemonScreen(Pokemon Pokemon) : base("", 1000, 500)
         {
             try
@@ -361,23 +354,23 @@ namespace NowComesGtk.Screens
                     {
                         if (poke.Pokemon.Name.Contains("mega"))
                         {
-                            forms.AppendValues(poke.Pokemon.Name, "Mega Stone");
+                            _forms.AppendValues(poke.Pokemon.Name, "Mega Stone");
                         }
                         else if (poke.Pokemon.Name.Contains("gmax"))
                         {
-                            forms.AppendValues(poke.Pokemon.Name, "Dynamax");
+                            _forms.AppendValues(poke.Pokemon.Name, "Dynamax");
                         }
                         else if (poke.Pokemon.Name.Contains("alola"))
                         {
-                            forms.AppendValues(poke.Pokemon.Name, "Alola");
+                            _forms.AppendValues(poke.Pokemon.Name, "Alola");
                         }
                         else if (poke.Pokemon.Name.Contains("galar"))
                         {
-                            forms.AppendValues(poke.Pokemon.Name, "Galar");
+                            _forms.AppendValues(poke.Pokemon.Name, "Galar");
                         }
                         else
                         {
-                            forms.AppendValues(poke.Pokemon.Name);
+                            _forms.AppendValues(poke.Pokemon.Name);
                         }
                     }
                 }
@@ -624,13 +617,6 @@ namespace NowComesGtk.Screens
                 {
                     _pokemonEggGroup += _textInfo.ToTitleCase(eggGroup.Name) + "\n";
                 }
-                CombinedPokemon combinedPokemon = new CombinedPokemon();
-                combinedPokemon.pokemon = pokemon;
-                combinedPokemon.pokemonForm = pokeForm;
-                combinedPokemon.pokemonSpecies = pokeSpecies;
-                combinedPokemon.pokemon.Name = pokemon.Name;
-                combinedPokemon.pokemonForm.Name = pokeForm.Name;
-                combinedPokemon.pokemonSpecies.Name = pokeSpecies.Name;
 
                 _isLoaded = true;
             }
@@ -797,10 +783,10 @@ namespace NowComesGtk.Screens
                     _damageRelations = GetTypeDamageRelation(_pokemonTypePrimary.Name);
                     _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{_damageRelations}]</span>";
                 }
-                if (pokemon.Types.Count == 1)
+                if (_pokemon.Types.Count == 1)
                 {
-                    imagePokemonTypeSecondary.Pixbuf = new Pixbuf("Images/pokemon_types/none.png");
-                    imagePokemonTypeSecondary.TooltipMarkup = "";
+                    _imagePokemonTypeSecondary.Pixbuf = new Pixbuf("Images/pokemon_types/none.png");
+                    _imagePokemonTypeSecondary.TooltipMarkup = "";
                 }
 
                 if (_pokemon.Types.Count > 1)

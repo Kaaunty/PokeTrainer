@@ -15,14 +15,14 @@ namespace NowComesGtk.Screens
         private ApiRequest _apiRequest = new();
         private Entry _txtSearchPokemon = new();
         private Methods _methods = new();
-        private Fixed fix = new();
-        private Button btnNext = new();
-        private ComboBox cbTypePokemon = new ComboBox();
+        private Fixed _fix = new();
+        private Button _btnNext = new();
+        private ComboBox _cbTypePokemon = new ComboBox();
 
-        private string TypeFormatted = "";
-        private int currentPage = 0;
-        private int choice = 0;
-        private string type = "";
+        private string _TypeFormatted = "";
+        private int _currentPage = 0;
+        private int _choice = 0;
+        private string _type = "";
 
         #region Pokeball buttons
 
@@ -98,7 +98,7 @@ namespace NowComesGtk.Screens
             ComboBox cbTypePokemon = new();
             _fix.Put(cbTypePokemon, 180, 60);
 
-            Button btnBack = new ("<<");
+            Button btnBack = new("<<");
             btnBack.SetSizeRequest(10, 10);
             _fix.Put(btnBack, 25, 74);
             btnBack.Clicked += btnBack_Clicked;
@@ -241,10 +241,10 @@ namespace NowComesGtk.Screens
 
             if (type != "all")
             {
-                fix.Put(cbTypePokemon, 175, 60);
+                _fix.Put(cbTypePokemon, 175, 60);
                 ListStore typeList = new ListStore(typeof(string));
                 typeList.AppendValues("Todos");
-                typeList.AppendValues($"Puro tipo {TypeFormatted}");
+                typeList.AppendValues($"Puro tipo {_TypeFormatted}");
                 typeList.AppendValues($"Meio tipo primário");
                 typeList.AppendValues($"Meio tipo secundário");
                 cbTypePokemon.Model = typeList;
@@ -262,31 +262,31 @@ namespace NowComesGtk.Screens
                         var typeSelected = (string)typeList.GetValue(searchByType, 0);
                         if (typeSelected == "Todos")
                         {
-                            currentPage = 0;
-                            choice = 0;
+                            _currentPage = 0;
+                            _choice = 0;
                             AllTypeClicked();
-                            _methods.DisableButtons(btnNext);
+                            _methods.DisableButtons(_btnNext);
                         }
-                        else if (typeSelected == $"Puro tipo {TypeFormatted}")
+                        else if (typeSelected == $"Puro tipo {_TypeFormatted}")
                         {
-                            currentPage = 0;
-                            choice = 1;
+                            _currentPage = 0;
+                            _choice = 1;
                             AllTypeClicked();
-                            _methods.DisableButtons(btnNext);
+                            _methods.DisableButtons(_btnNext);
                         }
                         else if (typeSelected == $"Meio tipo primário")
                         {
-                            currentPage = 0;
-                            choice = 2;
+                            _currentPage = 0;
+                            _choice = 2;
                             AllTypeClicked();
-                            _methods.DisableButtons(btnNext);
+                            _methods.DisableButtons(_btnNext);
                         }
                         else if (typeSelected == $"Meio tipo secundário")
                         {
-                            currentPage = 0;
-                            choice = 3;
+                            _currentPage = 0;
+                            _choice = 3;
                             AllTypeClicked();
-                            _methods.DisableButtons(btnNext);
+                            _methods.DisableButtons(_btnNext);
                         }
                     }
                 };
