@@ -114,6 +114,8 @@ namespace NowComesGtk.Screens
                 lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_pokemonFlavorText}</span>";
                 _fix.Put(lblPokemonName, 40, 357);
 
+                _fix.Put(_imagePokemonTypeSecondary, 188, 433);
+
                 _pokemonTypeOne = new Image($"Images/pokemon_types/{_pokemon.Types[0].Type.Name}.png");
                 _damageRelations = GetTypeDamageRelation(_pokemon.Types[0].Type.Name);
                 _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelations}</span>";
@@ -124,8 +126,6 @@ namespace NowComesGtk.Screens
                     _imagePokemonTypeSecondary = new Image($"Images/pokemon_types/{_pokemon.Types[1].Type.Name}.png");
                     _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
                     _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelationsSecondary}</span>";
-
-                    _fix.Put(_imagePokemonTypeSecondary, 188, 433);
                 }
 
                 lblPokemonAbilityOne.Text = _pokemonAbilityOneUpper;
@@ -223,6 +223,7 @@ namespace NowComesGtk.Screens
 
                 Add(_fix);
 
+                DeleteEvent += delegate { Destroy(); };
                 ShowAll();
             }
             catch (Exception ex)
@@ -669,20 +670,34 @@ namespace NowComesGtk.Screens
                     {
                         3 => "01.6%",
                         10 => "03.9%",
+                        15 => "05.2%",
+                        20 => "06.5%",
                         25 => "07.7%",
+                        30 => "08.8%",
                         45 => "11.9%",
+                        55 => "13.9%",
                         60 => "14.8%",
+                        70 => "16.6%",
                         75 => "17.5%",
+                        80 => "18.4%",
                         90 => "20.8%",
                         100 => "21.7%",
                         120 => "24.9%",
                         127 => "26.0%",
-                        150 => "29.5%",
+                        130 => "26.5%",
+                        140 => "28.0%",
+                        145 => "28.7%",
+                        150 => "30.2%",
+                        155 => "29.9%",
                         160 => "30.9%",
+                        170 => "32.4%",
                         180 => "33.8%",
                         190 => "35.2%",
+                        200 => "36.6%",
+                        205 => "37.2%",
                         220 => "39.3%",
                         225 => "39.9%",
+                        235 => "41.3%",
                         255 => "43.9%",
                         _ => _pokemonCatchRate
                     };
@@ -781,7 +796,7 @@ namespace NowComesGtk.Screens
                     _pokemonFirstTypeFormatted = _pokemonTypePrimary.Name;
                     _pokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonFirstTypeFormatted}.png");
                     _damageRelations = GetTypeDamageRelation(_pokemonTypePrimary.Name);
-                    _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{_damageRelations}]</span>";
+                    _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{_damageRelations}]</span>";
                 }
                 if (_pokemon.Types.Count == 1)
                 {
@@ -794,7 +809,7 @@ namespace NowComesGtk.Screens
                     _pokemonSecondaryTypeFormatted = _pokemon.Types[1].Type.Name;
                     _imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonSecondaryTypeFormatted}.png");
                     _damageRelationsSecondary = GetTypeDamageRelation(_pokemonTypeSecondary.Name);
-                    _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='MS Gothic Regular 12'>[{_damageRelationsSecondary}]</span>";
+                    _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{_damageRelationsSecondary}]</span>";
                 }
 
                 if (_pokeForm.IsMega)
@@ -812,10 +827,6 @@ namespace NowComesGtk.Screens
                 else
                 {
                     gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxDesactived.png");
-                }
-                if (_pokemon.Types.Count > 1)
-                {
-                    _pokemonSecondaryTypeFormatted = _pokemon.Types[1].Type.Name;
                 }
                 lblPokemonCatchRate.Text = _pokemonCatchRate;
                 lblPokemnFemale.Text = _pokemonFemaleFormatted;

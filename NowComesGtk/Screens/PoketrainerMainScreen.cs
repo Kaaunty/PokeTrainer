@@ -17,6 +17,7 @@ namespace NowComesGtk.Screens
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
+            DeleteEvent += delegate { Gtk.Application.Quit(); };
             Image poketrainerBackground = new Image("Images/pokemon_homescreen/homescreen.png");
             _fix.Put(poketrainerBackground, 0, 0);
 
@@ -138,18 +139,25 @@ namespace NowComesGtk.Screens
             btnWelcome.Clicked += Dialog_Start;
             _fix.Put(btnWelcome, 620, 75);
 
+            Image openBag = new Image("Images/buttons_type/AllPokémonsOpen.png");
+            Image closedBag = new Image("Images/buttons_type/AllPokémons.png");
+
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
             btnAllPokemons.Image = new Image("Images/buttons_type/AllPokémons.png");
+            btnAllPokemons.FocusInEvent += delegate { btnAllPokemons.Image = closedBag; };
+            btnAllPokemons.FocusOutEvent += delegate { btnAllPokemons.Image = openBag; };
             btnAllPokemons.TooltipMarkup = "Todos os Pokémons";
             btnAllPokemons.Data["_type"] = "all";
             btnAllPokemons.Clicked += BtnTypePokedexScreen;
             _fix.Put(btnAllPokemons, 67, 90);
 
             Button btnGitHub = new ButtonGenerator("", 40, 40);
+
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
             btnGitHub.TooltipMarkup = "Clique para abrir o gitHub do projeto.";
             btnGitHub.Clicked += GitHub_Open;
             _fix.Put(btnGitHub, 735, 435);
+
 
             Button BtnTest = new ButtonGenerator("Teste", 100, 50);
             BtnTest.Image = new Image("Images/buttons/btnTeste.png");
@@ -178,6 +186,7 @@ namespace NowComesGtk.Screens
         {
             _separetedMethods.DialogWithXamuca();
         }
+
 
         private async void btnPokemonTest(object sender, EventArgs e)
         {

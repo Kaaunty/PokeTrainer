@@ -95,9 +95,6 @@ namespace NowComesGtk.Screens
                 _txtSearchPokemon.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
             };
 
-            ComboBox cbTypePokemon = new();
-            _fix.Put(cbTypePokemon, 180, 60);
-
             Button btnBack = new("<<");
             btnBack.SetSizeRequest(10, 10);
             _fix.Put(btnBack, 25, 74);
@@ -241,23 +238,23 @@ namespace NowComesGtk.Screens
 
             if (type != "all")
             {
-                _fix.Put(cbTypePokemon, 175, 60);
+                _fix.Put(_cbTypePokemon, 175, 60);
                 ListStore typeList = new ListStore(typeof(string));
                 typeList.AppendValues("Todos");
                 typeList.AppendValues($"Puro tipo {_TypeFormatted}");
                 typeList.AppendValues($"Meio tipo primário");
                 typeList.AppendValues($"Meio tipo secundário");
-                cbTypePokemon.Model = typeList;
-                cbTypePokemon.Active = 0;
+                _cbTypePokemon.Model = typeList;
+                _cbTypePokemon.Active = 0;
 
                 CellRendererText cell = new CellRendererText();
-                cbTypePokemon.PackStart(cell, false);
-                cbTypePokemon.AddAttribute(cell, "text", 0);
+                _cbTypePokemon.PackStart(cell, false);
+                _cbTypePokemon.AddAttribute(cell, "text", 0);
 
-                cbTypePokemon.Changed += (sender, e) =>
+                _cbTypePokemon.Changed += (sender, e) =>
                 {
                     TreeIter searchByType;
-                    if (cbTypePokemon.GetActiveIter(out searchByType))
+                    if (_cbTypePokemon.GetActiveIter(out searchByType))
                     {
                         var typeSelected = (string)typeList.GetValue(searchByType, 0);
                         if (typeSelected == "Todos")
@@ -294,6 +291,7 @@ namespace NowComesGtk.Screens
 
             _methods.UpdateButtons(_fix, _currentPage, type, _choice);
             Add(_fix);
+            DeleteEvent += delegate { Destroy(); };
             ShowAll();
         }
 
