@@ -159,10 +159,10 @@ namespace NowComesGtk.Screens
             BtnTestLegendary.Image = new Image("Images/buttons/btnTeste.png");
             BtnTestLegendary.Clicked += btnPokemonTestLegendary;
             _fix.Put(BtnTestLegendary, 640, 360);
-            Button BtnTestMythical = new ButtonGenerator("Teste", 100, 50);
-            BtnTestMythical.Image = new Image("Images/buttons/btnTeste.png");
-            BtnTestMythical.Clicked += btnPokemonTestMythical;
-            _fix.Put(BtnTestMythical, 640, 420);
+            //Button BtnTestMythical = new ButtonGenerator("Teste", 100, 50);
+            //BtnTestMythical.Image = new Image("Images/buttons/btnTeste.png");
+            //BtnTestMythical.Clicked += btnPokemonTestMythical;
+            //_fix.Put(BtnTestMythical, 640, 420);
             DeleteEvent += delegate { Gtk.Application.Quit(); };
 
             Add(_fix);
@@ -193,10 +193,6 @@ namespace NowComesGtk.Screens
             Pokemon pokemon = await _apiRequest.GetPokemon("charizard");
             PokemonScreen pokemonScreen = new(pokemon);
             pokemonScreen.Show();
-        }
-
-        private async void btnPokemonTestMythical(object sender, EventArgs e)
-        {
         }
 
         private void BtnTypePokedexScreen(object sender, EventArgs e)

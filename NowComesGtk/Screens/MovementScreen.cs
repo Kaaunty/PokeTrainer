@@ -15,16 +15,14 @@ namespace NowComesGtk.Screens
         private Dictionary<string, string> _moveLearnByMoveTutor = new();
         private List<Move> _Moves = new();
         private ListStore _moveList;
-        private Pokemon _poke;
         private Pokemon _pokeSpecie;
+        private Pokemon _poke;
 
-        private string _defaultText = "Buscar Movimento";
         private int _choice;
 
         private enum Column
         {
-            Move,
-            Type
+            Move
         }
 
         public MovementScreen(List<Move> move, Pokemon pokemon, Pokemon pokemonSpecie, string pokemonType) : base("", 500, 500)
@@ -112,7 +110,6 @@ namespace NowComesGtk.Screens
             treeView.RulesHint = true;
 
             sw.Add(treeView);
-
             AddColumns(treeView);
             Add(fix);
             ShowAll();
@@ -196,7 +193,7 @@ namespace NowComesGtk.Screens
             foreach (var move in _Moves)
             {
                 bool MoveLearnByEgg = _poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
-               || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
+                || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
 
                 bool moveLearnByMachine = _poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"
                 || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"));
