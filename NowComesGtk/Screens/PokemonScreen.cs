@@ -90,6 +90,7 @@ namespace NowComesGtk.Screens
                 {
                     Task.Delay(100).Wait();
                 }
+
                 Image Background = new Image($"Images/pokemon_homescreen/{_pokemon.Types[0].Type.Name}.png");
 
                 _fix.Put(Background, 0, 0);
@@ -114,8 +115,6 @@ namespace NowComesGtk.Screens
                 lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_pokemonFlavorText}</span>";
                 _fix.Put(lblPokemonName, 40, 357);
 
-                _fix.Put(_imagePokemonTypeSecondary, 188, 433);
-
                 _pokemonTypeOne = new Image($"Images/pokemon_types/{_pokemon.Types[0].Type.Name}.png");
                 _damageRelations = GetTypeDamageRelation(_pokemon.Types[0].Type.Name);
                 _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelations}</span>";
@@ -127,6 +126,8 @@ namespace NowComesGtk.Screens
                     _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
                     _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelationsSecondary}</span>";
                 }
+
+                _fix.Put(_imagePokemonTypeSecondary, 188, 433);
 
                 lblPokemonAbilityOne.Text = _pokemonAbilityOneUpper;
                 _fix.Put(lblPokemonAbilityOne, 345, 50);
@@ -160,7 +161,7 @@ namespace NowComesGtk.Screens
                 lblPokemonCatchRate = new Label(_pokemonCatchRate);
                 _fix.Put(lblPokemonCatchRate, 897, 192);
                 lblPokemonEggGroup = new Label(_pokemonEggGroup);
-                _fix.Put(lblPokemonEggGroup, 840, 295);
+                _fix.Put(lblPokemonEggGroup, 830, 295);
                 lblPokemonEggGroup.SetAlignment(0.5f, 0.5f);
 
                 lblPokemonHP.Text = _pokemonHPFormatted;
@@ -317,7 +318,7 @@ namespace NowComesGtk.Screens
                             }
                             else if (i.Trigger.Name == "trade")
                             {
-                                _forms.AppendValues(evo.Species.Name, i.Trigger.Name);
+                                _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name}");
                             }
                             else if (i.Trigger.Name == "use-item")
                             {
@@ -334,7 +335,18 @@ namespace NowComesGtk.Screens
                         {
                             if (i != null)
                             {
-                                _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
+                                if (i.Trigger.Name == "level-up")
+                                {
+                                    _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
+                                }
+                                else if (i.Trigger.Name == "trade")
+                                {
+                                    _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name}");
+                                }
+                                else if (i.Trigger.Name == "use-item")
+                                {
+                                    _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Item Usado: {i.Item.Name}");
+                                }
                             }
                         }
                     }

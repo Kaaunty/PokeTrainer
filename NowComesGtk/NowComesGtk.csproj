@@ -15,24 +15,69 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <Optimize>True</Optimize>
-	  <DebugType>full</DebugType>
+		<Optimize>False</Optimize>
+		<DebugType>full</DebugType>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Setup|AnyCPU'">
-	  <DebugType>full</DebugType>
+		<DebugType>full</DebugType>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<Compile Remove="Back\**" />
+		<Compile Remove="bin\**" />
 		<Compile Remove="Front\**" />
 		<Compile Remove="Styles\**" />
 		<EmbeddedResource Remove="Back\**" />
+		<EmbeddedResource Remove="bin\**" />
 		<EmbeddedResource Remove="Front\**" />
 		<EmbeddedResource Remove="Styles\**" />
 		<None Remove="Back\**" />
+		<None Remove="bin\**" />
 		<None Remove="Front\**" />
 		<None Remove="Styles\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libatk-1.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libbz2-1.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libcairo-2.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libcairo-gobject-2.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libcroco-0.6-3.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libdatrie-1.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libepoxy-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libexpat-1.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libffi-6.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libfontconfig-1.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libfreetype-6.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libfribidi-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgcc_s_seh-1.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgdk-3-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgdk_pixbuf-2.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgio-2.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libglib-2.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgmodule-2.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgobject-2.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgraphite2.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libgtk-3-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libharfbuzz-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libiconv-2.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libintl-8.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libjpeg-8.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\liblzma-5.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libpango-1.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libpangocairo-1.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libpangoft2-1.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libpangowin32-1.0-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libpcre-1.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libpixman-1-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libpng16-16.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\librsvg-2-2.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libstdc++-6.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libthai-0.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libwinpthread-1.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\libxml2-2.dll" />
+	  <None Remove="C:\Users\Dell\.nuget\packages\gtksharp.dependencies\1.1.1\contentFiles\cs\netstandard2.0\bin\zlib1.dll" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -44,11 +89,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Apis.Translate.v2" Version="1.62.0.875" />
 		<PackageReference Include="GtkSharp" Version="3.24.24.95" />
+		<PackageReference Include="GtkSharp.Dependencies" Version="1.1.1" />
 		<PackageReference Include="NAudio" Version="2.2.1" />
 		<PackageReference Include="PokeApiNet" Version="3.0.10" />
-		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0-rc.2.23479.14" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -57,7 +102,7 @@
 
 	<ItemGroup>
 		<None Update="Fonts\Pixeloid.ttf">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\buttons\backEvolution.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -90,10 +135,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\buttons_type\AllPokémons.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\buttons_type\AllPokémonsOpen.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\buttons_type\BugIcon.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -153,61 +198,61 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\loadingScreen.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\bug.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\dark.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\dragon.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\electric.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\fairy.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\fighting.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\fire.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\flying.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\ghost.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\gound.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\grass.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\ice.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\normal.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\poison.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\psychic.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\rock.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\steel.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\moves_homescreen\water.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pikachu-running.gif">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -216,7 +261,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokedex_homescreen\all.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokedex_homescreen\bug.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -273,16 +318,16 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\PokemonAnimated.gif">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\PokemonAnimatedShiny.gif">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokemonerror.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokemonSpriteError.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokemon_forms\FormDesactivated.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -405,7 +450,7 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokemon_types\none.png">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\pokemon_types\normal.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -426,10 +471,10 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Images\red-and-pikachu-running.gif">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="Sounds\pokemon-opening2.mp3">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
 
