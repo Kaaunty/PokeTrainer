@@ -12,12 +12,12 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private ApiRequest _apiRequest = new();
-        private Entry _txtSearchPokemon = new();
-        private Methods _methods = new();
-        private Fixed _fix = new();
-        private Button _btnNext = new();
         private ComboBox _cbTypePokemon = new ComboBox();
+        private Entry _txtSearchPokemon = new();
+        private ApiRequest _apiRequest = new();
+        private Methods _methods = new();
+        private Button _btnNext = new();
+        private Fixed _fix = new();
 
         private string _TypeFormatted = "";
         private int _currentPage = 0;
