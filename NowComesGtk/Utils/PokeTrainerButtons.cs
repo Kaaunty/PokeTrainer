@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
-using Gtk;
+﻿using Gtk;
+using NAudio.Wave;
+using System.Diagnostics;
 
 namespace NowComesGtk.Utils
 {
@@ -50,9 +51,9 @@ namespace NowComesGtk.Utils
             {
                 dialog.Text += letter.ToString();
                 dialog.WindowPosition = WindowPosition.Center;
+
                 await Task.Delay(15);
             }
-
             dialog.Run();
             dialog.Destroy();
         }
