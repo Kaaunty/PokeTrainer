@@ -1,10 +1,9 @@
-﻿using Gtk;
-using NAudio.Wave;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Gtk;
 
 namespace NowComesGtk.Utils
 {
-    public class SeparatedMethods
+    public class SeparateApplicationComponents
     {
         public void GitHubOpen()
         {
@@ -28,7 +27,7 @@ namespace NowComesGtk.Utils
             }
         }
 
-        public void DialogWithXamuca()
+        public void TalkToNPC()
         {
             ShowMessageDialogWithAnimation(
                   "Bem-vindo, Pokémon Trainer!\r\n\r\nVocê acaba de entrar no mundo emocionante dos Pokémon, e estamos felizes em tê-lo aqui.\r\n\r\n" +
@@ -42,9 +41,7 @@ namespace NowComesGtk.Utils
             var dialog = new MessageDialog(null, DialogFlags.Modal, MessageType.Info, ButtonsType.Ok, null);
             dialog.Text = "                                                                                                                             \n";
             dialog.WindowPosition = WindowPosition.Center;
-
             dialog.DeleteEvent += (sender, args) => { args.RetVal = true; };
-
             dialog.ShowAll();
 
             foreach (char letter in text)
@@ -54,6 +51,7 @@ namespace NowComesGtk.Utils
 
                 await Task.Delay(15);
             }
+
             dialog.Run();
             dialog.Destroy();
         }
