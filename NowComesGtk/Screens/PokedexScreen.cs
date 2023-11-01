@@ -1,10 +1,10 @@
-﻿using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
-using PokeApiNet;
 using System.Globalization;
+using NowComesGtk.Utils;
+using PokeApiNet;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -12,16 +12,19 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
+
+        private SeparateApplicationComponents _separateApplicationComponents = new();
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
+        private IPokemonAPI _pokemonAPI = new PokemonApiRequest();
         private Entry _txtSearchPokemon = new();
         private ComboBox _cbTypePokemon = new();
         private Methods _methods = new();
         private Button _btnNext = new();
         private Button _btnBack = new();
         private Fixed _fix = new();
-        private IPokemonAPI _pokemonAPI = new PokemonApiRequest();
-        private string _TypeFormatted = "";
+
         private int _maxPokemonPerPage = 25;
+        private string _TypeFormatted = "";
         private int _currentPage = 0;
         private int _choice = 0;
         private string _type = "";

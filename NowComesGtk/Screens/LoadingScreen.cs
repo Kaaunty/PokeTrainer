@@ -1,21 +1,23 @@
-using Gtk;
-using NAudio.Wave;
+using static PokeApi.BackEnd.Service.PokemonApiRequest;
+using PokeApi.BackEnd.Service;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
-using PokeApi.BackEnd.Service;
-using static PokeApi.BackEnd.Service.PokemonApiRequest;
 using Image = Gtk.Image;
+using NAudio.Wave;
+using Gtk;
 
 public class PokemonLoad : BaseWindow
 {
 #nullable disable
 
-    private ProgressBar _progressBar = new();
+  
     private PokemonApiRequest _apiRequest = new();
     private Image _redAndPikachuRunning = new();
+    private ProgressBar _progressBar = new();
     private Label _loadingLabel = new();
-    private bool _isLoaded = false;
+
     private double _totalPokemonCount = 0;
+    private bool _isLoaded = false;
     private int _loadingDots = 0;
 
     public PokemonLoad() : base("", 400, 100)

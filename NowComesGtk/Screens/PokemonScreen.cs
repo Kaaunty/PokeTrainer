@@ -1,13 +1,13 @@
-using Gdk;
-using Gtk;
+using static PokeApi.BackEnd.Service.PokemonApiRequest;
 using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
-using PokeApiNet;
-using System.Globalization;
-using static PokeApi.BackEnd.Service.PokemonApiRequest;
 using Type = PokeApiNet.Type;
+using System.Globalization;
+using NowComesGtk.Utils;
+using PokeApiNet;
+using Gdk;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {

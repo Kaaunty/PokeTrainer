@@ -55,5 +55,18 @@ namespace NowComesGtk.Utils
             dialog.Run();
             dialog.Destroy();
         }
+
+        public void EntryKeyPressEvent(object sender, KeyPressEventArgs args)
+        {
+            char keyChar = (char)Gdk.Keyval.ToUnicode(args.Event.KeyValue);
+            if (char.IsLetter(keyChar) || keyChar == '-')
+            {
+                args.RetVal = false;
+            }
+            else
+            {
+                args.RetVal = true;
+            }
+        }
     }
 }

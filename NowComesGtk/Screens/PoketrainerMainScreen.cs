@@ -1,8 +1,8 @@
-﻿using GLib;
-using Gtk;
-using NowComesGtk.Reusable_components;
-using NowComesGtk.Utils;
+﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
+using NowComesGtk.Utils;
+using GLib;
+using Gtk;
 
 namespace NowComesGtk.Screens
 {
