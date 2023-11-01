@@ -6,10 +6,10 @@ namespace NowComesGtk.Reusable_components
     {
         public ButtonGenerator(string imagePath, int width, int height) : base()
         {
-            Image imgPokeball = new Image(imagePath);
+            Image image = new(imagePath);
             SetSizeRequest(width, height);
             Relief = ReliefStyle.None;
-            Image = imgPokeball;
+            Image = image;
         }
     }
 }

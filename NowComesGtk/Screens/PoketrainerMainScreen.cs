@@ -1,7 +1,6 @@
 ﻿using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Service;
 using NowComesGtk.Utils;
-using PokeApiNet;
 using GLib;
 using Gtk;
 
@@ -11,14 +10,12 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
-        private SeparatedMethods _separetedMethods = new();
-        private ApiRequest _apiRequest = new();
+        private SeparateApplicationComponents _separateApplicationComponents = new();
         private Fixed _fix = new();
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
-            DeleteEvent += delegate { Gtk.Application.Quit(); };
-            Image poketrainerBackground = new Image("Images/pokemon_homescreen/homescreen.png");
+            Image poketrainerBackground = new("Images/pokemon_homescreen/homescreen.png");
             _fix.Put(poketrainerBackground, 0, 0);
 
             #region Buttons Pokédex
@@ -139,10 +136,9 @@ namespace NowComesGtk.Screens
             btnWelcome.Clicked += Dialog_Start;
             _fix.Put(btnWelcome, 620, 75);
 
-            Image openBag = new Image("Images/buttons_type/AllPokémonsOpen.png");
-            Image closedBag = new Image("Images/buttons_type/AllPokémons.png");
-
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
+            Image openBag = new("Images/buttons_type/AllPokémonsOpen.png");
+            Image closedBag = new("Images/buttons_type/AllPokémons.png");
             btnAllPokemons.Image = new Image("Images/buttons_type/AllPokémons.png");
             btnAllPokemons.FocusInEvent += delegate { btnAllPokemons.Image = closedBag; };
             btnAllPokemons.FocusOutEvent += delegate { btnAllPokemons.Image = openBag; };
@@ -152,56 +148,14 @@ namespace NowComesGtk.Screens
             _fix.Put(btnAllPokemons, 67, 90);
 
             Button btnGitHub = new ButtonGenerator("", 40, 40);
-
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
             btnGitHub.TooltipMarkup = "Clique para abrir o gitHub do projeto.";
             btnGitHub.Clicked += GitHub_Open;
             _fix.Put(btnGitHub, 735, 435);
 
-
-            Button BtnTest = new ButtonGenerator("Teste", 100, 50);
-            BtnTest.Image = new Image("Images/buttons/btnTeste.png");
-            BtnTest.Clicked += btnPokemonTest;
-            _fix.Put(BtnTest, 640, 300);
-            Button BtnTestLegendary = new ButtonGenerator("Teste", 100, 50);
-            BtnTestLegendary.Image = new Image("Images/buttons/btnTeste.png");
-            BtnTestLegendary.Clicked += btnPokemonTestLegendary;
-            _fix.Put(BtnTestLegendary, 640, 360);
-            //Button BtnTestMythical = new ButtonGenerator("Teste", 100, 50);
-            //BtnTestMythical.Image = new Image("Images/buttons/btnTeste.png");
-            //BtnTestMythical.Clicked += btnPokemonTestMythical;
-            //_fix.Put(BtnTestMythical, 640, 420);
             DeleteEvent += delegate { Gtk.Application.Quit(); };
-
             Add(_fix);
             ShowAll();
-        }
-
-        private void GitHub_Open(object sender, EventArgs e)
-        {
-            _separetedMethods.GitHubOpen();
-        }
-
-        private void Dialog_Start(object sender, EventArgs e)
-        {
-            _separetedMethods.DialogWithXamuca();
-        }
-
-
-        private async void btnPokemonTest(object sender, EventArgs e)
-        {
-            //Pokemon pokemon = await _apiRequest.GetPokemonAsync("scizor");
-            Pokemon poke = await _apiRequest.GetPokemon("mudkip");
-
-            PokemonScreen pokemonScreen = new(poke);
-            pokemonScreen.Show();
-        }
-
-        private async void btnPokemonTestLegendary(object sender, EventArgs e)
-        {
-            Pokemon pokemon = await _apiRequest.GetPokemon("charizard");
-            PokemonScreen pokemonScreen = new(pokemon);
-            pokemonScreen.Show();
         }
 
         private void BtnTypePokedexScreen(object sender, EventArgs e)
@@ -219,6 +173,16 @@ namespace NowComesGtk.Screens
                 MessageDialogGenerator.ShowMessageDialog("Erro ao carregar a lista de Pokémon:" + ex);
                 ExceptionManager.RaiseUnhandledException(ex, true);
             }
+        }
+
+        private void GitHub_Open(object sender, EventArgs e)
+        {
+            _separateApplicationComponents.GitHubOpen();
+        }
+
+        private void Dialog_Start(object sender, EventArgs e)
+        {
+            _separateApplicationComponents.TalkToNPC();
         }
     }
 }
