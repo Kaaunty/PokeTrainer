@@ -1,9 +1,10 @@
-﻿using NowComesGtk.Reusable_components;
-using PokeApi.BackEnd.Service;
-using System.Globalization;
+﻿using Gtk;
+using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
+using PokeApi.BackEnd.Entities;
+using PokeApi.BackEnd.Service;
 using PokeApiNet;
-using Gtk;
+using System.Globalization;
 
 namespace NowComesGtk.Screens
 {
@@ -14,11 +15,11 @@ namespace NowComesGtk.Screens
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
         private ComboBox _cbTypePokemon = new ComboBox();
         private Entry _txtSearchPokemon = new();
-        private ApiRequest _apiRequest = new();
+
         private Methods _methods = new();
         private Button _btnNext = new();
         private Fixed _fix = new();
-
+        private IPokemonAPI _pokemonAPI = new PokemonApiRequest();
         private string _TypeFormatted = "";
         private int _currentPage = 0;
         private int _choice = 0;
@@ -54,14 +55,16 @@ namespace NowComesGtk.Screens
 
         #endregion Pokeball buttons
 
-        public PokedexScreen(string type) : base($"PokéTrainer© // Pokémons tipo - {type} // Pokémons", 500, 600)
+        public PokedexScreen(string type, ITranslationAPI translationAPI, IPokemonAPI pokemonAPI) : base($"PokéTrainer© // Pokémons tipo - {type} // Pokémons", 500, 600)
         {
             this._type = type;
-            _TypeFormatted = _apiRequest.TranslateType(_textInfo.ToTitleCase(type));
-            if (type == "bug")
-            {
-                _TypeFormatted = "Inseto";
-            }
+
+            //if (type == "bug")
+            //{
+            //    _TypeFormatted = "Inseto";
+            //}
+            _pokemonAPI = pokemonAPI;
+            _TypeFormatted = translationAPI.TranslateType(_textInfo.ToTitleCase(_type));
 
             Title = $"PokéTrainer© // Pokémons tipo - {_TypeFormatted} // Pokémons";
             Image backgroundScreen = new($"Images/pokedex_homescreen/{type}.png");
@@ -326,13 +329,13 @@ namespace NowComesGtk.Screens
             _btnNext.Sensitive = true;
         }
 
-        private async void OpenPokemonScreenClicked(object sender, EventArgs e)
+        private void OpenPokemonScreenClicked(object sender, EventArgs e)
         {
             var btn = (Button)sender;
             var pokemonName = (string)btn.Data["name"];
             if (pokemonName != string.Empty)
             {
-                Pokemon pokemonClicked = await _apiRequest.GetPokemon(pokemonName);
+                Pokemon pokemonClicked = _pokemonAPI.GetPokemonByName(pokemonName);
                 PokemonScreen pokemonScreen = new(pokemonClicked);
                 pokemonScreen.Show();
             }
@@ -347,7 +350,7 @@ namespace NowComesGtk.Screens
         private void AllTypeClicked()
         {
             _btnNext.Sensitive = true;
-            _methods.LoadPokemonList(_currentPage, _type, _choice);
+            _methods.LoadPokemonList(_currentPage, _type, _choice, new PokemonApiRequest());
             _methods.UpdateButtons(_fix, _currentPage, _type, _choice);
         }
     }

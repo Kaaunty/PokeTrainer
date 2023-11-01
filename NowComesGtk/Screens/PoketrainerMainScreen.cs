@@ -1,9 +1,8 @@
-﻿using NowComesGtk.Reusable_components;
-using PokeApi.BackEnd.Service;
-using NowComesGtk.Utils;
-using PokeApiNet;
-using GLib;
+﻿using GLib;
 using Gtk;
+using NowComesGtk.Reusable_components;
+using NowComesGtk.Utils;
+using PokeApi.BackEnd.Service;
 
 namespace NowComesGtk.Screens
 {
@@ -12,7 +11,6 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private SeparatedMethods _separetedMethods = new();
-        private ApiRequest _apiRequest = new();
         private Fixed _fix = new();
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
@@ -138,10 +136,8 @@ namespace NowComesGtk.Screens
             btnWelcome.TooltipMarkup = "Olá...";
             btnWelcome.Clicked += Dialog_Start;
             _fix.Put(btnWelcome, 620, 75);
-
             Image openBag = new Image("Images/buttons_type/AllPokémonsOpen.png");
             Image closedBag = new Image("Images/buttons_type/AllPokémons.png");
-
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
             btnAllPokemons.Image = new Image("Images/buttons_type/AllPokémons.png");
             btnAllPokemons.FocusInEvent += delegate { btnAllPokemons.Image = closedBag; };
@@ -181,7 +177,7 @@ namespace NowComesGtk.Screens
                 Button btn = (Button)sender;
                 string type = btn.Data["_type"].ToString();
 
-                PokedexScreen pokedexScreen = new(type);
+                PokedexScreen pokedexScreen = new(type, new GoogleTranslationApi(), new PokemonApiRequest());
                 pokedexScreen.ShowAll();
             }
             catch (Exception ex)
