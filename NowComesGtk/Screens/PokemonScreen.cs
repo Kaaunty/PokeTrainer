@@ -484,9 +484,6 @@ namespace NowComesGtk.Screens
                         }
                     }
                 }
-                string pokemonFlavorTextReplaced = _textInfo.ToTitleCase(_pokeSpecies.FlavorTextEntries[6].FlavorText.Replace("\n", "").ToLower());
-                _pokemonFlavorText = await _translationApiRequest.Translate(pokemonFlavorTextReplaced);
-                lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_pokemonFlavorText}</span>";
             }
             catch (Exception ex)
             {
