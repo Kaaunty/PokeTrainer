@@ -10,13 +10,12 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
-        private SeparatedMethods _separetedMethods = new();
+        private SeparateApplicationComponents _separateApplicationComponents = new();
         private Fixed _fix = new();
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
-            DeleteEvent += delegate { Gtk.Application.Quit(); };
-            Image poketrainerBackground = new Image("Images/pokemon_homescreen/homescreen.png");
+            Image poketrainerBackground = new("Images/pokemon_homescreen/homescreen.png");
             _fix.Put(poketrainerBackground, 0, 0);
 
             #region Buttons Pokédex
@@ -139,6 +138,8 @@ namespace NowComesGtk.Screens
             Image openBag = new Image("Images/buttons_type/AllPokémonsOpen.png");
             Image closedBag = new Image("Images/buttons_type/AllPokémons.png");
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
+            Image openBag = new("Images/buttons_type/AllPokémonsOpen.png");
+            Image closedBag = new("Images/buttons_type/AllPokémons.png");
             btnAllPokemons.Image = new Image("Images/buttons_type/AllPokémons.png");
             btnAllPokemons.FocusInEvent += delegate { btnAllPokemons.Image = closedBag; };
             btnAllPokemons.FocusOutEvent += delegate { btnAllPokemons.Image = openBag; };
@@ -148,26 +149,14 @@ namespace NowComesGtk.Screens
             _fix.Put(btnAllPokemons, 67, 90);
 
             Button btnGitHub = new ButtonGenerator("", 40, 40);
-
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
             btnGitHub.TooltipMarkup = "Clique para abrir o gitHub do projeto.";
             btnGitHub.Clicked += GitHub_Open;
             _fix.Put(btnGitHub, 735, 435);
 
             DeleteEvent += delegate { Gtk.Application.Quit(); };
-
             Add(_fix);
             ShowAll();
-        }
-
-        private void GitHub_Open(object sender, EventArgs e)
-        {
-            _separetedMethods.GitHubOpen();
-        }
-
-        private void Dialog_Start(object sender, EventArgs e)
-        {
-            _separetedMethods.DialogWithXamuca();
         }
 
         private void BtnTypePokedexScreen(object sender, EventArgs e)
@@ -185,6 +174,16 @@ namespace NowComesGtk.Screens
                 MessageDialogGenerator.ShowMessageDialog("Erro ao carregar a lista de Pokémon:" + ex);
                 ExceptionManager.RaiseUnhandledException(ex, true);
             }
+        }
+
+        private void GitHub_Open(object sender, EventArgs e)
+        {
+            _separateApplicationComponents.GitHubOpen();
+        }
+
+        private void Dialog_Start(object sender, EventArgs e)
+        {
+            _separateApplicationComponents.TalkToNPC();
         }
     }
 }

@@ -13,14 +13,15 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private ComboBox _cbTypePokemon = new ComboBox();
         private Entry _txtSearchPokemon = new();
 
         private Methods _methods = new();
         private Button _btnNext = new();
+        private Button _btnBack = new();
         private Fixed _fix = new();
         private IPokemonAPI _pokemonAPI = new PokemonApiRequest();
         private string _TypeFormatted = "";
+        private int _maxPokemonPerPage = 25;
         private int _currentPage = 0;
         private int _choice = 0;
         private string _type = "";
@@ -79,6 +80,7 @@ namespace NowComesGtk.Screens
             {
                 _txtSearchPokemon.Changed += SearchPokemon;
             }
+
             CssProvider cssProvider = new();
             cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
             _txtSearchPokemon.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
@@ -98,10 +100,11 @@ namespace NowComesGtk.Screens
                 _txtSearchPokemon.StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);
             };
 
-            Button btnBack = new("<<");
-            btnBack.SetSizeRequest(10, 10);
-            _fix.Put(btnBack, 25, 74);
-            btnBack.Clicked += btnBack_Clicked;
+            _btnBack = new Button("<<");
+            _btnBack.SetSizeRequest(10, 10);
+            _fix.Put(_btnBack, 25, 74);
+            _btnBack.Clicked += btnBack_Clicked;
+
             _btnNext = new Button(">>");
             _btnNext.SetSizeRequest(10, 10);
             _fix.Put(_btnNext, 425, 74);
@@ -153,7 +156,6 @@ namespace NowComesGtk.Screens
             pokeball9.Clicked += OpenPokemonScreenClicked;
             _fix.Put(pokeball9, 292, 249);
             // Pokeball 10
-
             pokeball10.Name = "pokemon10";
             pokeball10.Clicked += OpenPokemonScreenClicked;
             _fix.Put(pokeball10, 365, 249);
@@ -167,12 +169,10 @@ namespace NowComesGtk.Screens
             pokeball11.Clicked += OpenPokemonScreenClicked;
             _fix.Put(pokeball11, 72, 323);
             // Pokeball 12
-
             pokeball12.Name = "pokemon12";
             pokeball12.Clicked += OpenPokemonScreenClicked;
             _fix.Put(pokeball12, 146, 323);
             // Pokeball 13
-
             pokeball13.Name = "pokemon13";
             pokeball13.Clicked += OpenPokemonScreenClicked;
             _fix.Put(pokeball13, 219, 323);
@@ -317,14 +317,14 @@ namespace NowComesGtk.Screens
 
         private void btnNext_Clicked(object sender, EventArgs e)
         {
-            _currentPage += 25;
+            _currentPage += _maxPokemonPerPage;
             _methods.UpdateButtons(_fix, _currentPage, _type, _choice);
             _methods.DisableButtons(_btnNext);
         }
 
         private void btnBack_Clicked(object sender, EventArgs e)
         {
-            _currentPage -= 25;
+            _currentPage -= _maxPokemonPerPage;
             _methods.UpdateButtons(_fix, _currentPage, _type, _choice);
             _btnNext.Sensitive = true;
         }
