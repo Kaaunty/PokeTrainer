@@ -14,7 +14,7 @@ namespace NowComesGtk.Screens
 
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
         private Entry _txtSearchPokemon = new();
-
+        private ComboBox _cbTypePokemon = new();
         private Methods _methods = new();
         private Button _btnNext = new();
         private Button _btnBack = new();

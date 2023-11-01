@@ -138,8 +138,7 @@ namespace NowComesGtk.Screens
             Image openBag = new Image("Images/buttons_type/AllPokémonsOpen.png");
             Image closedBag = new Image("Images/buttons_type/AllPokémons.png");
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
-            Image openBag = new("Images/buttons_type/AllPokémonsOpen.png");
-            Image closedBag = new("Images/buttons_type/AllPokémons.png");
+
             btnAllPokemons.Image = new Image("Images/buttons_type/AllPokémons.png");
             btnAllPokemons.FocusInEvent += delegate { btnAllPokemons.Image = closedBag; };
             btnAllPokemons.FocusOutEvent += delegate { btnAllPokemons.Image = openBag; };
