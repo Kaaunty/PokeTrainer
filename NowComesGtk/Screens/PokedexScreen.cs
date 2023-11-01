@@ -63,10 +63,6 @@ namespace NowComesGtk.Screens
         {
             this._type = type;
 
-            //if (type == "bug")
-            //{
-            //    _TypeFormatted = "Inseto";
-            //}
             _pokemonAPI = pokemonAPI;
             _TypeFormatted = translationAPI.TranslateType(_textInfo.ToTitleCase(_type));
 
