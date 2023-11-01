@@ -2,6 +2,7 @@ using Gdk;
 using Gtk;
 using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
+using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
 using PokeApiNet;
 using System.Globalization;
@@ -14,10 +15,9 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
-        private static readonly PokemonApiRequest _pokemonApiRequest = new();
-        private PokemonImageApiRequest _pokemonImageApiRequest = new();
-        private GoogleTranslationApi _translationApiRequest = new();
-
+        private ITranslationAPI _translationApiRequest = new GoogleTranslationApi();
+        private IPokemonAPI _pokemonApiRequest = new PokemonApiRequest();
+        private IPokemonSpriteLoaderAPI _pokemonSpriteLoaderAPI = new PokemonImageApiRequest();
         private Pokemon _pokemon = new();
         private Button _shinyButton = new();
         private Image _megaIcon = new("Images/pokemon_forms/MegaKeyDesactivated.png");
@@ -81,10 +81,13 @@ namespace NowComesGtk.Screens
         private string _pokemonNameFormatted = "", _pokemonDexFormatted = "", _pokemonMaleFormatted = "", _pokemonFemaleFormatted = "", _pokemonCatchRate = "", _pokemonEggGroup = "";
         private string _pokemonAbilityOneUpper = "< >", _pokemonAbilityTwoUpper = "< >", _pokemonAbilityThreeUpper = "< >", _pokemonAbilityFourUpper = "< >", _pokemonFlavorText = "";
 
-        public PokemonScreen(Pokemon Pokemon) : base("", 1000, 500)
+        public PokemonScreen(Pokemon Pokemon, ITranslationAPI translationApi, IPokemonAPI pokemonAPI, IPokemonSpriteLoaderAPI pokemonSpriteLoaderAPI) : base("", 1000, 500)
         {
             try
             {
+                _translationApiRequest = translationApi;
+                _pokemonApiRequest = pokemonAPI;
+                _pokemonSpriteLoaderAPI = pokemonSpriteLoaderAPI;
                 _pokemon = Pokemon;
                 PopulateFields();
 
@@ -502,7 +505,7 @@ namespace NowComesGtk.Screens
                 {
                     try
                     {
-                        await _pokemonImageApiRequest.GetPokemonAnimatedSprite(_pokemon.Forms[_pokemonFormId].Name, _isShiny);
+                        await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Forms[_pokemonFormId].Name, _isShiny);
                     }
                     catch (Exception ex)
                     {
@@ -512,7 +515,7 @@ namespace NowComesGtk.Screens
                 }
                 else
                 {
-                    await _pokemonImageApiRequest.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
+                    await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
                 }
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
             }
@@ -522,11 +525,11 @@ namespace NowComesGtk.Screens
                 _isShiny = true;
                 if (_pokemon.Forms.Count > 1)
                 {
-                    await _pokemonImageApiRequest.GetPokemonAnimatedSprite(_pokemon.Forms[_pokemonFormId].Name, _isShiny);
+                    await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Forms[_pokemonFormId].Name, _isShiny);
                 }
                 else
                 {
-                    await _pokemonImageApiRequest.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
+                    await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
                 }
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
             }
@@ -711,12 +714,12 @@ namespace NowComesGtk.Screens
         {
             if (!_isShiny)
             {
-                await _pokemonImageApiRequest.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
+                await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
             }
             else if (_isShiny)
             {
-                await _pokemonImageApiRequest.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
+                await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
             }
         }

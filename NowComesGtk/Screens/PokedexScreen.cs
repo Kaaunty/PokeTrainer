@@ -336,7 +336,7 @@ namespace NowComesGtk.Screens
             if (pokemonName != string.Empty)
             {
                 Pokemon pokemonClicked = _pokemonAPI.GetPokemonByName(pokemonName);
-                PokemonScreen pokemonScreen = new(pokemonClicked);
+                PokemonScreen pokemonScreen = new(pokemonClicked, new GoogleTranslationApi(), new PokemonApiRequest(), new PokemonImageApiRequest());
                 pokemonScreen.Show();
             }
             else
