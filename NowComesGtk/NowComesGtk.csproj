@@ -96,7 +96,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\PokeTrainerAPI\PokeApi.csproj" />
+	  <ProjectReference Include="..\..\PokeTrainerAPI\PokeTrainerBackEnd.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
