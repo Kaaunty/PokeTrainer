@@ -1,9 +1,10 @@
-﻿using static PokeApi.BackEnd.Service.PokemonApiRequest;
+﻿using Gdk;
+using Gtk;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
-using PokeApiNet;
-using Gtk;
-using Gdk;
+using PokeTrainerBackEnd.Helper;
+using PokeTrainerBackEndTest.Entities;
+using static PokeApi.BackEnd.Service.PokemonApiRequest;
 
 namespace NowComesGtk.Presenters
 {
@@ -12,12 +13,13 @@ namespace NowComesGtk.Presenters
 #nullable disable
 
         private List<Pokemon> _pokemonList = new();
+        private PopulateLists populateLists = new();
         private List<Pokemon> _allPokemon = new();
         private List<Pokemon> _pokemonBySearch = new();
 
         private int _maxPokemonPerPage = 25, _currentPage;
 
-        enum Choice
+        private enum Choice
         {
             All,
             PureType,
@@ -27,36 +29,36 @@ namespace NowComesGtk.Presenters
 
         public void Populating(int currentPage, string choiceOfType, int subTypeChoice)
         {
-            FilterigForDisplay(currentPage, choiceOfType, subTypeChoice, new PokemonApiRequest());
+            FilterigForDisplay(currentPage, choiceOfType, subTypeChoice);
         }
 
-        public void FilterigForDisplay(int currentPage, string choiceOfType, int subTypeChoice, IPokemonAPI pokemonAPI)
+        public void FilterigForDisplay(int currentPage, string choiceOfType, int subTypeChoice)
         {
             _currentPage = currentPage;
 
             if (choiceOfType == "all")
             {
-                _allPokemon = pokemonAPI.GetPokemonListAll(currentPage);
-                _pokemonBySearch = PokeList.pokemonList;
+                _allPokemon = populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
+                _pokemonBySearch = PokeList.pokemonListAllType;
             }
             if (subTypeChoice == (int)Choice.All)
             {
-                _allPokemon = pokemonAPI.GetPokemonListByTypeAll(currentPage, choiceOfType);
-                _pokemonBySearch = PokeList.pokemonListAllType;
+                _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
+                _pokemonBySearch = PokeList.pokemonListPureType;
             }
             else if (subTypeChoice == (int)Choice.PureType)
             {
-                _allPokemon = pokemonAPI.GetPokemonListByTypePure(currentPage, choiceOfType);
+                _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
                 _pokemonBySearch = PokeList.pokemonListPureType;
             }
             else if (subTypeChoice == (int)Choice.PrimaryType)
             {
-                _allPokemon = pokemonAPI.GetPokemonListByTypeHalfType(currentPage, choiceOfType);
+                _allPokemon = populateLists.GetPokemonListByTypeHalfType(currentPage, choiceOfType);
                 _pokemonBySearch = PokeList.pokemonListHalfType;
             }
             else if (subTypeChoice == (int)Choice.SecondaryType)
             {
-                _allPokemon = pokemonAPI.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
+                _allPokemon = populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
                 _pokemonBySearch = PokeList.pokemonListHalfSecundaryType;
             }
         }
@@ -117,25 +119,13 @@ namespace NowComesGtk.Presenters
 
         private async void UpdateButtonImages(Button button, int pokemonId, IPokemonSpriteLoaderAPI pokemonSpriteLoaderAPI)
         {
-            Image pokemonImage = new();
-            Pixbuf pokemonSprite = await pokemonSpriteLoaderAPI.LoadPokemonSprite(pokemonId);
-
-            if (pokemonSprite != null)
+            Image pokeimage = new Image();
+            Byte[] pokemonImage = await pokemonSpriteLoaderAPI.LoadPokemonSprite(pokemonId);
+            if (pokemonImage != null)
             {
-                pokemonSprite = pokemonSprite.ScaleSimple(50, 50, InterpType.Bilinear);
-                pokemonImage.Pixbuf = pokemonSprite;
-
-                if (pokemonImage != null)
-                {
-                    button.Image = pokemonImage;
-                }
-            }
-            else
-            {
-                pokemonSprite = new Pixbuf("Images/pokemonerror.png");
-                pokemonSprite = pokemonSprite.ScaleSimple(50, 50, InterpType.Bilinear);
-                pokemonImage.Pixbuf = pokemonSprite;
-                button.Image = pokemonImage;
+                pokeimage.Pixbuf = new Gdk.Pixbuf(pokemonImage);
+                pokeimage.Pixbuf = pokeimage.Pixbuf.ScaleSimple(50, 50, Gdk.InterpType.Bilinear);
+                button.Image = pokeimage;
             }
         }
 

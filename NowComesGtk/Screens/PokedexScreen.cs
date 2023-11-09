@@ -1,13 +1,12 @@
+using Gtk;
+using NowComesGtk.Presenters;
 using NowComesGtk.Reusable_components;
+using NowComesGtk.Utils;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
 using PokeTrainerBackEndTest.Controller;
 using PokeTrainerBackEndTest.Entities;
 using System.Globalization;
-using NowComesGtk.Utils;
-using PokeApiNet;
-using Gtk;
-using NowComesGtk.Presenters;
 
 namespace NowComesGtk.Screens
 {
@@ -16,16 +15,10 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private IPokemonAPI _pokemonAPI = new PokemonApiRequest();
         private PokedexScreenFeatures _screenFeatures = new();
 
         private Entry _txtSearchPokemon = new TextBoxGenerator("Buscar Pokémon", 125, 20);
         private ComboBox _cbTypePokemon = new();
-        private SeparateApplicationComponents _separateApplicationComponents = new();
-        private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private Entry _txtSearchPokemon = new();
-        private ComboBox _cbTypePokemon = new();
-        private readonly Methods _methods = new();
         private readonly IPokemonAPI _pokemonAPI = new PokeApiNetController();
         private Button _btnNext = new();
         private Button _btnBack = new();
@@ -68,7 +61,6 @@ namespace NowComesGtk.Screens
         {
             _pokemonType = pokemonType;
 
-
             _pokemonAPI = pokemonAPI;
             _pokemonTypeFormatted = translationAPI.TranslateType(_textInfo.ToTitleCase(_pokemonType));
 
@@ -79,14 +71,12 @@ namespace NowComesGtk.Screens
             _fix.Put(_txtSearchPokemon, 165, 25);
             if (!string.IsNullOrEmpty(_txtSearchPokemon.Text))
             {
-                _txtSearchPokemon.Changed +=  delegate
+                _txtSearchPokemon.Changed += delegate
                 {
                     if (_txtSearchPokemon.Text != "Buscar Pokémon" && !string.IsNullOrEmpty(_txtSearchPokemon.Text))
                     {
-
                         Console.WriteLine(_txtSearchPokemon.Text);
                         SearchPokemon();
-
                     }
                 };
             }
@@ -286,7 +276,7 @@ namespace NowComesGtk.Screens
                 };
             }
 
-             _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text);
+            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text.ToLower());
             Add(_fix);
             DeleteEvent += delegate { Destroy(); };
             ShowAll();
@@ -296,13 +286,13 @@ namespace NowComesGtk.Screens
         {
             string PokemonName = _txtSearchPokemon.Text.ToLower();
             PokemonName = PokemonName.Replace(' ', '-');
-            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, PokemonName);   
+            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, PokemonName);
         }
 
         private void btnNext_Clicked(object sender, EventArgs e)
         {
             _currentPage += _maxPokemonPerPage;
-            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text);
+            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text.ToLower());
             _screenFeatures.DisableNextButton(_btnNext);
             _btnBack.Sensitive = true;
         }
@@ -310,7 +300,7 @@ namespace NowComesGtk.Screens
         private void btnBack_Clicked(object sender, EventArgs e)
         {
             _currentPage -= _maxPokemonPerPage;
-            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text);
+            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text.ToLower());
             _screenFeatures.DisableBackButton(_btnBack);
             _btnNext.Sensitive = true;
         }
@@ -336,8 +326,8 @@ namespace NowComesGtk.Screens
         private void Filtering()
         {
             _btnNext.Sensitive = true;
-            _screenFeatures.FilterigForDisplay(_currentPage, _pokemonType, _chooseTypeOfType, new PokemonApiRequest());
-            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text);
+            _screenFeatures.FilterigForDisplay(_currentPage, _pokemonType, _chooseTypeOfType);
+            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _chooseTypeOfType, _txtSearchPokemon.Text.ToLower());
         }
     }
 }
