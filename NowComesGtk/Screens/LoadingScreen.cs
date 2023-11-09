@@ -89,7 +89,7 @@ public class PokemonLoad : BaseWindow
 
             _waveOut.Init(readers);
             _waveOut.Volume = 0.1f;
-            _waveOut.Play();
+           // _waveOut.Play();
         }
         catch (Exception ex)
         {
