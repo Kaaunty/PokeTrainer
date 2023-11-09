@@ -1,16 +1,13 @@
-using static PokeApi.BackEnd.Service.PokemonApiRequest;
-using NowComesGtk.Utils.WidgetGenerators;
-using PokeTrainerBackEndTest.Controller;
-using PokeTrainerBackEnd.Helper;
-using PokeApi.BackEnd.Entities;
+using Gtk;
+using NAudio.Wave;
 using NowComesGtk.Screens;
+using NowComesGtk.Utils;
+using NowComesGtk.Utils.WidgetGenerators;
+using PokeApi.BackEnd.Entities;
 using PokeTrainerBackEnd;
-
 using PokeTrainerBackEnd.Helper;
 using PokeTrainerBackEndTest.Controller;
 using Image = Gtk.Image;
-using NAudio.Wave;
-using Gtk;
 
 public class PokemonLoad : BaseWindow
 {

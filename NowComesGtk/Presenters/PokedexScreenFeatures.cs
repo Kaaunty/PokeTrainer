@@ -1,11 +1,9 @@
-
-usign Gtk;
+using Gtk;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
 using PokeTrainerBackEnd;
 using PokeTrainerBackEnd.Helper;
 using PokeTrainerBackEndTest.Entities;
-
 
 namespace NowComesGtk.Presenters
 {
@@ -40,9 +38,8 @@ namespace NowComesGtk.Presenters
 
             if (choiceOfType == "all")
             {
-
                 _allPokemon = populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
-                _pokemonBySearch = Repository.Pokemons;
+                _pokemonBySearch = Repository.Pokemon;
             }
             if (subTypeChoice == (int)Choice.All)
             {
