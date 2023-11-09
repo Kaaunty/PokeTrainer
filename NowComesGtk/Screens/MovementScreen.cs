@@ -15,8 +15,7 @@ namespace NowComesGtk.Screens
         private Dictionary<string, string> _moveLearnByMoveTutor = new();
         private List<Move> _Moves = new();
         private ListStore _moveList;
-        private Pokemon _pokeSpecie;
-        private Pokemon _poke;
+     
 
         private int _choice;
 
@@ -25,11 +24,10 @@ namespace NowComesGtk.Screens
             Move
         }
 
-        public MovementScreen(List<Move> move, Pokemon pokemon, Pokemon pokemonSpecie, string pokemonType) : base("", 500, 500)
+        public MovementScreen(List<Move> move, string pokemonType) : base("", 500, 500)
         {
             _Moves = move;
-            _poke = pokemon;
-            _pokeSpecie = pokemonSpecie;
+        
 
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
@@ -130,7 +128,7 @@ namespace NowComesGtk.Screens
         {
             foreach (Move move in _Moves)
             {
-                Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Name}.png");
+                Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Type}.png");
                 _moves.AppendValues(move.Name, pixbuf);
             }
             return _moves;

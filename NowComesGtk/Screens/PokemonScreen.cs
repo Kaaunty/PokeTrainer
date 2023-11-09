@@ -37,7 +37,6 @@ namespace NowComesGtk.Screens
             FormMethod
         }
 
-        private EvolutionChain evolutionChain = new();
 
         #region Labels
 
@@ -562,16 +561,17 @@ namespace NowComesGtk.Screens
 
         private async void PokemonMoves(object sender, EventArgs e)
         {
-            Pokemon pokemonSpecie = _pokemonApiRequest.GetPokemonByName(evolutionChain.Chain.Species.Name);
-            //List<Move> pokemonSpecieMoves = await _pokemonApiRequest.GetMoveLearnedByPokemon(pokemonSpecie);
-            //List<Move> pokemonMoves = await _pokemonApiRequest.GetMoveLearnedByPokemon(_pokemon);
+            Pokemon pokemonSpecie = _pokemonApiRequest.GetPokemonByName(_pokemon.EvolutionChain.Chain.Species.Name);
 
-            //var MoveList = pokemonSpecieMoves.Where(pokeSpecieMove => !pokemonMoves.Any(pokeMove => pokeMove.Name == pokeSpecieMove.Name)).Concat(pokemonMoves).ToList();
+            List<Move> pokemonSpecieMoves = pokemonSpecie.Moves;
+            List<Move> pokemonMoves = _pokemon.Moves;
 
-            //string pokemonType = _pokemon.Types[0].Name;
+            var MoveList = pokemonSpecieMoves.Where(pokeSpecieMove => !pokemonMoves.Any(pokeMove => pokeMove.Name == pokeSpecieMove.Name)).Concat(pokemonMoves).ToList();
 
-            //MovementScreen movementScreen = new(MoveList, _pokemon, pokemonSpecie, pokemonType);
-            //movementScreen.ShowAll();
+            string pokemonType = _pokemon.Types[0].Type.Name;
+
+            MovementScreen movementScreen = new(MoveList, pokemonType);
+            movementScreen.ShowAll();
         }
 
         public async Task PopulateFields()
