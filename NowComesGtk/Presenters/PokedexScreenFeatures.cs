@@ -1,10 +1,9 @@
-﻿using Gdk;
-using Gtk;
+﻿using Gtk;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
+using PokeTrainerBackEnd;
 using PokeTrainerBackEnd.Helper;
 using PokeTrainerBackEndTest.Entities;
-using static PokeApi.BackEnd.Service.PokemonApiRequest;
 
 namespace NowComesGtk.Presenters
 {
@@ -39,27 +38,27 @@ namespace NowComesGtk.Presenters
             if (choiceOfType == "all")
             {
                 _allPokemon = populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
-                _pokemonBySearch = PokeList.pokemonListAllType;
+                _pokemonBySearch = Repository.pokemonListAllType;
             }
             if (subTypeChoice == (int)Choice.All)
             {
                 _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
-                _pokemonBySearch = PokeList.pokemonListPureType;
+                _pokemonBySearch = Repository.pokemonListPureType;
             }
             else if (subTypeChoice == (int)Choice.PureType)
             {
                 _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
-                _pokemonBySearch = PokeList.pokemonListPureType;
+                _pokemonBySearch = Repository.pokemonListPureType;
             }
             else if (subTypeChoice == (int)Choice.PrimaryType)
             {
                 _allPokemon = populateLists.GetPokemonListByTypeHalfType(currentPage, choiceOfType);
-                _pokemonBySearch = PokeList.pokemonListHalfType;
+                _pokemonBySearch = Repository.pokemonListHalfType;
             }
             else if (subTypeChoice == (int)Choice.SecondaryType)
             {
                 _allPokemon = populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
-                _pokemonBySearch = PokeList.pokemonListHalfSecundaryType;
+                _pokemonBySearch = Repository.pokemonListHalfSecundaryType;
             }
         }
 

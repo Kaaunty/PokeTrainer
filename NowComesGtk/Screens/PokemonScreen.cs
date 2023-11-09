@@ -4,10 +4,10 @@ using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
+using PokeTrainerBackEnd;
 using PokeTrainerBackEndTest.Controller;
 using PokeTrainerBackEndTest.Entities;
 using System.Globalization;
-using static PokeApi.BackEnd.Service.PokemonApiRequest;
 
 namespace NowComesGtk.Screens
 {
@@ -27,7 +27,6 @@ namespace NowComesGtk.Screens
         private Image _pokemonTypeOne = new();
         private Image _megaKey = new();
         private ListStore _formsList;
-        private List<Ability> _pokeAbilityList = new();
         private Fixed _fix = new();
         private ListStore _forms = new(typeof(string), (typeof(string)));
 
@@ -36,7 +35,6 @@ namespace NowComesGtk.Screens
             Form,
             FormMethod
         }
-
 
         #region Labels
 
@@ -74,7 +72,7 @@ namespace NowComesGtk.Screens
         private string _pokemonHPFormatted = "", _pokemonATKFormatted = "", _pokemonDEFFormatted = "", _pokemonSpATKFormatted = "", _pokemonSpDEFFormatted = "", _pokemonSpeedFormatted = "";
         private string _pokemonFirstTypeFormattedTitle = "", _pokemonFirstTypeFormatted = "", _pokemonSecondaryTypeFormatted = "", _damageRelations = "", _damageRelationsSecondary = "";
         private string _pokemonNameFormatted = "", _pokemonDexFormatted = "", _pokemonMaleFormatted = "", _pokemonFemaleFormatted = "", _pokemonCatchRate = "", _pokemonEggGroup = "";
-        private string _pokemonAbilityOneUpper = "< >", _pokemonAbilityTwoUpper = "< >", _pokemonAbilityThreeUpper = "< >", _pokemonAbilityFourUpper = "< >", _pokemonFlavorText = "";
+        private string _pokemonAbilityOneUpper = "< >", _pokemonAbilityTwoUpper = "< >", _pokemonAbilityThreeUpper = "< >", _pokemonAbilityFourUpper = "< >";
 
         public PokemonScreen(Pokemon Pokemon, ITranslationAPI translationApi, IPokemonAPI pokemonAPI, IPokemonSpriteLoaderAPI pokemonSpriteLoaderAPI) : base("", 1000, 500)
         {
@@ -110,9 +108,8 @@ namespace NowComesGtk.Screens
 
                 lblPokemonName.Text = _pokemonNameFormatted;
 
-                //TranslateString();
+                TranslateString();
 
-                lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_pokemonFlavorText}</span>";
                 _fix.Put(lblPokemonName, 40, 357);
 
                 _pokemonTypeOne = new Image($"Images/pokemon_types/{_pokemon.Types[0].Type.Name}.png");
@@ -175,6 +172,9 @@ namespace NowComesGtk.Screens
                     FormDesactivated.Pixbuf = new Pixbuf("Images/pokemon_forms/MythicalIcon.png");
                 }
 
+                FormDesactivated.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Indica se o pokemon é Lendario ou Mitico</span>";
+                _megaIcon.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Indica se o pokemon é uma Mega Evolução</span>";
+                gMaxIcon.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>Indica se o pokemon é uma Gigantamax</span>";
                 _fix.Put(FormDesactivated, 61, 35);
                 _fix.Put(_megaIcon, 36, 35);
                 _fix.Put(gMaxIcon, 85, 35);
@@ -219,9 +219,10 @@ namespace NowComesGtk.Screens
             }
         }
 
-        private async void OnRowActivated(object o, RowActivatedArgs args)
+        private void OnRowActivated(object o, RowActivatedArgs args)
         {
             TreeIter iter;
+            string pokemonName;
             if (_formsList.GetIter(out iter, args.Path))
             {
                 string form = (string)_formsList.GetValue(iter, (int)Column.Form);
@@ -230,45 +231,46 @@ namespace NowComesGtk.Screens
                     _pokemonFormId = _pokemon.PokemonForms.FindIndex(pokeForm => pokeForm.Name == form);
                     if (_pokemonFormId >= 0)
                     {
-                        string pokemonName = _pokemon.PokemonForms[_pokemonFormId].Name;
+                        pokemonName = _pokemon.PokemonForms[_pokemonFormId].Name;
+                        string pokemonType = _pokemon.PokemonForms[_pokemonFormId].Types[0].Type.Name;
+
                         Pokemon pokemon = _pokemonApiRequest.GetPokemonByName(pokemonName);
+
                         if (pokemon != null)
                         {
-                            if (_pokemon.Types[0].Type.Name != pokemon.Types[0].Type.Name)
-                            {
-                                _pokemonFirstTypeFormatted = pokemon.Types[0].Type.Name;
-                                _pokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonFirstTypeFormatted}.png");
-                                _damageRelations = GetTypeDamageRelation(_pokemon.Types[0].Type.Name);
-                                _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelations}</span>";
-                            }
-                            if (_pokemon.Types.Count > 1)
-                            {
-                                if (_pokemon.Types[1].Type.Name != pokemon.Types[1].Type.Name)
-                                {
-                                    _pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
-                                    _imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonSecondaryTypeFormatted}.png");
-                                    _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
-                                    _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelationsSecondary}</span>";
-                                }
-                            }
                             _pokemon = pokemon;
-                            await PopulateFields();
-                            UpdateLabels();
-                            GetPokemonGifSize();
-                            await UpdatePokemonSprite(pokemon.Name);
-                            _pokeAbilityList.Clear();
-                            CreateModel();
                         }
+                        if (_pokemon.Types[0].Type.Name != pokemonType)
+                        {
+                            _pokemonFirstTypeFormatted = pokemonType;
+                            _pokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonFirstTypeFormatted}.png");
+                            _damageRelations = GetTypeDamageRelation(_pokemon.Types[0].Type.Name);
+                            _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelations}</span>";
+                        }
+                        if (_pokemon.Types.Count > 1)
+                        {
+                            if (_pokemon.Types[1].Type.Name != pokemon.Types[1].Type.Name)
+                            {
+                                _pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
+                                _imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonSecondaryTypeFormatted}.png");
+                                _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
+                                _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelationsSecondary}</span>";
+                            }
+                        }
+                        PopulateFields();
+                        UpdateLabels();
+                        GetPokemonGifSize();
+                        UpdatePokemonSprite(pokemonName);
+                        CreateModel();
                     }
                     else
                     {
                         Pokemon pokemon = _pokemonApiRequest.GetPokemonByName(form);
                         _pokemon = pokemon;
-                        await PopulateFields();
+                        PopulateFields();
                         UpdateLabels();
                         GetPokemonGifSize();
-                        await UpdatePokemonSprite(pokemon.Name);
-                        _pokeAbilityList.Clear();
+                        UpdatePokemonSprite(pokemon.Name);
                         CreateModel();
                     }
                 }
@@ -276,11 +278,10 @@ namespace NowComesGtk.Screens
                 {
                     Pokemon pokemon = _pokemonApiRequest.GetPokemonByName(form);
                     _pokemon = pokemon;
-                    await PopulateFields();
+                    PopulateFields();
                     UpdateLabels();
                     GetPokemonGifSize();
-                    await UpdatePokemonSprite(pokemon.Name);
-                    _pokeAbilityList.Clear();
+                    UpdatePokemonSprite(pokemon.Name);
                     CreateModel();
                 }
             }
@@ -288,7 +289,7 @@ namespace NowComesGtk.Screens
 
         public string GetTypeDamageRelation(string type)
         {
-            return PokeList.typeDamageRelations[type];
+            return Repository.typeDamageRelations[type];
         }
 
         private void AddColumns(TreeView treeView)
@@ -307,41 +308,15 @@ namespace NowComesGtk.Screens
         private ListStore CreateModel()
         {
             _forms.Clear();
-            _forms.AppendValues(_pokemon.EvolutionChain.Chain.Species.Name, "Primeira Evolução");
-
+            if (_pokemon.PokemonForms[_pokemonFormId].Name != _pokemon.EvolutionChain.Chain.Species.Name || _pokemon.Name != _pokemon.EvolutionChain.Chain.Species.Name)
+            {
+                _forms.AppendValues($"{_pokemon.EvolutionChain.Chain.Species.Name}", "Forma Base");
+            }
             if (_pokemon.EvolutionChain.Chain.EvolvesTo.Count > 0)
             {
                 foreach (var evo in _pokemon.EvolutionChain.Chain.EvolvesTo)
                 {
-                    foreach (var i in evo.EvolutionDetails)
-                    {
-                        if (i != null)
-                        {
-                            if (i.Trigger.Name == "level-up")
-                            {
-                                if (i.MinLevel != null)
-                                {
-                                    _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
-                                }
-                                else
-                                {
-                                    _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Sem Level Minimo");
-                                }
-                            }
-                            else if (i.Trigger.Name == "trade")
-                            {
-                                _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name}");
-                            }
-                            else if (i.Trigger.Name == "use-item")
-                            {
-                                _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Item Usado: {i.Item.Name}");
-                            }
-                        }
-                    }
-                }
-                if (_pokemon.EvolutionChain.Chain.EvolvesTo[0].EvolvesTo.Count > 0)
-                {
-                    foreach (var evo in _pokemon.EvolutionChain.Chain.EvolvesTo[0].EvolvesTo)
+                    if (evo.Species.Name != _pokemon.Name)
                     {
                         foreach (var i in evo.EvolutionDetails)
                         {
@@ -349,7 +324,14 @@ namespace NowComesGtk.Screens
                             {
                                 if (i.Trigger.Name == "level-up")
                                 {
-                                    _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
+                                    if (i.MinLevel != null)
+                                    {
+                                        _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
+                                    }
+                                    else
+                                    {
+                                        _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Sem Level Minimo");
+                                    }
                                 }
                                 else if (i.Trigger.Name == "trade")
                                 {
@@ -358,6 +340,33 @@ namespace NowComesGtk.Screens
                                 else if (i.Trigger.Name == "use-item")
                                 {
                                     _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Item Usado: {i.Item.Name}");
+                                }
+                            }
+                        }
+                    }
+                }
+                if (_pokemon.EvolutionChain.Chain.EvolvesTo[0].EvolvesTo.Count > 0)
+                {
+                    foreach (var evo in _pokemon.EvolutionChain.Chain.EvolvesTo[0].EvolvesTo)
+                    {
+                        if (evo.Species.Name != _pokemon.Name)
+                        {
+                            foreach (var i in evo.EvolutionDetails)
+                            {
+                                if (i != null)
+                                {
+                                    if (i.Trigger.Name == "level-up")
+                                    {
+                                        _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Level Minimo: {i.MinLevel}");
+                                    }
+                                    else if (i.Trigger.Name == "trade")
+                                    {
+                                        _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name}");
+                                    }
+                                    else if (i.Trigger.Name == "use-item")
+                                    {
+                                        _forms.AppendValues($"{evo.Species.Name}", $"Metodo de Evolução: {i.Trigger.Name} Item Usado: {i.Item.Name}");
+                                    }
                                 }
                             }
                         }
@@ -376,27 +385,30 @@ namespace NowComesGtk.Screens
             {
                 foreach (var poke in _pokemon.Varieties)
                 {
-                    if (poke.IsDefault == false)
+                    if (poke.Pokemon.Name != _pokemon.Name)
                     {
-                        if (poke.Pokemon.Name.Contains("mega"))
+                        if (poke.IsDefault == false)
                         {
-                            _forms.AppendValues(poke.Pokemon.Name, "Mega Stone");
-                        }
-                        else if (poke.Pokemon.Name.Contains("gmax"))
-                        {
-                            _forms.AppendValues(poke.Pokemon.Name, "Dynamax");
-                        }
-                        else if (poke.Pokemon.Name.Contains("alola"))
-                        {
-                            _forms.AppendValues(poke.Pokemon.Name, "Alola");
-                        }
-                        else if (poke.Pokemon.Name.Contains("galar"))
-                        {
-                            _forms.AppendValues(poke.Pokemon.Name, "Galar");
-                        }
-                        else
-                        {
-                            _forms.AppendValues(poke.Pokemon.Name);
+                            if (poke.Pokemon.Name.Contains("mega"))
+                            {
+                                _forms.AppendValues(poke.Pokemon.Name, "Mega Stone");
+                            }
+                            else if (poke.Pokemon.Name.Contains("gmax"))
+                            {
+                                _forms.AppendValues(poke.Pokemon.Name, "Dynamax");
+                            }
+                            else if (poke.Pokemon.Name.Contains("alola"))
+                            {
+                                _forms.AppendValues(poke.Pokemon.Name, "Alola");
+                            }
+                            else if (poke.Pokemon.Name.Contains("galar"))
+                            {
+                                _forms.AppendValues(poke.Pokemon.Name, "Galar");
+                            }
+                            else
+                            {
+                                _forms.AppendValues(poke.Pokemon.Name);
+                            }
                         }
                     }
                 }
@@ -404,119 +416,50 @@ namespace NowComesGtk.Screens
             return _forms;
         }
 
-        //private async void TranslateString()
-        //{
-        //    try
-        //    {
-        //        if (_pokemon.Abilities.Count == 1)
-        //        {
-        //            lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokeAbility[0].EffectEntries.Last().Effect);
-        //            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
-        //        }
-        //        else
-        //        {
-        //            lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //        }
-        //        if (_pokemon.Abilities.Count == 2)
-        //        {
-        //            if (_pokeAbility[0].EffectEntries.Count > 0)
-        //            {
-        //                lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokeAbility[0].EffectEntries.Last().Effect);
-        //                lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
-        //            }
-        //            else
-        //            {
-        //                lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //            }
-        //            if (_pokeAbility[1].EffectEntries.Count > 0)
-        //            {
-        //                lblPokemonAbilityTwoToolTip = await _translationApiRequest.Translate(_pokeAbility[1].EffectEntries.Last().Effect);
-        //                lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityTwoToolTip}</span>";
-        //            }
-        //            else
-        //            {
-        //                lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //            }
-        //            if (_pokemon.Abilities.Count == 3)
-        //            {
-        //                if (_pokeAbility[0].EffectEntries.Count > 0)
-        //                {
-        //                    lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokeAbility[0].EffectEntries.Last().Effect);
-        //                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
-        //                }
-        //                else
-        //                {
-        //                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //                }
-        //                if (_pokeAbility[1].EffectEntries.Count > 0)
-        //                {
-        //                    lblPokemonAbilityTwoToolTip = await _translationApiRequest.Translate(_pokeAbility[1].EffectEntries.Last().Effect);
-        //                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
-        //                }
-        //                else
-        //                {
-        //                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //                }
-        //                if (_pokeAbility[2].EffectEntries.Count > 0)
-        //                {
-        //                    lblPokemonAbilityThreeToolTip = await _translationApiRequest.Translate(_pokeAbility[2].EffectEntries.Last().Effect);
-        //                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
-        //                }
-        //                else
-        //                {
-        //                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //                }
-        //            }
-        //            if (_pokemon.Abilities.Count == 4)
-        //            {
-        //                if (_pokeAbility[0].EffectEntries.Count > 0)
-        //                {
-        //                    lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokeAbility[0].EffectEntries.Last().Effect);
-        //                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
-        //                }
-        //                else
-        //                {
-        //                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //                }
-        //                if (_pokeAbility[1].EffectEntries.Count > 0)
-        //                {
-        //                    lblPokemonAbilityTwoToolTip = await _translationApiRequest.Translate(_pokeAbility[1].EffectEntries.Last().Effect);
-        //                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
-        //                }
-        //                else
-        //                {
-        //                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //                }
-        //                if (_pokeAbility[2].EffectEntries.Count > 0)
-        //                {
-        //                    lblPokemonAbilityThreeToolTip = await _translationApiRequest.Translate(_pokeAbility[2].EffectEntries.Last().Effect);
-        //                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
-        //                }
-        //                else
-        //                {
-        //                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //                }
+        private async void TranslateString()
+        {
+            try
+            {
+                if (_pokemon.Abilities.Count == 1)
+                {
+                    lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[0].Effect);
+                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
+                }
+                else if (_pokemon.Abilities.Count == 2)
+                {
+                    lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[0].Effect);
+                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityOneToolTip}</span>";
+                    lblPokemonAbilityTwoToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[1].Effect);
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{lblPokemonAbilityTwoToolTip}</span>";
+                }
+                else if (_pokemon.Abilities.Count == 3)
+                {
+                    lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[1].Effect);
+                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
 
-        //                if (_pokeAbility[3].EffectEntries.Count > 0)
-        //                {
-        //                    lblPokemonAbilityFourToolTip = await _translationApiRequest.Translate(_pokeAbility[3].EffectEntries.Last().Effect);
-        //                    lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityFourToolTip} </span>";
-        //                }
-        //                else
-        //                {
-        //                    lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[Sem descrição da habilidade]</span>";
-        //                }
-        //            }
-        //        }
-        //        string pokemonFlavorTextReplaced = _textInfo.ToTitleCase(_pokeSpecies.FlavorTextEntries[6].FlavorText.Replace("\n", "").ToLower());
-        //        _pokemonFlavorText = await _translationApiRequest.Translate(pokemonFlavorTextReplaced);
-        //        lblPokemonName.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_pokemonFlavorText}</span>";
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Erro ao traduzir a descrição da habilidade {_pokeAbility[0].Name}: {ex.Message}");
-        //    }
-        //}
+                    lblPokemonAbilityTwoToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[1].Effect);
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
+
+                    lblPokemonAbilityThreeToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[2].Effect);
+                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
+                }
+                else if (_pokemon.Abilities.Count == 4)
+                {
+                    lblPokemonAbilityOneToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[0].Effect);
+                    lblPokemonAbilityOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityOneToolTip} </span>";
+                    lblPokemonAbilityTwoToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[1].Effect);
+                    lblPokemonAbilityTwo.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityTwoToolTip} </span>";
+                    lblPokemonAbilityThreeToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[2].Effect);
+                    lblPokemonAbilityThree.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityThreeToolTip} </span>";
+                    lblPokemonAbilityFourToolTip = await _translationApiRequest.Translate(_pokemon.Abilities[3].Effect);
+                    lblPokemonAbilityFour.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'> {lblPokemonAbilityFourToolTip} </span>";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao traduzir a descrição da habilidade {_pokemon.Abilities[0].Name}: {ex.Message}");
+            }
+        }
 
         private async void ShinyButtonClicked(object sender, EventArgs e)
         {
@@ -529,7 +472,7 @@ namespace NowComesGtk.Screens
                 {
                     try
                     {
-                        await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.PokemonForms[_pokemonFormId].Name, _isShiny);
+                        _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.PokemonForms[_pokemonFormId].Name, _isShiny);
                     }
                     catch (Exception ex)
                     {
@@ -539,7 +482,7 @@ namespace NowComesGtk.Screens
                 }
                 else
                 {
-                    await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
+                    _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
                 }
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
             }
@@ -549,17 +492,17 @@ namespace NowComesGtk.Screens
                 _isShiny = true;
                 if (_pokemon.PokemonForms.Count > 1)
                 {
-                    await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.PokemonForms[_pokemonFormId].Name, _isShiny);
+                    _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.PokemonForms[_pokemonFormId].Name, _isShiny);
                 }
                 else
                 {
-                    await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
+                    _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(_pokemon.Name, _isShiny);
                 }
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
             }
         }
 
-        private async void PokemonMoves(object sender, EventArgs e)
+        private void PokemonMoves(object sender, EventArgs e)
         {
             Pokemon pokemonSpecie = _pokemonApiRequest.GetPokemonByName(_pokemon.EvolutionChain.Chain.Species.Name);
 
@@ -574,7 +517,7 @@ namespace NowComesGtk.Screens
             movementScreen.ShowAll();
         }
 
-        public async Task PopulateFields()
+        public void PopulateFields()
         {
             try
             {
@@ -586,7 +529,7 @@ namespace NowComesGtk.Screens
                 _pokemonSpDEFFormatted = _pokemon.Stats[4].BaseStat.ToString("D3");
                 _pokemonSpeedFormatted = _pokemon.Stats[5].BaseStat.ToString("D3");
 
-                await UpdatePokemonSprite(_pokemon.Name);
+                UpdatePokemonSprite(_pokemon.Name);
 
                 _pokemonDexFormatted = "#" + _pokemon.Id.ToString("D4");
 
@@ -652,10 +595,6 @@ namespace NowComesGtk.Screens
                     _ => _pokemonCatchRate
                 };
 
-                foreach (var ability in _pokemon.Abilities)
-                {
-                    _pokeAbilityList?.Add(ability);
-                }
                 if (_pokemon.Abilities.Count == 1)
                 {
                     _pokemonAbilityOneUpper = $"<{_textInfo.ToTitleCase(_pokemon.Abilities[0].Name)}>";
@@ -682,15 +621,12 @@ namespace NowComesGtk.Screens
                 if (_pokemon.Types.Count == 1)
                 {
                     _pokemonFirstTypeFormatted = _pokemon.Types[0].Type.Name;
-                    //_pokemonTypePrimary = await _pokemonApiRequest.GetTypeAsync(_pokemonFirstTypeFormatted);
                     _pokemonSecondaryTypeFormatted = "";
                 }
                 else
                 {
                     _pokemonFirstTypeFormatted = _pokemon.Types[0].Type.Name;
-                    // _pokemonTypePrimary = await _pokemonApiRequest.GetTypeAsync(_pokemonFirstTypeFormatted);
                     _pokemonSecondaryTypeFormatted = _pokemon.Types[1].Type.Name;
-                    // _pokemonTypeSecondary = await _pokemonApiRequest.GetTypeAsync(_pokemonSecondaryTypeFormatted);
                 }
 
                 foreach (var eggGroup in _pokemon.EggGroups)
@@ -706,16 +642,16 @@ namespace NowComesGtk.Screens
             }
         }
 
-        private async Task UpdatePokemonSprite(string pokemonForm)
+        private void UpdatePokemonSprite(string pokemonForm)
         {
             if (!_isShiny)
             {
-                await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
+                _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimated.gif");
             }
             else if (_isShiny)
             {
-                await _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
+                _pokemonSpriteLoaderAPI.GetPokemonAnimatedSprite(pokemonForm, _isShiny);
                 _pokemonAnimation.PixbufAnimation = new PixbufAnimation("Images/PokemonAnimatedShiny.gif");
             }
         }
@@ -740,39 +676,59 @@ namespace NowComesGtk.Screens
             lblPokemonName.Text = _pokemonNameFormatted;
             _pokemonFirstTypeFormattedTitle = (_textInfo.ToTitleCase(_pokemonFirstTypeFormatted));
 
-            lblPokemonAbilityOne.Text = _pokemonAbilityOneUpper;
+            TranslateString();
+
+            if (_pokemon.Abilities.Count == 1)
+            {
+                lblPokemonAbilityOne.Text = _pokemonAbilityOneUpper;
+            }
+            else if (_pokemon.Abilities.Count == 2)
+            {
+                lblPokemonAbilityOne.Text = _pokemonAbilityOneUpper;
+                lblPokemonAbilityTwo.Text = _pokemonAbilityTwoUpper;
+            }
+            else if (_pokemon.Abilities.Count == 3)
+            {
+                lblPokemonAbilityOne.Text = _pokemonAbilityOneUpper;
+                lblPokemonAbilityTwo.Text = _pokemonAbilityTwoUpper;
+                lblPokemonAbilityThree.Text = _pokemonAbilityThreeUpper;
+            }
+            else if (_pokemon.Abilities.Count == 4)
+            {
+                lblPokemonAbilityOne.Text = _pokemonAbilityOneUpper;
+                lblPokemonAbilityTwo.Text = _pokemonAbilityTwoUpper;
+                lblPokemonAbilityThree.Text = _pokemonAbilityThreeUpper;
+                lblPokemonAbilityFour.Text = _pokemonAbilityFourUpper;
+            }
 
             if (_pokemon.Types.Count == 1)
             {
                 _imagePokemonTypeSecondary.Pixbuf = new Pixbuf("Images/pokemon_types/none.png");
                 _imagePokemonTypeSecondary.TooltipMarkup = "";
             }
-
-            if (_pokemon.Types.Count > 1)
+            else if (_pokemon.Types.Count > 1)
             {
                 _pokemonSecondaryTypeFormatted = _pokemon.Types[1].Type.Name;
                 _imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonSecondaryTypeFormatted}.png");
                 _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
                 _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{_damageRelationsSecondary}]</span>";
             }
-            if (_pokemonFormId >= 0)
+
+            if (_pokemon.PokemonForms[_pokemonFormId].IsMega)
             {
-                if (_pokemon.PokemonForms[_pokemonFormId].IsMega)
-                {
-                    _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
-                }
-                else
-                {
-                    _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
-                }
-                if (_pokemon.PokemonForms[_pokemonFormId].Name == "gmax")
-                {
-                    gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxActivated.png");
-                }
-                else
-                {
-                    gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxDesactived.png");
-                }
+                _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
+            }
+            else
+            {
+                _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
+            }
+            if (_pokemon.PokemonForms[_pokemonFormId].Name.Contains("gmax"))
+            {
+                gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxActivated.png");
+            }
+            else
+            {
+                gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxDesactived.png");
             }
 
             lblPokemonCatchRate.Text = _pokemonCatchRate;
