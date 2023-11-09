@@ -153,12 +153,6 @@ namespace NowComesGtk.Screens
             btnAllPokemons.Clicked += BtnTypePokedexScreen;
             _fix.Put(btnAllPokemons, 67, 90);
 
-            Button pokemonTest = new ButtonGenerator("", 50, 60);
-            pokemonTest.Image = new Image("Images/buttons_type/AllPokémons.png");
-            pokemonTest.TooltipMarkup = "Teste";
-            _fix.Put(pokemonTest, 67, 150);
-            pokemonTest.Clicked += PokemonTest;
-
             Button btnGitHub = new ButtonGenerator("", 40, 40);
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
             btnGitHub.TooltipMarkup = "Clique para abrir o gitHub do projeto.";
@@ -168,13 +162,6 @@ namespace NowComesGtk.Screens
             DeleteEvent += delegate { Gtk.Application.Quit(); };
             Add(_fix);
             ShowAll();
-        }
-
-        private async void PokemonTest(object sender, EventArgs e)
-        {
-            var pokemon = await pokemonModel.GetPokemon(172);
-            PokemonScreen pokemonScreen = new(pokemon, new GoogleTranslationApi(), new PokeApiNetController(), new PokemonImageApiRequest());
-            pokemonScreen.ShowAll();
         }
 
         private void BtnTypePokedexScreen(object sender, EventArgs e)
