@@ -15,7 +15,6 @@ namespace NowComesGtk.Screens
         private Dictionary<string, string> _moveLearnByMoveTutor = new();
         private List<Move> _Moves = new();
         private ListStore _moveList;
-     
 
         private int _choice;
 
@@ -27,7 +26,6 @@ namespace NowComesGtk.Screens
         public MovementScreen(List<Move> move, string pokemonType) : base("", 500, 500)
         {
             _Moves = move;
-        
 
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
