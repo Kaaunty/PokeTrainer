@@ -1,17 +1,20 @@
-using static PokeApi.BackEnd.Service.PokemonApiRequest;
-using PokeApi.BackEnd.Service;
+using Gtk;
+using NAudio.Wave;
 using NowComesGtk.Screens;
 using NowComesGtk.Utils;
+using PokeApi.BackEnd.Entities;
+using PokeTrainerBackEnd;
+using PokeTrainerBackEnd.Helper;
+using PokeTrainerBackEndTest.Controller;
+using static PokeApi.BackEnd.Service.PokemonApiRequest;
 using Image = Gtk.Image;
-using NAudio.Wave;
-using Gtk;
 
 public class PokemonLoad : BaseWindow
 {
 #nullable disable
 
-  
-    private PokemonApiRequest _apiRequest = new();
+    private IPokemonAPI _pokemonAPI = new PokeApiNetController();
+    private DirectoryHelper directoryHelper = new DirectoryHelper();
     private Image _redAndPikachuRunning = new();
     private ProgressBar _progressBar = new();
     private Label _loadingLabel = new();
@@ -56,8 +59,8 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            _totalPokemonCount = await _apiRequest.GetPokemonTotalCount();
-            await _apiRequest.LoadPokemonsListAll();
+            _totalPokemonCount = await _pokemonAPI.GetPokemonTotalCount();
+            await directoryHelper.ValidateXmlArchive();
             PopulateTypeDamageRelationDictionary();
             _progressBar.Fraction = 1;
             _isLoaded = true;
@@ -96,7 +99,7 @@ public class PokemonLoad : BaseWindow
 
     public double GetProgress(double pokemonTotalCount)
     {
-        double totalPokemonReceived = PokeList.pokemonList.Count;
+        double totalPokemonReceived = Repository.Pokemon.Count;
         if (pokemonTotalCount == 0 || totalPokemonReceived == 0)
             return 0;
 

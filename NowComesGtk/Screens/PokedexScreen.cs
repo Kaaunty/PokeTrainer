@@ -1,6 +1,8 @@
-﻿using NowComesGtk.Reusable_components;
+using NowComesGtk.Reusable_components;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
+using PokeTrainerBackEndTest.Controller;
+using PokeTrainerBackEndTest.Entities;
 using System.Globalization;
 using NowComesGtk.Utils;
 using PokeApiNet;
@@ -19,6 +21,12 @@ namespace NowComesGtk.Screens
 
         private Entry _txtSearchPokemon = new TextBoxGenerator("Buscar Pokémon", 125, 20);
         private ComboBox _cbTypePokemon = new();
+        private SeparateApplicationComponents _separateApplicationComponents = new();
+        private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
+        private Entry _txtSearchPokemon = new();
+        private ComboBox _cbTypePokemon = new();
+        private readonly Methods _methods = new();
+        private readonly IPokemonAPI _pokemonAPI = new PokeApiNetController();
         private Button _btnNext = new();
         private Button _btnBack = new();
         private Fixed _fix = new();
@@ -59,6 +67,7 @@ namespace NowComesGtk.Screens
         public PokedexScreen(string pokemonType, ITranslationAPI translationAPI, IPokemonAPI pokemonAPI) : base($"PokéTrainer© // Pokémons tipo - {pokemonType} // Pokémons", 500, 600)
         {
             _pokemonType = pokemonType;
+
 
             _pokemonAPI = pokemonAPI;
             _pokemonTypeFormatted = translationAPI.TranslateType(_textInfo.ToTitleCase(_pokemonType));
@@ -313,7 +322,7 @@ namespace NowComesGtk.Screens
             if (pokemonName != string.Empty)
             {
                 Pokemon pokemonClicked = _pokemonAPI.GetPokemonByName(pokemonName);
-                PokemonScreen pokemonScreen = new(pokemonClicked, new GoogleTranslationApi(), new PokemonApiRequest(), new PokemonImageApiRequest());
+                PokemonScreen pokemonScreen = new(pokemonClicked, new GoogleTranslationApi(), new PokeApiNetController(), new PokemonImageApiRequest());
                 pokemonScreen.Show();
             }
             else

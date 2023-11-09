@@ -3,6 +3,10 @@ using PokeApi.BackEnd.Service;
 using NowComesGtk.Utils;
 using GLib;
 using Gtk;
+using PokeTrainerBackEndTest.Controller;
+using PokeTrainerBackEndTest.Entities;
+using PokeApi.BackEnd.Entities;
+using PokeTrainerBackEndTest.Model;
 
 namespace NowComesGtk.Screens
 {
@@ -12,6 +16,8 @@ namespace NowComesGtk.Screens
 
         private SeparateApplicationComponents _separateApplicationComponents = new();
         private Fixed _fix = new();
+        private IPokemonAPI _pokemonAPI = new PokeApiNetController();
+        private PokemonModel pokemonModel = new PokemonModel();
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
         {
@@ -135,8 +141,7 @@ namespace NowComesGtk.Screens
             btnWelcome.TooltipMarkup = "Olá...";
             btnWelcome.Clicked += Dialog_Start;
             _fix.Put(btnWelcome, 620, 75);
-            
-            
+
             Image openBag = new Image("Images/buttons_type/AllPokémonsOpen.png");
             Image closedBag = new Image("Images/buttons_type/AllPokémons.png");
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
@@ -147,6 +152,12 @@ namespace NowComesGtk.Screens
             btnAllPokemons.Data["_type"] = "all";
             btnAllPokemons.Clicked += BtnTypePokedexScreen;
             _fix.Put(btnAllPokemons, 67, 90);
+
+            Button pokemonTest = new ButtonGenerator("", 50, 60);
+            pokemonTest.Image = new Image("Images/buttons_type/AllPokémons.png");
+            pokemonTest.TooltipMarkup = "Teste";
+            _fix.Put(pokemonTest, 67, 150);
+            pokemonTest.Clicked += PokemonTest;
 
             Button btnGitHub = new ButtonGenerator("", 40, 40);
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
@@ -159,6 +170,13 @@ namespace NowComesGtk.Screens
             ShowAll();
         }
 
+        private async void PokemonTest(object sender, EventArgs e)
+        {
+            var pokemon = await pokemonModel.GetPokemon(172);
+            PokemonScreen pokemonScreen = new(pokemon, new GoogleTranslationApi(), new PokeApiNetController(), new PokemonImageApiRequest());
+            pokemonScreen.ShowAll();
+        }
+
         private void BtnTypePokedexScreen(object sender, EventArgs e)
         {
             try
@@ -166,7 +184,7 @@ namespace NowComesGtk.Screens
                 Button btn = (Button)sender;
                 string type = btn.Data["_type"].ToString();
 
-                PokedexScreen pokedexScreen = new(type, new GoogleTranslationApi(), new PokemonApiRequest());
+                PokedexScreen pokedexScreen = new(type, new GoogleTranslationApi(), new PokeApiNetController());
                 pokedexScreen.ShowAll();
             }
             catch (Exception ex)
