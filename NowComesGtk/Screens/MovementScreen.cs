@@ -1,6 +1,6 @@
-﻿using NowComesGtk.Utils;
-using PokeApiNet;
-using Gtk;
+﻿using Gtk;
+using NowComesGtk.Utils;
+using PokeTrainerBackEndTest.Entities;
 
 namespace NowComesGtk.Screens
 {
@@ -34,7 +34,7 @@ namespace NowComesGtk.Screens
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
 
-            GetMoveLearnMethod();
+            //GetMoveLearnMethod();
 
             Fixed fix = new();
 
@@ -130,7 +130,7 @@ namespace NowComesGtk.Screens
         {
             foreach (Move move in _Moves)
             {
-                Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Type.Name}.png");
+                Gdk.Pixbuf pixbuf = new($"Images/pokemon_types/{move.Name}.png");
                 _moves.AppendValues(move.Name, pixbuf);
             }
             return _moves;
@@ -188,39 +188,39 @@ namespace NowComesGtk.Screens
             }
         }
 
-        private void GetMoveLearnMethod()
-        {
-            foreach (var move in _Moves)
-            {
-                bool MoveLearnByEgg = _poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"
-                || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
+        //private void GetMoveLearnMethod()
+        //{
+        //    foreach (var move in _Moves)
+        //    {
+        //        bool MoveLearnByEgg = _poke.Moves.Any(pokemonMove => pokemonMove.Name == move.Name && pokemonMove.MoveLearnMethod == "egg"
+        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
 
-                bool moveLearnByMachine = _poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"
-                || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"));
+        //        bool moveLearnByMachine = _poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"
+        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"));
 
-                bool moveLearnByLevelUp = _poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"
-                || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"));
+        //        bool moveLearnByLevelUp = _poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"
+        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"));
 
-                bool moveLearnByTutor = _poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"
-                || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"));
+        //        bool moveLearnByTutor = _poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"
+        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"));
 
-                if (MoveLearnByEgg)
-                {
-                    _moveLearnByEgg.Add(move.Name, move.Type.Name);
-                }
-                if (moveLearnByMachine)
-                {
-                    _moveLearnByTmHm.Add(move.Name, move.Type.Name);
-                }
-                if (moveLearnByLevelUp)
-                {
-                    _moveLearnByLevelUp.Add(move.Name, move.Type.Name);
-                }
-                if (moveLearnByTutor)
-                {
-                    _moveLearnByMoveTutor.Add(move.Name, move.Type.Name);
-                }
-            }
-        }
+        //        if (MoveLearnByEgg)
+        //        {
+        //            _moveLearnByEgg.Add(move.Name, move.Type.Name);
+        //        }
+        //        if (moveLearnByMachine)
+        //        {
+        //            _moveLearnByTmHm.Add(move.Name, move.Type.Name);
+        //        }
+        //        if (moveLearnByLevelUp)
+        //        {
+        //            _moveLearnByLevelUp.Add(move.Name, move.Type.Name);
+        //        }
+        //        if (moveLearnByTutor)
+        //        {
+        //            _moveLearnByMoveTutor.Add(move.Name, move.Type.Name);
+        //        }
+        //    }
+        //}
     }
 }

@@ -1,10 +1,11 @@
-﻿using NowComesGtk.Reusable_components;
+﻿using Gtk;
+using NowComesGtk.Reusable_components;
+using NowComesGtk.Utils;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
+using PokeTrainerBackEndTest.Controller;
+using PokeTrainerBackEndTest.Entities;
 using System.Globalization;
-using NowComesGtk.Utils;
-using PokeApiNet;
-using Gtk;
 
 namespace NowComesGtk.Screens
 {
@@ -12,13 +13,12 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
-
         private SeparateApplicationComponents _separateApplicationComponents = new();
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
-        private IPokemonAPI _pokemonAPI = new PokemonApiRequest();
         private Entry _txtSearchPokemon = new();
         private ComboBox _cbTypePokemon = new();
-        private Methods _methods = new();
+        private readonly Methods _methods = new();
+        private readonly IPokemonAPI _pokemonAPI = new PokeApiNetController();
         private Button _btnNext = new();
         private Button _btnBack = new();
         private Fixed _fix = new();
@@ -63,7 +63,7 @@ namespace NowComesGtk.Screens
         {
             this._type = type;
 
-            _pokemonAPI = pokemonAPI;
+            //_pokemonAPI = pokemonAPI;
             _TypeFormatted = translationAPI.TranslateType(_textInfo.ToTitleCase(_type));
 
             Title = $"PokéTrainer© // Pokémons tipo - {_TypeFormatted} // Pokémons";
@@ -335,7 +335,7 @@ namespace NowComesGtk.Screens
             if (pokemonName != string.Empty)
             {
                 Pokemon pokemonClicked = _pokemonAPI.GetPokemonByName(pokemonName);
-                PokemonScreen pokemonScreen = new(pokemonClicked, new GoogleTranslationApi(), new PokemonApiRequest(), new PokemonImageApiRequest());
+                PokemonScreen pokemonScreen = new(pokemonClicked, new GoogleTranslationApi(), new PokeApiNetController(), new PokemonImageApiRequest());
                 pokemonScreen.Show();
             }
             else
@@ -349,7 +349,7 @@ namespace NowComesGtk.Screens
         private void AllTypeClicked()
         {
             _btnNext.Sensitive = true;
-            _methods.LoadPokemonList(_currentPage, _type, _choice, new PokemonApiRequest());
+            _methods.LoadPokemonList(_currentPage, _type, _choice);
             _methods.UpdateButtons(_fix, _currentPage, _type, _choice);
         }
     }
