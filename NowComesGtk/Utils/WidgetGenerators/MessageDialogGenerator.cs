@@ -1,6 +1,6 @@
 ﻿using Gtk;
 
-namespace NowComesGtk.Utils
+namespace NowComesGtk.Utils.WidgetGenerators
 {
     public class MessageDialogGenerator : MessageDialog
     {

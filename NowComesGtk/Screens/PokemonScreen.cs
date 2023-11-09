@@ -1,7 +1,7 @@
 using Gdk;
 using Gtk;
-using NowComesGtk.Reusable_components;
 using NowComesGtk.Utils;
+using NowComesGtk.Utils.WidgetGenerators;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
 using PokeTrainerBackEnd;
@@ -15,20 +15,24 @@ namespace NowComesGtk.Screens
     {
 #nullable disable
 
-        private ITranslationAPI _translationApiRequest = new GoogleTranslationApi();
-        private IPokemonAPI _pokemonApiRequest = new PokeApiNetController();
         private IPokemonSpriteLoaderAPI _pokemonSpriteLoaderAPI = new PokemonImageApiRequest();
-        private Pokemon _pokemon = new();
-        private Button _shinyButton = new();
-        private Image _megaIcon = new("Images/pokemon_forms/MegaKeyDesactivated.png");
+        private ITranslationAPI _translationApiRequest = new GoogleTranslationApi();
         private TextInfo _textInfo = new CultureInfo("pt-BR", false).TextInfo;
+        private IPokemonAPI _pokemonApiRequest = new PokeApiNetController();
+
+        private Pokemon _pokemon = new();
+
+        private Image _megaIcon = new("Images/pokemon_forms/MegaKeyDesactivated.png");
         private Image _imagePokemonTypeSecondary = new();
         private Image _pokemonAnimation = new();
         private Image _pokemonTypeOne = new();
+        private Button _shinyButton = new();
         private Image _megaKey = new();
-        private ListStore _formsList;
         private Fixed _fix = new();
+    
         private ListStore _forms = new(typeof(string), (typeof(string)));
+        private List<Ability> _pokeAbilityList = new();
+        private ListStore _formsList;
 
         private enum Column
         {

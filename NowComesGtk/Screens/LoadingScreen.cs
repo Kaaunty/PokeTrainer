@@ -1,19 +1,23 @@
-using Gtk;
-using NAudio.Wave;
-using NowComesGtk.Screens;
-using NowComesGtk.Utils;
+using static PokeApi.BackEnd.Service.PokemonApiRequest;
+using NowComesGtk.Utils.WidgetGenerators;
+using PokeTrainerBackEndTest.Controller;
+using PokeTrainerBackEnd.Helper;
 using PokeApi.BackEnd.Entities;
+using NowComesGtk.Screens;
 using PokeTrainerBackEnd;
+
 using PokeTrainerBackEnd.Helper;
 using PokeTrainerBackEndTest.Controller;
 using Image = Gtk.Image;
+using NAudio.Wave;
+using Gtk;
 
 public class PokemonLoad : BaseWindow
 {
 #nullable disable
 
     private IPokemonAPI _pokemonAPI = new PokeApiNetController();
-    private DirectoryHelper directoryHelper = new DirectoryHelper();
+    private DirectoryHelper directoryHelper = new();
     private Image _redAndPikachuRunning = new();
     private ProgressBar _progressBar = new();
     private Label _loadingLabel = new();
@@ -36,7 +40,7 @@ public class PokemonLoad : BaseWindow
         Add(vBox);
         ShowAll();
         LoadPokemonList();
-        Thread sound = new Thread(new ThreadStart(PlaySound));
+        Thread sound = new(new ThreadStart(PlaySound));
         sound.Start();
         Task.Run(() => UpdateProgressBar());
     }
@@ -84,8 +88,8 @@ public class PokemonLoad : BaseWindow
     {
         try
         {
-            MediaFoundationReader readers = new MediaFoundationReader("Sounds/pokemon-opening2.mp3");
-            WaveOutEvent _waveOut = new WaveOutEvent();
+            MediaFoundationReader readers = new("Sounds/pokemon-opening2.mp3");
+            WaveOutEvent _waveOut = new();
 
             _waveOut.Init(readers);
             _waveOut.Volume = 0.1f;

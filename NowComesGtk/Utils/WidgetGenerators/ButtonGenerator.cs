@@ -1,6 +1,6 @@
 ﻿using Gtk;
 
-namespace NowComesGtk.Reusable_components
+namespace NowComesGtk.Utils.WidgetGenerators
 {
     public class ButtonGenerator : Button
     {
