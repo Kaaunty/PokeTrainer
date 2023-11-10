@@ -6,8 +6,7 @@ namespace NowComesGtk.Utils.WidgetGenerators
     {
         public TextBoxGenerator(string defaultText, int width, int height) : base()
         {
-            string text = defaultText;
-            Text = text;
+            Text = defaultText;
             SetSizeRequest(width, height);
 
             CssProvider cssProvider = new();
@@ -23,7 +22,7 @@ namespace NowComesGtk.Utils.WidgetGenerators
             };
             FocusOutEvent += (sender, e) =>
             {
-                Text = text;
+
                 CssProvider cssProvider = new();
                 cssProvider.LoadFromData("entry { color: rgb(200, 200, 200); }");
                 StyleContext.AddProvider(cssProvider, StyleProviderPriority.Application);

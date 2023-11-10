@@ -149,6 +149,10 @@ namespace NowComesGtk.Screens
             btnAllPokemons.Clicked += BtnTypePokedexScreen;
             _fix.Put(btnAllPokemons, 67, 90);
 
+            Button RegisterTest = new ButtonGenerator("", 50, 60);
+            RegisterTest.Clicked += delegate { PokemonTrainerRegister pokemonTrainer = new(); pokemonTrainer.Show(); };
+            RegisterTest.TooltipMarkup = "Teste de Registro";
+            _fix.Put(RegisterTest, 67, 150);
             Button btnGitHub = new ButtonGenerator("", 40, 40);
             btnGitHub.Image = new Image("Images/buttons/btnGitHub.png");
             btnGitHub.TooltipMarkup = "Clique para abrir o gitHub do projeto.";
@@ -168,8 +172,8 @@ namespace NowComesGtk.Screens
                 string type = btn.Data["_type"].ToString();
 
                 PokedexScreen pokedexScreen = new(type, new GoogleTranslationApi(), new PokeApiNetController());
-
                 pokedexScreen.ShowAll();
+                Hide();
             }
             catch (Exception ex)
             {
