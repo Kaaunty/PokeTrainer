@@ -33,10 +33,9 @@ namespace NowComesGtk.Presenters
         }
 
         public void FilterigForDisplay(int currentPage, string choiceOfType, int subTypeChoice)
-        { 
+        {
             if (choiceOfType == "all")
             {
-
                 _allPokemon = _populateLists.GetPokemonListAll(currentPage);
 
                 _pokemonBySearch = Repository.Pokemon;
@@ -45,9 +44,8 @@ namespace NowComesGtk.Presenters
             {
                 if (subTypeChoice == (int)Choice.All)
                 {
-
                     _allPokemon = _populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
-                    _pokemonBySearch = Repository.pokemonListPureType;
+                    _pokemonBySearch = Repository.pokemonListAllType;
                 }
                 else if (subTypeChoice == (int)Choice.PureType)
                 {
@@ -61,7 +59,6 @@ namespace NowComesGtk.Presenters
                 }
                 else if (subTypeChoice == (int)Choice.SecondaryType)
                 {
-
                     _allPokemon = _populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
                     _pokemonBySearch = Repository.pokemonListHalfSecundaryType;
                 }
