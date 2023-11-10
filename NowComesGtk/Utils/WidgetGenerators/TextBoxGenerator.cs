@@ -1,5 +1,4 @@
-﻿
-using Gtk;
+﻿using Gtk;
 
 namespace NowComesGtk.Utils.WidgetGenerators
 {
