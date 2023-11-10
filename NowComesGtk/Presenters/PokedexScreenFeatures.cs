@@ -38,28 +38,31 @@ namespace NowComesGtk.Presenters
 
             if (choiceOfType == "all")
             {
-                _allPokemon = populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
+                _allPokemon = populateLists.GetPokemonListAll(currentPage);
                 _pokemonBySearch = Repository.Pokemon;
             }
-            if (subTypeChoice == (int)Choice.All)
+            else
             {
-                _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
-                _pokemonBySearch = Repository.pokemonListPureType;
-            }
-            else if (subTypeChoice == (int)Choice.PureType)
-            {
-                _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
-                _pokemonBySearch = Repository.pokemonListPureType;
-            }
-            else if (subTypeChoice == (int)Choice.PrimaryType)
-            {
-                _allPokemon = populateLists.GetPokemonListByTypeHalfType(currentPage, choiceOfType);
-                _pokemonBySearch = Repository.pokemonListHalfType;
-            }
-            else if (subTypeChoice == (int)Choice.SecondaryType)
-            {
-                _allPokemon = populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
-                _pokemonBySearch = Repository.pokemonListHalfSecundaryType;
+                if (subTypeChoice == (int)Choice.All)
+                {
+                    _allPokemon = populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
+                    _pokemonBySearch = Repository.pokemonListAllType;
+                }
+                else if (subTypeChoice == (int)Choice.PureType)
+                {
+                    _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
+                    _pokemonBySearch = Repository.pokemonListPureType;
+                }
+                else if (subTypeChoice == (int)Choice.PrimaryType)
+                {
+                    _allPokemon = populateLists.GetPokemonListByTypeHalfType(currentPage, choiceOfType);
+                    _pokemonBySearch = Repository.pokemonListHalfType;
+                }
+                else if (subTypeChoice == (int)Choice.SecondaryType)
+                {
+                    _allPokemon = populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
+                    _pokemonBySearch = Repository.pokemonListHalfSecundaryType;
+                }
             }
         }
 

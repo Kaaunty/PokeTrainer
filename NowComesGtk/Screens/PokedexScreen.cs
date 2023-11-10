@@ -7,6 +7,7 @@ using NowComesGtk.Presenters;
 using System.Globalization;
 using NowComesGtk.Utils;
 using Gtk;
+using GLib;
 
 namespace NowComesGtk.Screens
 {
@@ -23,6 +24,7 @@ namespace NowComesGtk.Screens
         private Button _btnNext = new(">>");
         private Button _btnBack = new("<<");
         private Fixed _fix = new();
+
         private enum Choice
         {
             All,
@@ -275,7 +277,7 @@ namespace NowComesGtk.Screens
 
             _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _choice, _txtSearchPokemon.Text.ToLower());
 
-            DeleteEvent += delegate { Destroy(); };
+            DeleteEvent += delegate { Dispose(); Destroy(); };
             Add(_fix);
             ShowAll();
         }

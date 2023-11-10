@@ -30,8 +30,6 @@ namespace NowComesGtk.Screens
             string title = "PokéTrainer© // Pokémons tipo - Água // Pokemon [#0000] - Movimentos";
             Title = title;
 
-            //GetMoveLearnMethod();
-
             Fixed fix = new();
 
             Image backgroundScreen = new($"Images/moves_homescreen/{pokemonType}.png");
@@ -108,6 +106,7 @@ namespace NowComesGtk.Screens
             sw.Add(treeView);
             AddColumns(treeView);
             Add(fix);
+            DeleteEvent += delegate { Dispose(); Destroy(); };
             ShowAll();
         }
 
@@ -183,40 +182,5 @@ namespace NowComesGtk.Screens
                 throw;
             }
         }
-
-        //private void GetMoveLearnMethod()
-        //{
-        //    foreach (var move in _Moves)
-        //    {
-        //        bool MoveLearnByEgg = _poke.Moves.Any(pokemonMove => pokemonMove.Name == move.Name && pokemonMove.MoveLearnMethod == "egg"
-        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "egg"));
-
-        //        bool moveLearnByMachine = _poke.Moves.Any(pokemonMove => pokemonMove.Move.Name == move.Name && pokemonMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"
-        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "machine"));
-
-        //        bool moveLearnByLevelUp = _poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"
-        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "level-up"));
-
-        //        bool moveLearnByTutor = _poke.Moves.Any(pokemonMoves => pokemonMoves.Move.Name == move.Name && pokemonMoves.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"
-        //        || _pokeSpecie.Moves.Any(specieMove => specieMove.Move.Name == move.Name && specieMove.VersionGroupDetails.Last().MoveLearnMethod.Name == "tutor"));
-
-        //        if (MoveLearnByEgg)
-        //        {
-        //            _moveLearnByEgg.Add(move.Name, move.Type.Name);
-        //        }
-        //        if (moveLearnByMachine)
-        //        {
-        //            _moveLearnByTmHm.Add(move.Name, move.Type.Name);
-        //        }
-        //        if (moveLearnByLevelUp)
-        //        {
-        //            _moveLearnByLevelUp.Add(move.Name, move.Type.Name);
-        //        }
-        //        if (moveLearnByTutor)
-        //        {
-        //            _moveLearnByMoveTutor.Add(move.Name, move.Type.Name);
-        //        }
-        //    }
-        //}
     }
 }
