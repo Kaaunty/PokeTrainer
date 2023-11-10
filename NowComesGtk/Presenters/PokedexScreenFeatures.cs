@@ -27,11 +27,6 @@ namespace NowComesGtk.Presenters
             SecondaryType
         }
 
-        public void Populating(int currentPage, string choiceOfType, int subTypeChoice)
-        {
-            FilterigForDisplay(currentPage, choiceOfType, subTypeChoice);
-        }
-
         public void FilterigForDisplay(int currentPage, string choiceOfType, int subTypeChoice)
         {
             if (choiceOfType == "all")
@@ -67,19 +62,16 @@ namespace NowComesGtk.Presenters
 
         public void Filter(Fixed fix, int currentPage, string type, int choice, string PokeName)
         {
-            Populating(currentPage, type, choice);
+            FilterigForDisplay(currentPage, type, choice);
 
-            string pokemonName = PokeName;
-            if (pokemonName != string.Empty && pokemonName != "buscar-pokémon")
+            if (!string.IsNullOrEmpty(PokeName) && PokeName != "buscar pokémon")
             {
-                _pokemonBySearch = _pokemonBySearch.Where(pokemon => pokemon.Name.StartsWith(pokemonName)).ToList();
-                _pokemonList = _pokemonBySearch;
+                _pokemonList = _pokemonBySearch.FindAll(pokemon => pokemon.Name.StartsWith(PokeName.Replace(" ", "-")));
             }
             else
             {
                 _pokemonList = _allPokemon;
             }
-
             UpdateButtons(fix);
         }
 
