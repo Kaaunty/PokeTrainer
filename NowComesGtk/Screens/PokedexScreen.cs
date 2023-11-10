@@ -82,6 +82,7 @@ namespace NowComesGtk.Screens
             {
                 SearchPokemon();
             };
+
             _fix.Put(_btnBack, 25, 74);
             _btnBack.Sensitive = false;
             _btnBack.Name = "BackButton";
@@ -301,7 +302,7 @@ namespace NowComesGtk.Screens
         {
             _currentPage -= _maxPokemonPerPage;
             _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _choice, _txtSearchPokemon.Text.ToLower());
-            _screenFeatures.DisableBackButton(_btnBack);
+            _screenFeatures.DisableBackButton(_btnBack, _currentPage);
             _btnNext.Sensitive = true;
         }
 
