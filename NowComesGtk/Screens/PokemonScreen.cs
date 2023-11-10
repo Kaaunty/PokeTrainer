@@ -29,9 +29,8 @@ namespace NowComesGtk.Screens
         private Button _shinyButton = new();
         private Image _megaKey = new();
         private Fixed _fix = new();
-    
+
         private ListStore _forms = new(typeof(string), (typeof(string)));
-        private List<Ability> _pokeAbilityList = new();
         private ListStore _formsList;
 
         private enum Column
@@ -465,7 +464,7 @@ namespace NowComesGtk.Screens
             }
         }
 
-        private async void ShinyButtonClicked(object sender, EventArgs e)
+        private void ShinyButtonClicked(object sender, EventArgs e)
         {
             if (_isShiny)
             {
