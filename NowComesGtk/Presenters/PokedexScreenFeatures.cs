@@ -36,13 +36,16 @@ namespace NowComesGtk.Presenters
         { 
             if (choiceOfType == "all")
             {
+
                 _allPokemon = _populateLists.GetPokemonListAll(currentPage);
+
                 _pokemonBySearch = Repository.Pokemon;
             }
             else
             {
                 if (subTypeChoice == (int)Choice.All)
                 {
+
                     _allPokemon = _populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
                     _pokemonBySearch = Repository.pokemonListPureType;
                 }
@@ -58,6 +61,7 @@ namespace NowComesGtk.Presenters
                 }
                 else if (subTypeChoice == (int)Choice.SecondaryType)
                 {
+
                     _allPokemon = _populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
                     _pokemonBySearch = Repository.pokemonListHalfSecundaryType;
                 }

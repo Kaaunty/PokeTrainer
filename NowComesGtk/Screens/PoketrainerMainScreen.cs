@@ -1,9 +1,8 @@
-﻿using NowComesGtk.Utils.WidgetGenerators;
-using PokeApi.BackEnd.Service;
-using NowComesGtk.Utils;
-using GLib;
+﻿using GLib;
 using Gtk;
-using PokeApi.BackEnd.Entities;
+using NowComesGtk.Utils;
+using NowComesGtk.Utils.WidgetGenerators;
+using PokeApi.BackEnd.Service;
 using PokeTrainerBackEndTest.Controller;
 
 namespace NowComesGtk.Screens
@@ -13,6 +12,7 @@ namespace NowComesGtk.Screens
 #nullable disable
 
         private SeparateApplicationComponents _separateApplicationComponents = new();
+        private PokedexScreen _pokedexScreen;
         private Fixed _fix = new();
 
         public PoketrainerMainScreen() : base("PokéTrainer©", 800, 500)
@@ -137,8 +137,7 @@ namespace NowComesGtk.Screens
             btnWelcome.TooltipMarkup = "Olá...";
             btnWelcome.Clicked += Dialog_Start;
             _fix.Put(btnWelcome, 620, 75);
-            
-            
+
             Image openBag = new Image("Images/buttons_type/AllPokémonsOpen.png");
             Image closedBag = new Image("Images/buttons_type/AllPokémons.png");
             Button btnAllPokemons = new ButtonGenerator("", 50, 60);
@@ -169,6 +168,7 @@ namespace NowComesGtk.Screens
                 string type = btn.Data["_type"].ToString();
 
                 PokedexScreen pokedexScreen = new(type, new GoogleTranslationApi(), new PokeApiNetController());
+
                 pokedexScreen.ShowAll();
             }
             catch (Exception ex)

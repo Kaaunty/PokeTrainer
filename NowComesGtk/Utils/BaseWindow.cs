@@ -6,12 +6,19 @@ namespace NowComesGtk.Utils
     {
         public BaseWindow(string title, int width, int height) : base(WindowType.Toplevel)
         {
-            Title = title;
-            Resizable = false;
+            try
+            {
+                Title = title;
+                Resizable = false;
 
-            SetPosition(WindowPosition.Center);
-            SetDefaultSize(width, height);
-            SetIconFromFile("Images/pokeball.png");
+                SetPosition(WindowPosition.Center);
+                SetDefaultSize(width, height);
+                SetIconFromFile("Images/pokeball.png");
+            }
+            catch (System.Exception e)
+            {
+                GLib.ExceptionManager.RaiseUnhandledException(e, true);
+            }
         }
     }
 }

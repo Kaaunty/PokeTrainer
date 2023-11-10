@@ -7,6 +7,7 @@ using NowComesGtk.Presenters;
 using System.Globalization;
 using NowComesGtk.Utils;
 using Gtk;
+using GLib;
 
 namespace NowComesGtk.Screens
 {
@@ -23,6 +24,7 @@ namespace NowComesGtk.Screens
         private Button _btnNext = new(">>");
         private Button _btnBack = new("<<");
         private Fixed _fix = new();
+
         private enum Choice
         {
             All,

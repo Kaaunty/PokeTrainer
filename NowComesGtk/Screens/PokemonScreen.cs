@@ -213,7 +213,7 @@ namespace NowComesGtk.Screens
 
                 Add(_fix);
 
-                DeleteEvent += delegate { Destroy(); };
+                DeleteEvent += delegate { Dispose(); Destroy(); };
                 ShowAll();
             }
             catch (Exception ex)
@@ -243,23 +243,27 @@ namespace NowComesGtk.Screens
                         {
                             _pokemon = pokemon;
                         }
-                        if (_pokemon.Types[0].Type.Name != pokemonType)
+                        else
                         {
-                            _pokemonFirstTypeFormatted = pokemonType;
-                            _pokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonFirstTypeFormatted}.png");
-                            _damageRelations = GetTypeDamageRelation(_pokemon.Types[0].Type.Name);
-                            _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelations}</span>";
-                        }
-                        if (_pokemon.Types.Count > 1)
-                        {
-                            if (_pokemon.Types[1].Type.Name != pokemon.Types[1].Type.Name)
+                            if (_pokemon.Types[0].Type.Name != pokemonType)
                             {
-                                _pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
-                                _imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonSecondaryTypeFormatted}.png");
-                                _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
-                                _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelationsSecondary}</span>";
+                                _pokemonFirstTypeFormatted = pokemonType;
+                                _pokemonTypeOne.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonFirstTypeFormatted}.png");
+                                _damageRelations = GetTypeDamageRelation(_pokemon.Types[0].Type.Name);
+                                _pokemonTypeOne.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelations}</span>";
+                            }
+                            if (_pokemon.Types.Count > 1)
+                            {
+                                if (_pokemon.Types[1].Type.Name != pokemon.Types[1].Type.Name)
+                                {
+                                    _pokemonSecondaryTypeFormatted = pokemon.Types[1].Type.Name;
+                                    _imagePokemonTypeSecondary.Pixbuf = new Pixbuf($"Images/pokemon_types/{_pokemonSecondaryTypeFormatted}.png");
+                                    _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
+                                    _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>{_damageRelationsSecondary}</span>";
+                                }
                             }
                         }
+
                         PopulateFields();
                         UpdateLabels();
                         GetPokemonGifSize();
@@ -311,19 +315,28 @@ namespace NowComesGtk.Screens
         private ListStore CreateModel()
         {
             _forms.Clear();
-            if (_pokemon.PokemonForms[_pokemonFormId].Name != _pokemon.EvolutionChain.Chain.Species.Name || _pokemon.Name != _pokemon.EvolutionChain.Chain.Species.Name)
+
+            if (_pokemonFormId >= 0)
+            {
+                if (_pokemon.PokemonForms[_pokemonFormId].Name != _pokemon.EvolutionChain.Chain.Species.Name || _pokemon.Name != _pokemon.EvolutionChain.Chain.Species.Name)
+                {
+                    _forms.AppendValues($"{_pokemon.EvolutionChain.Chain.Species.Name}", "Forma Base");
+                }
+            }
+            else if (_pokemon.Name != _pokemon.EvolutionChain.Chain.Species.Name)
             {
                 _forms.AppendValues($"{_pokemon.EvolutionChain.Chain.Species.Name}", "Forma Base");
             }
+
             if (_pokemon.EvolutionChain.Chain.EvolvesTo.Count > 0)
             {
                 foreach (var evo in _pokemon.EvolutionChain.Chain.EvolvesTo)
                 {
-                    if (evo.Species.Name != _pokemon.Name)
+                    if (evo.Species.Name != _pokemon.Name && !ContainsItem(evo.Species.Name))
                     {
                         foreach (var i in evo.EvolutionDetails)
                         {
-                            if (i != null)
+                            if (i != null && !ContainsItem(evo.Species.Name))
                             {
                                 if (i.Trigger.Name == "level-up")
                                 {
@@ -352,11 +365,11 @@ namespace NowComesGtk.Screens
                 {
                     foreach (var evo in _pokemon.EvolutionChain.Chain.EvolvesTo[0].EvolvesTo)
                     {
-                        if (evo.Species.Name != _pokemon.Name)
+                        if (evo.Species.Name != _pokemon.Name && !ContainsItem(evo.Species.Name))
                         {
                             foreach (var i in evo.EvolutionDetails)
                             {
-                                if (i != null)
+                                if (i != null && !ContainsItem(evo.Species.Name))
                                 {
                                     if (i.Trigger.Name == "level-up")
                                     {
@@ -416,7 +429,23 @@ namespace NowComesGtk.Screens
                     }
                 }
             }
+
             return _forms;
+        }
+
+        private bool ContainsItem(string itemName)
+        {
+            TreeIter iter;
+            if (_forms.GetIterFirst(out iter))
+            {
+                do
+                {
+                    string value = (string)_forms.GetValue(iter, 0);
+                    if (value == itemName)
+                        return true;
+                } while (_forms.IterNext(ref iter));
+            }
+            return false;
         }
 
         private async void TranslateString()
@@ -716,22 +745,24 @@ namespace NowComesGtk.Screens
                 _damageRelationsSecondary = GetTypeDamageRelation(_pokemon.Types[1].Type.Name);
                 _imagePokemonTypeSecondary.TooltipMarkup = $"<span foreground='white' font_desc='Pixeloid Mono Regular 12'>[{_damageRelationsSecondary}]</span>";
             }
-
-            if (_pokemon.PokemonForms[_pokemonFormId].IsMega)
+            if (_pokemonFormId >= 0)
             {
-                _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
-            }
-            else
-            {
-                _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
-            }
-            if (_pokemon.PokemonForms[_pokemonFormId].Name.Contains("gmax"))
-            {
-                gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxActivated.png");
-            }
-            else
-            {
-                gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxDesactived.png");
+                if (_pokemon.PokemonForms[_pokemonFormId].IsMega)
+                {
+                    _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyActivated.png");
+                }
+                else
+                {
+                    _megaIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/MegaKeyDesactivated.png");
+                }
+                if (_pokemon.PokemonForms[_pokemonFormId].Name.Contains("gmax"))
+                {
+                    gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxActivated.png");
+                }
+                else
+                {
+                    gMaxIcon.Pixbuf = new Pixbuf("Images/pokemon_forms/GigaMaxDesactived.png");
+                }
             }
 
             lblPokemonCatchRate.Text = _pokemonCatchRate;
