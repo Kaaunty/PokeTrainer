@@ -1,9 +1,9 @@
-using Gtk;
+using PokeTrainerBackEndTest.Entities;
+using PokeTrainerBackEnd.Helper;
 using PokeApi.BackEnd.Entities;
 using PokeApi.BackEnd.Service;
 using PokeTrainerBackEnd;
-using PokeTrainerBackEnd.Helper;
-using PokeTrainerBackEndTest.Entities;
+using Gtk;
 
 namespace NowComesGtk.Presenters
 {
@@ -11,13 +11,13 @@ namespace NowComesGtk.Presenters
     {
 #nullable disable
 
-        private PopulateLists populateLists = new();
+        private PopulateLists _populateLists = new();
 
         private List<Pokemon> _pokemonBySearch = new();
         private List<Pokemon> _pokemonList = new();
         private List<Pokemon> _allPokemon = new();
 
-        private int _maxPokemonPerPage = 25, _currentPage;
+        private int _maxPokemonPerPage = 25, _firstPage = 0;
 
         private enum Choice
         {
@@ -27,40 +27,34 @@ namespace NowComesGtk.Presenters
             SecondaryType
         }
 
-        public void Populating(int currentPage, string choiceOfType, int subTypeChoice)
-        {
-            FilterigForDisplay(currentPage, choiceOfType, subTypeChoice);
-        }
-
         public void FilterigForDisplay(int currentPage, string choiceOfType, int subTypeChoice)
         {
-            _currentPage = currentPage;
-
             if (choiceOfType == "all")
             {
-                _allPokemon = populateLists.GetPokemonListAll(currentPage);
+                _allPokemon = _populateLists.GetPokemonListAll(currentPage);
+
                 _pokemonBySearch = Repository.Pokemon;
             }
             else
             {
                 if (subTypeChoice == (int)Choice.All)
                 {
-                    _allPokemon = populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
+                    _allPokemon = _populateLists.GetPokemonListByTypeAll(currentPage, choiceOfType);
                     _pokemonBySearch = Repository.pokemonListAllType;
                 }
                 else if (subTypeChoice == (int)Choice.PureType)
                 {
-                    _allPokemon = populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
+                    _allPokemon = _populateLists.GetPokemonListByTypePure(currentPage, choiceOfType);
                     _pokemonBySearch = Repository.pokemonListPureType;
                 }
                 else if (subTypeChoice == (int)Choice.PrimaryType)
                 {
-                    _allPokemon = populateLists.GetPokemonListByTypeHalfType(currentPage, choiceOfType);
+                    _allPokemon = _populateLists.GetPokemonListByTypeHalfType(currentPage, choiceOfType);
                     _pokemonBySearch = Repository.pokemonListHalfType;
                 }
                 else if (subTypeChoice == (int)Choice.SecondaryType)
                 {
-                    _allPokemon = populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
+                    _allPokemon = _populateLists.GetPokemonlistByHalfTypeSecondary(currentPage, choiceOfType);
                     _pokemonBySearch = Repository.pokemonListHalfSecundaryType;
                 }
             }
@@ -68,23 +62,20 @@ namespace NowComesGtk.Presenters
 
         public void Filter(Fixed fix, int currentPage, string type, int choice, string PokeName)
         {
-            Populating(currentPage, type, choice);
+            FilterigForDisplay(currentPage, type, choice);
 
-            string pokemonName = PokeName;
-            if (pokemonName != string.Empty && pokemonName != "buscar-pokémon" && pokemonName != "buscar pokémon")
+            if (!string.IsNullOrEmpty(PokeName) && PokeName != "buscar pokémon")
             {
-                _pokemonBySearch = _pokemonBySearch.Where(pokemon => pokemon.Name.StartsWith(pokemonName)).ToList();
-                _pokemonList = _pokemonBySearch;
+                _pokemonList = _pokemonBySearch.FindAll(pokemon => pokemon.Name.StartsWith(PokeName.Replace(" ", "-")));
             }
             else
             {
                 _pokemonList = _allPokemon;
             }
-
-            UpdateButtons(fix, _pokemonList);
+            UpdateButtons(fix);
         }
 
-        private void UpdateButtons(Fixed fix, List<Pokemon> pokemonList)
+        private void UpdateButtons(Fixed fix)
         {
             int buttonIndex = 0;
 
@@ -95,15 +86,15 @@ namespace NowComesGtk.Presenters
                     Button btn = (Button)button;
                     if (ApprovingButtonsToModify(btn.Name))
                     {
-                        if (buttonIndex < pokemonList.Count)
+                        if (buttonIndex < _pokemonList.Count)
                         {
-                            btn.Data["id"] = pokemonList[buttonIndex].Id;
-                            btn.Data["name"] = pokemonList[buttonIndex].Name;
+                            btn.Data["id"] = _pokemonList[buttonIndex].Id;
+                            btn.Data["name"] = _pokemonList[buttonIndex].Name;
                             btn.Sensitive = true;
 
                             if (ApprovingButtonsToModify(btn.Name))
                             {
-                                var pokemon = pokemonList[buttonIndex];
+                                var pokemon = _pokemonList[buttonIndex];
                                 UpdateButtonImages(btn, pokemon.Id, new PokemonImageApiRequest());
                             }
 
@@ -150,9 +141,9 @@ namespace NowComesGtk.Presenters
             }
         }
 
-        public void DisableBackButton(Button button)
+        public void DisableBackButton(Button button, int currentPage)
         {
-            if (_allPokemon != null && _currentPage == 0)
+            if (_allPokemon != null && currentPage == _firstPage)
             {
                 button.Sensitive = false;
             }

@@ -1,20 +1,20 @@
-using Gtk;
-using NAudio.Wave;
-using NowComesGtk.Screens;
-using NowComesGtk.Utils;
 using NowComesGtk.Utils.WidgetGenerators;
-using PokeApi.BackEnd.Entities;
-using PokeTrainerBackEnd;
-using PokeTrainerBackEnd.Helper;
 using PokeTrainerBackEndTest.Controller;
+using PokeTrainerBackEnd.Helper;
+using PokeApi.BackEnd.Entities;
+using NowComesGtk.Screens;
+using PokeTrainerBackEnd;
 using Image = Gtk.Image;
+using NowComesGtk.Utils;
+using NAudio.Wave;
+using Gtk;
 
 public class PokemonLoad : BaseWindow
 {
 #nullable disable
 
     private IPokemonAPI _pokemonAPI = new PokeApiNetController();
-    private DirectoryHelper directoryHelper = new();
+    private DirectoryHelper _directoryHelper = new();
     private Image _redAndPikachuRunning = new();
     private ProgressBar _progressBar = new();
     private Label _loadingLabel = new();
@@ -62,7 +62,7 @@ public class PokemonLoad : BaseWindow
             _totalPokemonCount = await _pokemonAPI.GetPokemonTotalCount();
             RepositoryPopulation.PopulateTypeDamageRelationDictionary();
             RepositoryPopulation.PokemonSpritesCorrection();
-            await directoryHelper.ValidateXmlArchive();
+            await _directoryHelper.ValidateXmlArchive();
             _progressBar.Fraction = 1;
             _isLoaded = true;
 

@@ -1,5 +1,6 @@
 using Gdk;
 using Gtk;
+using NAudio.CoreAudioApi;
 using NowComesGtk.Utils;
 using NowComesGtk.Utils.WidgetGenerators;
 using PokeApi.BackEnd.Entities;
@@ -213,13 +214,19 @@ namespace NowComesGtk.Screens
 
                 Add(_fix);
 
-                DeleteEvent += delegate { Dispose(); Destroy(); };
+                DeleteEvent += DeleteEventClick;
                 ShowAll();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao carregar os dados do Pokémon: {ex.Message}");
             }
+        }
+
+        private void DeleteEventClick(object o, DeleteEventArgs args)
+        {
+            Dispose();
+            Destroy();
         }
 
         private void OnRowActivated(object o, RowActivatedArgs args)
@@ -284,7 +291,10 @@ namespace NowComesGtk.Screens
                 else
                 {
                     Pokemon pokemon = _pokemonApiRequest.GetPokemonByName(form);
-                    _pokemon = pokemon;
+                    if (pokemon != null)
+                    {
+                        _pokemon = pokemon;
+                    }
                     PopulateFields();
                     UpdateLabels();
                     GetPokemonGifSize();
@@ -316,7 +326,7 @@ namespace NowComesGtk.Screens
         {
             _forms.Clear();
 
-            if (_pokemonFormId >= 0)
+            if (_pokemonFormId > 0)
             {
                 if (_pokemon.PokemonForms[_pokemonFormId].Name != _pokemon.EvolutionChain.Chain.Species.Name || _pokemon.Name != _pokemon.EvolutionChain.Chain.Species.Name)
                 {
@@ -325,7 +335,7 @@ namespace NowComesGtk.Screens
             }
             else if (_pokemon.Name != _pokemon.EvolutionChain.Chain.Species.Name)
             {
-                _forms.AppendValues($"{_pokemon.EvolutionChain.Chain.Species.Name}", "Forma Base");
+                _forms.AppendValues($"{_pokemon.Name}", "Forma Base");
             }
 
             if (_pokemon.EvolutionChain.Chain.EvolvesTo.Count > 0)

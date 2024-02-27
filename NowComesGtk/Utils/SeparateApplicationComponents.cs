@@ -1,10 +1,14 @@
 ﻿using System.Diagnostics;
 using Gtk;
+using PokeTrainerBackEnd.Controller;
+using PokeTrainerBackEnd.Entities;
 
 namespace NowComesGtk.Utils
 {
     public class SeparateApplicationComponents
     {
+        private IPokemonTrainer pokemonTrainer = new PokemonTrainerController();
+
         public void GitHubOpen()
         {
             string repoGit = "https://github.com/Kaaunty/PokeTrainer";

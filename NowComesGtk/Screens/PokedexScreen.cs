@@ -82,6 +82,7 @@ namespace NowComesGtk.Screens
             {
                 SearchPokemon();
             };
+
             _fix.Put(_btnBack, 25, 74);
             _btnBack.Sensitive = false;
             _btnBack.Name = "BackButton";
@@ -277,16 +278,22 @@ namespace NowComesGtk.Screens
 
             _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _choice, _txtSearchPokemon.Text.ToLower());
 
-            DeleteEvent += delegate { Dispose(); Destroy(); };
+            DeleteEvent += CloseEvent;
             Add(_fix);
             ShowAll();
         }
 
+        private void CloseEvent(object o, DeleteEventArgs args)
+        {
+            Dispose();
+            Destroy();
+            PoketrainerMainScreen mainScreen = new();
+            mainScreen.Show();
+        }
+
         private void SearchPokemon()
         {
-            string PokemonName = _txtSearchPokemon.Text.ToLower();
-            PokemonName = PokemonName.Replace(' ', '-');
-            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _choice, PokemonName);
+            _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _choice, _txtSearchPokemon.Text.ToLower());
         }
 
         private void btnNext_Clicked(object sender, EventArgs e)
@@ -301,7 +308,7 @@ namespace NowComesGtk.Screens
         {
             _currentPage -= _maxPokemonPerPage;
             _screenFeatures.Filter(_fix, _currentPage, _pokemonType, _choice, _txtSearchPokemon.Text.ToLower());
-            _screenFeatures.DisableBackButton(_btnBack);
+            _screenFeatures.DisableBackButton(_btnBack, _currentPage);
             _btnNext.Sensitive = true;
         }
 
